@@ -58,7 +58,7 @@ const Header = () => {
         </div>
       </div>
       {/* Main navigation */}
-      <nav className="max-w-7xl mx-auto px-4 py-4 pt-[12px] pb-[12px] pl-[0px] pr-[0px]">
+      <nav className="max-w-7xl mx-auto px-4 py-4 pt-[12px] pb-[12px] pl-[8px] pr-[8px]">
         <div className="flex justify-between items-center">
           <div className="flex items-center">
             <div className="flex items-center text-2xl font-bold text-green-600">
