@@ -65,7 +65,7 @@ const Header = () => {
               <img 
                 src="/logo-placeholder.png" 
                 alt="Super Fruit Center Logo" 
-                className="w-16 h-16 rounded-xl object-cover object-center border-2 border-green-200 shadow-lg bg-white/90 aspect-square"
+                className="w-12 h-12 rounded-xl object-cover object-center border-2 border-green-200 shadow-lg bg-white/90 aspect-square"
                 onError={(e) => {
                   // Fallback to text if logo not found
                   e.currentTarget.style.display = 'none';
