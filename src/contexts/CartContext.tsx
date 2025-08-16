@@ -1,0 +1,251 @@
+import React, { createContext, useContext, useReducer, ReactNode } from 'react';
+import { useAuth } from './AuthContext';
+import { firestoreService } from '../services/firestoreService';
+
+export interface CartItem {
+  productId: string;
+  name: string;
+  unitPrice: number;
+  amount: string;
+  unit: string;
+  imageUrls: string[];
+  quantity: number;
+  totalPrice: number;
+  priceLabel?: string;
+  priceValue?: number;
+  id?: string;
+  price?: number;
+  image?: string;
+}
+
+interface CartState {
+  items: CartItem[];
+  total: number;
+  notification: string | null;
+  loading: boolean;
+}
+
+type CartAction =
+  | { type: 'SET_CART'; payload: CartItem[] }
+  | { type: 'ADD_ITEM'; payload: { name: string } }
+  | { type: 'REMOVE_ITEM'; payload: string }
+  | { type: 'UPDATE_QUANTITY'; payload: { productId: string; quantity: number } }
+  | { type: 'CLEAR_CART' }
+  | { type: 'CLEAR_NOTIFICATION' }
+  | { type: 'SET_LOADING'; payload: boolean };
+
+const CartContext = createContext<{
+  state: CartState;
+  dispatch: React.Dispatch<CartAction>;
+  addToCart: (product: any) => Promise<void>;
+  updateQuantity: (productId: string, quantity: number) => Promise<void>;
+  removeItem: (productId: string) => Promise<void>;
+  clearCart: () => Promise<void>;
+} | null>(null);
+
+const cartReducer = (state: CartState, action: CartAction): CartState => {
+  switch (action.type) {
+    case 'SET_CART': {
+      return {
+        ...state,
+        items: action.payload,
+        total: action.payload.reduce((sum, item) => {
+          const price = Number(item.priceValue ?? item.unitPrice ?? 0);
+          const qty = Number(item.quantity ?? 0);
+          const itemTotal = !isNaN(price * qty) ? price * qty : 0;
+          return sum + itemTotal;
+        }, 0),
+        loading: false
+      };
+    }
+
+    case 'ADD_ITEM': {
+      return {
+        ...state,
+        notification: `${action.payload.name} added to cart successfully!`
+      };
+    }
+
+    case 'REMOVE_ITEM': {
+      const newItems = state.items.filter(item => item.productId !== action.payload);
+      return {
+        ...state,
+        items: newItems,
+        total: newItems.reduce((sum, item) => {
+          const price = Number(item.priceValue ?? item.unitPrice ?? 0);
+          const qty = Number(item.quantity ?? 0);
+          const itemTotal = !isNaN(price * qty) ? price * qty : 0;
+          return sum + itemTotal;
+        }, 0)
+      };
+    }
+
+    case 'UPDATE_QUANTITY': {
+      const updatedItems = state.items.map(item =>
+        item.productId === action.payload.productId
+          ? {
+              ...item,
+              quantity: action.payload.quantity,
+              totalPrice: Number(item.priceValue ?? item.unitPrice ?? 0) * action.payload.quantity
+            }
+          : item
+      );
+      return {
+        ...state,
+        items: updatedItems,
+        total: updatedItems.reduce((sum, item) => {
+          const price = Number(item.priceValue ?? item.unitPrice ?? 0);
+          const qty = Number(item.quantity ?? 0);
+          const itemTotal = !isNaN(price * qty) ? price * qty : 0;
+          return sum + itemTotal;
+        }, 0)
+      };
+    }
+
+    case 'CLEAR_NOTIFICATION':
+      return { ...state, notification: null };
+
+    case 'SET_LOADING':
+      return { ...state, loading: action.payload };
+
+    case 'CLEAR_CART':
+      return { items: [], total: 0, notification: null, loading: false };
+
+    default:
+      return state;
+  }
+};
+
+export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const [state, dispatch] = useReducer(cartReducer, {
+    items: [],
+    total: 0,
+    notification: null,
+    loading: false
+  });
+  const { state: authState } = useAuth();
+
+  React.useEffect(() => {
+    const loadCart = async () => {
+      if (authState.isAuthenticated && authState.user) {
+        try {
+          dispatch({ type: 'SET_LOADING', payload: true });
+          const cartItems = await firestoreService.getUserCart(authState.user.id);
+          dispatch({ type: 'SET_CART', payload: cartItems });
+        } catch (error) {
+          console.error('Error loading cart:', error);
+          dispatch({ type: 'SET_LOADING', payload: false });
+        }
+      } else {
+        dispatch({ type: 'CLEAR_CART' });
+      }
+    };
+
+    loadCart();
+  }, [authState.isAuthenticated, authState.user]);
+
+  const addToCart = async (product: any) => {
+    if (!authState.user) return;
+
+    try {
+      const productPrice = (() => {
+        const fallback = Number(product.price || 0);
+        if (!product.displayPrice) return fallback;
+        const match = product.displayPrice.match(/[\d,]+(\.\d+)?/);
+        if (match) return Number(match[0].replace(/,/g, ''));
+        const digits = (product.displayPrice || '').replace(/[^\d.]/g, '');
+        return digits ? Number(digits) : fallback;
+      })();
+
+      const productImages =
+        product.imageUrls ||
+        product.image_urls ||
+        (product.image ? [product.image] : []) ||
+        [
+          'https://images.pexels.com/photos/1128678/pexels-photo-1128678.jpeg?auto=compress&cs=tinysrgb&w=400'
+        ];
+
+      const cartItem = {
+        productId: product.id.toString(),
+        name: product.name,
+        unitPrice: productPrice,
+        priceValue: productPrice,
+        priceLabel:
+          product.priceLabel ||
+          product.displayPrice ||
+          `₹${productPrice}/${product.unit || 'box'}`,
+        amount: getDefaultAmount(product.unit),
+        unit: product.unit || 'piece',
+        imageUrls: productImages,
+        quantity: 1,
+        totalPrice: productPrice
+      };
+
+      await firestoreService.addToCart(authState.user.id, cartItem);
+
+      const cartItems = await firestoreService.getUserCart(authState.user.id);
+      dispatch({ type: 'SET_CART', payload: cartItems });
+      dispatch({ type: 'ADD_ITEM', payload: { name: product.name } });
+    } catch (error) {
+      console.error('Error adding to cart:', error);
+    }
+  };
+
+  const getDefaultAmount = (unit: string): string => {
+    const normalizedUnit = unit?.toLowerCase() || 'piece';
+    if (normalizedUnit.includes('kg') || normalizedUnit.includes('g')) return '1kg';
+    if (normalizedUnit.includes('piece') || normalizedUnit.includes('pc')) return '1 pcs';
+    if (normalizedUnit.includes('box')) return '1 box';
+    return '1 pcs';
+  };
+
+  const updateQuantity = async (productId: string, quantity: number) => {
+    if (!authState.user) return;
+
+    try {
+      await firestoreService.updateCartItemQuantity(authState.user.id, productId, quantity);
+
+      if (quantity <= 0) {
+        dispatch({ type: 'REMOVE_ITEM', payload: productId });
+      } else {
+        dispatch({ type: 'UPDATE_QUANTITY', payload: { productId, quantity } });
+      }
+    } catch (error) {
+      console.error('Error updating quantity:', error);
+    }
+  };
+
+  const removeItem = async (productId: string) => {
+    if (!authState.user) return;
+
+    try {
+      await firestoreService.removeFromCart(authState.user.id, productId);
+      dispatch({ type: 'REMOVE_ITEM', payload: productId });
+    } catch (error) {
+      console.error('Error removing item:', error);
+    }
+  };
+
+  const clearCart = async () => {
+    if (!authState.user) return;
+
+    try {
+      await firestoreService.clearUserCart(authState.user.id);
+      dispatch({ type: 'CLEAR_CART' });
+    } catch (error) {
+      console.error('Error clearing cart:', error);
+    }
+  };
+
+  return (
+    <CartContext.Provider value={{ state, dispatch, addToCart, updateQuantity, removeItem, clearCart }}>
+      {children}
+    </CartContext.Provider>
+  );
+};
+
+export const useCart = () => {
+  const context = useContext(CartContext);
+  if (!context) throw new Error('useCart must be used within a CartProvider');
+  return context;
+};
