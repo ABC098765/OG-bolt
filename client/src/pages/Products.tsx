@@ -14,6 +14,76 @@ const Products = () => {
   const [categories, setCategories] = useState([
     { id: 'all', name: 'All Products' }
   ]);
+  
+  // Fallback products when Firestore fails
+  const fallbackProducts = [
+    {
+      id: 'apple-1',
+      name: 'Fresh Apples',
+      category: 'Fruits',
+      price: 120,
+      displayPrice: '₹120',
+      unit: 'kg',
+      imageUrls: ['https://images.pexels.com/photos/102104/pexels-photo-102104.jpeg?auto=compress&cs=tinysrgb&w=400'],
+      inStock: true,
+      description: 'Fresh, crispy red apples perfect for snacking and cooking.'
+    },
+    {
+      id: 'banana-1',
+      name: 'Fresh Bananas',
+      category: 'Fruits',
+      price: 60,
+      displayPrice: '₹60',
+      unit: 'kg',
+      imageUrls: ['https://images.pexels.com/photos/61127/pexels-photo-61127.jpeg?auto=compress&cs=tinysrgb&w=400'],
+      inStock: true,
+      description: 'Ripe yellow bananas rich in potassium and natural sweetness.'
+    },
+    {
+      id: 'orange-1',
+      name: 'Fresh Oranges',
+      category: 'Fruits',
+      price: 80,
+      displayPrice: '₹80',
+      unit: 'kg',
+      imageUrls: ['https://images.pexels.com/photos/1414110/pexels-photo-1414110.jpeg?auto=compress&cs=tinysrgb&w=400'],
+      inStock: true,
+      description: 'Juicy oranges packed with vitamin C and refreshing flavor.'
+    },
+    {
+      id: 'mango-1',
+      name: 'Fresh Mangoes',
+      category: 'Fruits',
+      price: 200,
+      displayPrice: '₹200',
+      unit: 'kg',
+      imageUrls: ['https://images.pexels.com/photos/1128678/pexels-photo-1128678.jpeg?auto=compress&cs=tinysrgb&w=400'],
+      inStock: true,
+      description: 'Sweet and juicy mangoes, the king of fruits.'
+    },
+    {
+      id: 'grapes-1',
+      name: 'Fresh Grapes',
+      category: 'Fruits',
+      price: 150,
+      displayPrice: '₹150',
+      unit: 'kg',
+      imageUrls: ['https://images.pexels.com/photos/708777/pexels-photo-708777.jpeg?auto=compress&cs=tinysrgb&w=400'],
+      inStock: true,
+      description: 'Sweet purple grapes perfect for snacking.'
+    },
+    {
+      id: 'strawberry-1',
+      name: 'Fresh Strawberries',
+      category: 'Fruits',
+      price: 300,
+      displayPrice: '₹300',
+      unit: 'kg',
+      imageUrls: ['https://images.pexels.com/photos/89778/strawberries-red-fruit-royalty-free-89778.jpeg?auto=compress&cs=tinysrgb&w=400'],
+      inStock: true,
+      description: 'Fresh red strawberries bursting with flavor.'
+    }
+  ];
   const navigate = useNavigate();
   const { addToCart } = useCart();
   const { state: authState, dispatch: authDispatch } = useAuth();
@@ -24,24 +94,43 @@ const Products = () => {
       try {
         setLoading(true);
         const productsData = await firestoreService.getProducts();
-        setProducts(productsData);
         
-        // Extract unique categories from products
-        const uniqueCategories = [...new Set(productsData.map(product => product.category))];
+        if (productsData && productsData.length > 0) {
+          setProducts(productsData);
+          
+          // Extract unique categories from products
+          const uniqueCategories = Array.from(new Set(productsData.map(product => product.category)));
+          const categoryOptions = [
+            { id: 'all', name: 'All Products' },
+            ...uniqueCategories.map(cat => ({ id: cat, name: cat }))
+          ];
+          setCategories(categoryOptions);
+        } else {
+          // Use fallback products if Firestore is empty
+          console.log('No products found in Firestore, using fallback products');
+          setProducts(fallbackProducts);
+          const categoryOptions = [
+            { id: 'all', name: 'All Products' },
+            { id: 'Fruits', name: 'Fruits' }
+          ];
+          setCategories(categoryOptions);
+        }
+      } catch (error) {
+        console.error('Error loading products from Firestore, using fallback products:', error);
+        // Use fallback products when Firestore fails
+        setProducts(fallbackProducts);
         const categoryOptions = [
           { id: 'all', name: 'All Products' },
-          ...uniqueCategories.map(cat => ({ id: cat, name: cat }))
+          { id: 'Fruits', name: 'Fruits' }
         ];
         setCategories(categoryOptions);
-      } catch (error) {
-        console.error('Error loading products:', error);
       } finally {
         setLoading(false);
       }
     };
 
     loadProducts();
-  }, []);
+  }, [fallbackProducts]);
 
   const filteredProducts = products.filter(product => {
     const matchesCategory = selectedCategory === 'all' || product.category === selectedCategory;
