@@ -40,7 +40,7 @@ const Header = () => {
   return (
     <header className="bg-white shadow-lg sticky top-0 z-50">
       {/* Top bar */}
-      <div className="bg-green-600 text-white py-2">
+      <div className="bg-green-600 text-white py-2 pt-[0px] pb-[0px]">
         <div className="max-w-7xl mx-auto px-4 flex justify-between items-center text-sm">
           <div className="w-full text-center overflow-hidden relative">
             <div className="relative bg-green-600 py-3 px-6">
@@ -57,7 +57,6 @@ const Header = () => {
           </div>
         </div>
       </div>
-
       {/* Main navigation */}
       <nav className="max-w-7xl mx-auto px-4 py-4">
         <div className="flex justify-between items-center">
