@@ -65,14 +65,14 @@ const Header = () => {
               <img 
                 src="/logo-placeholder.png" 
                 alt="Super Fruit Center Logo" 
-                className="w-12 h-12 rounded-full object-cover border-2 border-green-200 shadow-lg bg-white/90"
+                className="w-12 h-12 pt-[3px] pb-[3px] mt-[0px] mb-[0px] ml-[6px] mr-[6px] pl-[0px] pr-[0px]"
                 onError={(e) => {
                   // Fallback to text if logo not found
                   e.currentTarget.style.display = 'none';
                   e.currentTarget.nextElementSibling.style.display = 'inline';
                 }}
               />
-              <span style={{ display: 'none' }} className="text-3xl">🍎</span>
+              <span style={{ display: 'none' }}>🍎</span>
               Super Fruit Center
             </div>
           </div>
