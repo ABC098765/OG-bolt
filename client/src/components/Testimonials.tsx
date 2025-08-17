@@ -7,7 +7,6 @@ const AndroidApp = () => {
       {/* Background decorations */}
       <div className="absolute top-20 right-20 w-32 h-32 bg-gradient-to-r from-green-300 to-emerald-300 rounded-full opacity-20 animate-float"></div>
       <div className="absolute bottom-20 left-20 w-24 h-24 bg-gradient-to-r from-orange-300 to-yellow-300 rounded-full opacity-20 animate-float" style={{ animationDelay: '1s' }}></div>
-
       <div className="max-w-7xl mx-auto px-4 relative z-10">
         <div className="text-center mb-16">
           <div className="inline-flex items-center px-4 py-2 bg-green-100 text-green-800 rounded-full text-sm font-medium mb-6">
@@ -71,7 +70,7 @@ const AndroidApp = () => {
                 </div>
                 <div>
                   <h4 className="text-lg font-semibold text-gray-900 mb-2">Real-time Tracking</h4>
-                  <p className="text-gray-600">Track your order from farm to doorstep with live delivery updates.</p>
+                  <p className="text-gray-600">Track your order from store to doorstep with live delivery updates.</p>
                 </div>
               </div>
 
