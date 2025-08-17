@@ -96,12 +96,7 @@ const Hero = () => {
                 className="rounded-2xl shadow-2xl w-full transform group-hover:scale-105 transition-transform duration-500"
               />
               {/* Overlay badges */}
-              <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-2 rounded-full shadow-lg">
-                <div className="flex items-center text-sm font-medium text-gray-800">
-                  <Star className="w-4 h-4 text-yellow-500 mr-1" />
-                  4.9/5 Rating
-                </div>
-              </div>
+
               <div className="absolute bottom-4 right-4 bg-green-600/90 backdrop-blur-sm text-white px-3 py-2 rounded-full shadow-lg">
                 <div className="flex items-center text-sm font-medium">
                   <Truck className="w-4 h-4 mr-1" />
