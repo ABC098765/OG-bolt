@@ -5,13 +5,18 @@ import { ShoppingCart, Truck, Star, Heart, Award, Clock } from 'lucide-react';
 const Hero = () => {
   return (
     <section id="home" className="relative overflow-hidden bg-gradient-to-br from-green-50 via-emerald-50 to-orange-50 py-20">
-      {/* Floating Fruit Icons Animation */}
+      {/* Enhanced Floating Fruit Icons Animation */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-10 text-6xl animate-bounce" style={{ animationDelay: '0s' }}>🍎</div>
-        <div className="absolute top-40 right-20 text-5xl animate-bounce" style={{ animationDelay: '1s' }}>🍊</div>
-        <div className="absolute bottom-40 left-20 text-4xl animate-bounce" style={{ animationDelay: '2s' }}>🍌</div>
-        <div className="absolute bottom-20 right-10 text-5xl animate-bounce" style={{ animationDelay: '0.5s' }}>🥝</div>
-        <div className="absolute top-60 left-1/2 text-4xl animate-bounce" style={{ animationDelay: '1.5s' }}>🍇</div>
+        {/* Mobile optimized positions */}
+        <div className="absolute top-10 left-5 sm:top-20 sm:left-10 text-4xl sm:text-5xl lg:text-6xl animate-float opacity-70" style={{ animationDelay: '0s', animationDuration: '4s' }}>🍎</div>
+        <div className="absolute top-32 right-5 sm:top-40 sm:right-20 text-3xl sm:text-4xl lg:text-5xl animate-float opacity-60" style={{ animationDelay: '1s', animationDuration: '5s' }}>🍊</div>
+        <div className="absolute bottom-32 left-8 sm:bottom-40 sm:left-20 text-3xl sm:text-3xl lg:text-4xl animate-float opacity-80" style={{ animationDelay: '2s', animationDuration: '3.5s' }}>🍌</div>
+        <div className="absolute bottom-16 right-8 sm:bottom-20 sm:right-10 text-4xl sm:text-4xl lg:text-5xl animate-float opacity-75" style={{ animationDelay: '0.5s', animationDuration: '4.5s' }}>🥝</div>
+        <div className="absolute top-1/2 left-1/3 sm:left-1/2 text-3xl sm:text-3xl lg:text-4xl animate-float opacity-65" style={{ animationDelay: '1.5s', animationDuration: '3s' }}>🍇</div>
+        {/* Additional fruits for larger screens */}
+        <div className="hidden md:block absolute top-1/3 right-1/3 text-3xl lg:text-4xl animate-float opacity-50" style={{ animationDelay: '2.5s', animationDuration: '6s' }}>🍓</div>
+        <div className="hidden lg:block absolute bottom-1/3 left-1/4 text-4xl animate-float opacity-55" style={{ animationDelay: '3s', animationDuration: '4.8s' }}>🥭</div>
+        <div className="hidden xl:block absolute top-1/4 left-1/5 text-3xl animate-float opacity-45" style={{ animationDelay: '3.5s', animationDuration: '5.5s' }}>🍑</div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 relative z-10">
@@ -24,18 +29,12 @@ const Hero = () => {
             </div>
 
             <div className="space-y-6">
-              <h1 className="text-5xl lg:text-7xl font-bold text-gray-900 leading-tight">
-                Fresh <span className="text-green-600 relative">
+              <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold text-gray-900 leading-tight">
+                Fresh <span className="text-green-600 underline-animated">
                   Fruits
-                  <svg className="absolute -bottom-2 left-0 w-full h-3 text-green-200" viewBox="0 0 120 8" fill="currentColor">
-                    <path d="M0,6 Q30,0 60,4 T120,2 L120,8 L0,8 Z" />
-                  </svg>
                 </span><br />
-                Delivered <span className="text-orange-500 relative">
+                Delivered <span className="text-orange-500 underline-gradient">
                   Daily
-                  <svg className="absolute -bottom-2 left-0 w-full h-3 text-orange-200" viewBox="0 0 80 8" fill="currentColor">
-                    <path d="M0,6 Q20,0 40,4 T80,2 L80,8 L0,8 Z" />
-                  </svg>
                 </span>
               </h1>
               <p className="text-xl text-gray-600 leading-relaxed max-w-xl">

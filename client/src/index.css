@@ -21,10 +21,57 @@
 
 @keyframes float {
   0%, 100% {
-    transform: translateY(0px);
+    transform: translateY(0px) rotate(0deg) scale(1);
+  }
+  25% {
+    transform: translateY(-15px) rotate(2deg) scale(1.05);
   }
   50% {
-    transform: translateY(-20px);
+    transform: translateY(-25px) rotate(0deg) scale(1.1);
+  }
+  75% {
+    transform: translateY(-10px) rotate(-2deg) scale(1.05);
+  }
+}
+
+@keyframes enhanced-float {
+  0%, 100% {
+    transform: translateY(0px) translateX(0px) rotate(0deg);
+  }
+  20% {
+    transform: translateY(-20px) translateX(5px) rotate(5deg);
+  }
+  40% {
+    transform: translateY(-10px) translateX(-3px) rotate(-3deg);
+  }
+  60% {
+    transform: translateY(-30px) translateX(8px) rotate(8deg);
+  }
+  80% {
+    transform: translateY(-5px) translateX(-5px) rotate(-5deg);
+  }
+}
+
+@keyframes underline-draw {
+  0% {
+    width: 0%;
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    width: 100%;
+    opacity: 1;
+  }
+}
+
+@keyframes underline-shimmer {
+  0% {
+    background-position: -200% center;
+  }
+  100% {
+    background-position: 200% center;
   }
 }
 
@@ -47,6 +94,67 @@
 
 .animate-float {
   animation: float 3s ease-in-out infinite;
+}
+
+.animate-enhanced-float {
+  animation: enhanced-float 4s ease-in-out infinite;
+}
+
+.underline-animated {
+  position: relative;
+  display: inline-block;
+}
+
+.underline-animated::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  height: 8px;
+  background: linear-gradient(90deg, transparent, currentColor, transparent);
+  background-size: 200% 100%;
+  border-radius: 4px;
+  animation: underline-draw 2s ease-out forwards, underline-shimmer 3s ease-in-out infinite 2s;
+}
+
+.underline-gradient {
+  position: relative;
+  display: inline-block;
+}
+
+.underline-gradient::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 100%;
+  height: 6px;
+  background: linear-gradient(90deg, #10b981, #f59e0b, #ef4444, #8b5cf6);
+  background-size: 300% 100%;
+  border-radius: 3px;
+  animation: gradient 4s ease infinite;
+  opacity: 0.8;
+}
+
+/* Responsive float animations */
+@media (max-width: 640px) {
+  .animate-float {
+    animation-duration: 2.5s;
+  }
+  
+  .animate-enhanced-float {
+    animation-duration: 3s;
+  }
+}
+
+@media (min-width: 1024px) {
+  .animate-float {
+    animation-duration: 4s;
+  }
+  
+  .animate-enhanced-float {
+    animation-duration: 5s;
+  }
 }
 
 .animate-pulse-slow {

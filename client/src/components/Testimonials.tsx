@@ -15,12 +15,9 @@ const AndroidApp = () => {
             <Smartphone className="w-4 h-4 mr-2" />
             Download Now
           </div>
-          <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
-            Our <span className="text-green-600 relative">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+            Our <span className="text-green-600 underline-gradient">
               Android App
-              <svg className="absolute -bottom-2 left-0 w-full h-3 text-green-200" viewBox="0 0 120 8" fill="currentColor">
-                <path d="M0,6 Q30,0 60,4 T120,2 L120,8 L0,8 Z" />
-              </svg>
             </span>
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">

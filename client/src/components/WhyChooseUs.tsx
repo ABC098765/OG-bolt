@@ -51,8 +51,8 @@ const WhyChooseUs = () => {
     <section className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
-            Why Choose <span className="text-green-600">Super Fruit Center</span>?
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+            Why Choose <span className="text-green-600 underline-gradient">Super Fruit Center</span>?
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
             We're committed to bringing you the freshest, highest-quality fruits with exceptional service that sets us apart.
