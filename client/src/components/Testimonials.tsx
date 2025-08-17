@@ -86,21 +86,13 @@ const AndroidApp = () => {
               </div>
             </div>
 
-            {/* Download Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 pt-6">
-              <button className="group flex items-center justify-center bg-black text-white px-6 py-4 rounded-2xl hover:bg-gray-800 transition-all transform hover:scale-105 shadow-lg">
+            {/* Download Button */}
+            <div className="pt-6">
+              <button className="group flex items-center justify-center bg-black text-white px-8 py-4 rounded-2xl hover:bg-gray-800 transition-all transform hover:scale-105 shadow-lg">
                 <Play className="w-6 h-6 mr-3 fill-current" />
                 <div className="text-left">
                   <div className="text-xs text-gray-300">GET IT ON</div>
                   <div className="text-lg font-semibold">Google Play</div>
-                </div>
-              </button>
-              
-              <button className="group flex items-center justify-center border-2 border-gray-800 text-gray-800 px-6 py-4 rounded-2xl hover:bg-gray-800 hover:text-white transition-all transform hover:scale-105 shadow-lg">
-                <Download className="w-6 h-6 mr-3" />
-                <div className="text-left">
-                  <div className="text-xs opacity-70">DIRECT</div>
-                  <div className="text-lg font-semibold">APK Download</div>
                 </div>
               </button>
             </div>
