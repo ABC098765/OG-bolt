@@ -1,6 +1,8 @@
 import React from 'react';
 import { Smartphone, Download, Star, Play } from 'lucide-react';
 
+import og_replit_sfc from "@assets/og replit sfc.png";
+
 const AndroidApp = () => {
   return (
     <section className="py-20 bg-gradient-to-br from-green-50 to-emerald-50 relative overflow-hidden">
@@ -33,7 +35,7 @@ const AndroidApp = () => {
             <div className="flex items-center space-x-4 mb-8">
               <div className="w-20 h-20 bg-gradient-to-br from-green-600 to-emerald-600 rounded-2xl flex items-center justify-center shadow-2xl">
                 <img
-                  src="/logo-placeholder.png"
+                  src={og_replit_sfc}
                   alt="Super Fruit Center Logo"
                   className="w-12 h-12 object-contain"
                   onError={(e) => {
