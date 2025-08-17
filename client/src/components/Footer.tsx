@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'wouter';
 import { Facebook, Instagram, Twitter, Phone, Mail, MapPin } from 'lucide-react';
 
 const Footer = () => {
@@ -21,7 +21,10 @@ const Footer = () => {
                 onError={(e) => {
                   // Fallback to text if logo not found
                   e.currentTarget.style.display = 'none';
-                  e.currentTarget.nextElementSibling.style.display = 'inline';
+                  const nextElement = e.currentTarget.nextElementSibling;
+                  if (nextElement && nextElement instanceof HTMLElement) {
+                    nextElement.style.display = 'inline';
+                  }
                 }}
               />
               <span style={{ display: 'none' }}>🍎</span>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useLocation } from 'wouter';
 import { ArrowLeft, ShoppingCart } from 'lucide-react';
 import { useCart } from '../contexts/CartContext';
 import { useAuth } from '../contexts/AuthContext';
@@ -8,7 +8,8 @@ import { firestoreService } from '../services/firestoreService';
 
 const ProductDetails = () => {
   const { productId } = useParams();
-  const navigate = useNavigate();
+  const [, setLocation] = useLocation();
+  const navigate = (path: string) => setLocation(path);
   const { addToCart } = useCart();
   const { state: authState, dispatch: authDispatch } = useAuth();
   const [product, setProduct] = useState<any>(null);
@@ -111,7 +112,7 @@ const ProductDetails = () => {
               {/* Image Gallery */}
               {productImages.length > 1 && (
                 <div className="flex space-x-2 overflow-x-auto">
-                  {productImages.map((imageUrl, index) => (
+                  {productImages.map((imageUrl: string, index: number) => (
                     <img
                       key={index}
                       src={imageUrl}

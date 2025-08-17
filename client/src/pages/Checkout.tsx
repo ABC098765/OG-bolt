@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation } from 'wouter';
 import { ArrowLeft, Plus, Edit3, Trash2, MapPin, CreditCard, Package, Check } from 'lucide-react';
 import { useCart } from '../contexts/CartContext';
 import { useAuth } from '../contexts/AuthContext';
@@ -7,7 +7,8 @@ import { firestoreService } from '../services/firestoreService';
 import { FirestoreAddress } from '../types/firestore';
 
 const Checkout = () => {
-  const navigate = useNavigate();
+  const [, setLocation] = useLocation();
+  const navigate = (path: string) => setLocation(path);
   const { state: cartState, dispatch: cartDispatch } = useCart();
   const { clearCart } = useCart();
   const { state: authState, dispatch: authDispatch } = useAuth();
@@ -131,7 +132,7 @@ const Checkout = () => {
         phone: phone.trim(),
         flatNo: flatNo.trim(),
         buildingName: buildingName.trim(),
-        landmark: landmark.trim() || null,
+        landmark: landmark.trim() || undefined,
       };
 
       if (editingAddress) {
@@ -209,12 +210,12 @@ const Checkout = () => {
         payment_status: selectedPaymentMethod === 'cod' ? 'pending' : 'paid',
         payment_id: selectedPaymentMethod === 'cod' ? 'COD' : 'ONLINE_PAYMENT',
         items: cartState.items.map(item => ({
-          product_id: item.id.toString(),
+          product_id: item.id?.toString() || '',
           name: item.name,
           quantity: item.quantity,
           displayPrice: `₹${item.price}`,
-          numericPrice: item.price,
-          imageUrls: [item.image],
+          numericPrice: item.price || 0,
+          imageUrls: [item.image].filter((url): url is string => url !== undefined),
         })),
       };
 
@@ -488,7 +489,7 @@ const Checkout = () => {
                   </div>
                 </div>
                 <span className="font-semibold text-gray-900">
-                  ₹{item.price * item.quantity}
+                  ₹{(item.price || 0) * item.quantity}
                 </span>
               </div>
             ))}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useLocation } from 'wouter';
 import { ArrowLeft, Package, Clock, CheckCircle, Truck, MapPin, CreditCard, Calendar } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { firestoreService } from '../services/firestoreService';
@@ -7,7 +7,8 @@ import { FirestoreOrder } from '../types/firestore';
 
 const OrderDetails = () => {
   const { orderId } = useParams();
-  const navigate = useNavigate();
+  const [, setLocation] = useLocation();
+  const navigate = (path: string) => setLocation(path);
   const { state: authState, dispatch: authDispatch } = useAuth();
   const [order, setOrder] = React.useState<FirestoreOrder | null>(null);
   const [loading, setLoading] = React.useState(true);

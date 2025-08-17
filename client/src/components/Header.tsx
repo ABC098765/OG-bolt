@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation } from 'wouter';
 import { Menu, X, Phone, MapPin, ShoppingCart, LogOut, Bell } from 'lucide-react';
 import { useCart } from '../contexts/CartContext';
 import { useAuth } from '../contexts/AuthContext';
@@ -9,8 +9,8 @@ import { firestoreService } from '../services/firestoreService';
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
-  const location = useLocation();
-  const navigate = useNavigate();
+  const [location, setLocation] = useLocation();
+  const navigate = (path: string) => setLocation(path);
   const { state } = useCart();
   const { state: authState, dispatch: authDispatch } = useAuth();
 
@@ -34,7 +34,7 @@ const Header = () => {
   }, [authState.user]);
 
   const isActive = (path: string) => {
-    return location.pathname === path;
+    return location === path;
   };
 
   return (
@@ -70,7 +70,10 @@ const Header = () => {
                 onError={(e) => {
                   // Fallback to text if logo not found
                   e.currentTarget.style.display = 'none';
-                  e.currentTarget.nextElementSibling.style.display = 'inline';
+                  const nextElement = e.currentTarget.nextElementSibling;
+                  if (nextElement && nextElement instanceof HTMLElement) {
+                    nextElement.style.display = 'inline';
+                  }
                 }}
               />
               <span style={{ display: 'none' }}>🍎</span>

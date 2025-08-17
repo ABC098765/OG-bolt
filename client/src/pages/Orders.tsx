@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation } from 'wouter';
 import { Package, Clock, CheckCircle, XCircle, Eye, Truck } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { firestoreService } from '../services/firestoreService';
@@ -9,7 +9,8 @@ const Orders = () => {
   const [selectedTab, setSelectedTab] = useState('all');
   const [orders, setOrders] = useState<FirestoreOrder[]>([]);
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
+  const [, setLocation] = useLocation();
+  const navigate = (path: string) => setLocation(path);
   const { state: authState, dispatch: authDispatch } = useAuth();
 
   // Redirect to sign in if not authenticated

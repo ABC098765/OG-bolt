@@ -1,9 +1,10 @@
 import React from 'react';
 import { ArrowLeft } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation } from 'wouter';
 
 const TermsAndConditions = () => {
-  const navigate = useNavigate();
+  const [, setLocation] = useLocation();
+  const navigate = (path: string) => setLocation(path);
 
   // Scroll to top when component mounts
   React.useEffect(() => {
@@ -15,7 +16,7 @@ const TermsAndConditions = () => {
       <div className="max-w-4xl mx-auto px-4">
         <div className="mb-8">
           <button 
-            onClick={() => navigate(-1)}
+            onClick={() => window.history.back()}
             className="flex items-center text-green-600 hover:text-green-700 mb-4"
           >
             <ArrowLeft className="w-5 h-5 mr-2" />

@@ -2,13 +2,14 @@ import React, { useState } from 'react';
 import { User, Mail, Phone, MapPin, Calendar, Edit3, Save, X, Check, LogOut } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { authService } from '../services/authService';
-import { useNavigate } from 'react-router-dom';
+import { useLocation } from 'wouter';
 import { RecaptchaVerifier, signInWithPhoneNumber, ConfirmationResult } from 'firebase/auth';
 import { auth } from '../config/firebase';
 
 const Profile = () => {
   const { state: authState, dispatch: authDispatch } = useAuth();
-  const navigate = useNavigate();
+  const [, setLocation] = useLocation();
+  const navigate = (path: string) => setLocation(path);
   const [isEditing, setIsEditing] = useState(false);
   const [showAvatarModal, setShowAvatarModal] = useState(false);
   const [selectedAvatar, setSelectedAvatar] = useState('initials');
