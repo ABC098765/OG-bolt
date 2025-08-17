@@ -2,7 +2,7 @@ import React from 'react';
 import Hero from '../components/Hero';
 import WhyChooseUs from '../components/WhyChooseUs';
 import FeaturedProducts from '../components/FeaturedProducts';
-import Testimonials from '../components/Testimonials';
+import AndroidApp from '../components/Testimonials';
 import Contact from '../components/Contact';
 
 const Home = () => {
@@ -11,7 +11,7 @@ const Home = () => {
       <Hero />
       <WhyChooseUs />
       <FeaturedProducts />
-      <Testimonials />
+      <AndroidApp />
       <Contact />
     </>
   );
