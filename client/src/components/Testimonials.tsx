@@ -86,28 +86,7 @@ const Testimonials = () => {
           ))}
         </div>
 
-        {/* Trust indicators */}
-        <div className="mt-16 text-center">
-          <div className="inline-flex items-center justify-center space-x-8 bg-white rounded-2xl px-8 py-6 shadow-lg">
-            <div className="text-center">
-              <div className="text-3xl font-bold text-gray-900">4.9</div>
-              <div className="flex items-center justify-center mb-1">
-                {renderStars(5)}
-              </div>
-              <div className="text-sm text-gray-600">Average Rating</div>
-            </div>
-            <div className="w-px h-16 bg-gray-200"></div>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-gray-900">50K+</div>
-              <div className="text-sm text-gray-600 mt-2">Happy Customers</div>
-            </div>
-            <div className="w-px h-16 bg-gray-200"></div>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-gray-900">98%</div>
-              <div className="text-sm text-gray-600 mt-2">Satisfaction Rate</div>
-            </div>
-          </div>
-        </div>
+
       </div>
     </section>
   );
