@@ -81,27 +81,7 @@ const WhyChooseUs = () => {
           })}
         </div>
 
-        {/* Stats Section */}
-        <div className="mt-20 bg-gradient-to-r from-green-600 to-emerald-600 rounded-3xl p-8 lg:p-12 text-white">
-          <div className="grid md:grid-cols-4 gap-8 text-center">
-            <div>
-              <div className="text-4xl lg:text-5xl font-bold mb-2">50K+</div>
-              <div className="text-green-100">Happy Customers</div>
-            </div>
-            <div>
-              <div className="text-4xl lg:text-5xl font-bold mb-2">100+</div>
-              <div className="text-green-100">Fruit Varieties</div>
-            </div>
-            <div>
-              <div className="text-4xl lg:text-5xl font-bold mb-2">15</div>
-              <div className="text-green-100">Cities Served</div>
-            </div>
-            <div>
-              <div className="text-4xl lg:text-5xl font-bold mb-2">4.9★</div>
-              <div className="text-green-100">Average Rating</div>
-            </div>
-          </div>
-        </div>
+
       </div>
     </section>
   );
