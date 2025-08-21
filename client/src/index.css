@@ -343,6 +343,29 @@
   }
 }
 
+@keyframes shine-sweep {
+  0% {
+    transform: translateX(-120%) skewX(-25deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.3;
+  }
+  30% {
+    opacity: 0.8;
+  }
+  70% {
+    opacity: 0.8;
+  }
+  90% {
+    opacity: 0.3;
+  }
+  100% {
+    transform: translateX(220%) skewX(-25deg);
+    opacity: 0;
+  }
+}
+
 @keyframes text-glow {
   0%, 100% {
     text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
@@ -358,4 +381,41 @@
 
 .animate-text-glow {
   animation: text-glow 2s ease-in-out infinite;
+}
+
+/* Feature badge shine effect */
+.feature-badge {
+  position: relative;
+  overflow: hidden;
+}
+
+.feature-badge::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    110deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.4) 50%,
+    rgba(255, 255, 255, 0.6) 55%,
+    transparent 70%
+  );
+  animation: shine-sweep 3s ease-in-out infinite;
+  z-index: 1;
+  border-radius: inherit;
+}
+
+.feature-badge-1::before {
+  animation-delay: 0s;
+}
+
+.feature-badge-2::before {
+  animation-delay: 1s;
+}
+
+.feature-badge-3::before {
+  animation-delay: 2s;
 }
