@@ -119,71 +119,6 @@
   }
 }
 
-@keyframes icon-color-shift {
-  0% {
-    color: #10b981;
-    filter: drop-shadow(0 0 8px rgba(16, 185, 129, 0.4));
-  }
-  33% {
-    color: #f59e0b;
-    filter: drop-shadow(0 0 8px rgba(245, 158, 11, 0.4));
-  }
-  66% {
-    color: #ef4444;
-    filter: drop-shadow(0 0 8px rgba(239, 68, 68, 0.4));
-  }
-  100% {
-    color: #10b981;
-    filter: drop-shadow(0 0 8px rgba(16, 185, 129, 0.4));
-  }
-}
-
-@keyframes icon-rainbow-shift {
-  0% {
-    color: #ff6b6b;
-    filter: drop-shadow(0 0 10px rgba(255, 107, 107, 0.5));
-  }
-  14% {
-    color: #4ecdc4;
-    filter: drop-shadow(0 0 10px rgba(78, 205, 196, 0.5));
-  }
-  28% {
-    color: #45b7d1;
-    filter: drop-shadow(0 0 10px rgba(69, 183, 209, 0.5));
-  }
-  42% {
-    color: #96ceb4;
-    filter: drop-shadow(0 0 10px rgba(150, 206, 180, 0.5));
-  }
-  56% {
-    color: #ffeaa7;
-    filter: drop-shadow(0 0 10px rgba(255, 234, 167, 0.5));
-  }
-  70% {
-    color: #fab1a0;
-    filter: drop-shadow(0 0 10px rgba(250, 177, 160, 0.5));
-  }
-  84% {
-    color: #fd79a8;
-    filter: drop-shadow(0 0 10px rgba(253, 121, 168, 0.5));
-  }
-  100% {
-    color: #6c5ce7;
-    filter: drop-shadow(0 0 10px rgba(108, 92, 231, 0.5));
-  }
-}
-
-@keyframes icon-pulse-glow {
-  0%, 100% {
-    transform: scale(1);
-    filter: brightness(1) drop-shadow(0 0 5px currentColor);
-  }
-  50% {
-    transform: scale(1.1);
-    filter: brightness(1.3) drop-shadow(0 0 15px currentColor);
-  }
-}
-
 @keyframes pulse-slow {
   0%, 100% {
     opacity: 1;
@@ -423,17 +358,4 @@
 
 .animate-text-glow {
   animation: text-glow 2s ease-in-out infinite;
-}
-
-/* Animated icon classes */
-.icon-fresh {
-  animation: icon-color-shift 4s ease-in-out infinite;
-}
-
-.icon-speed {
-  animation: icon-rainbow-shift 6s ease-in-out infinite;
-}
-
-.icon-premium {
-  animation: icon-pulse-glow 3s ease-in-out infinite;
 }

@@ -48,19 +48,19 @@ const Hero = () => {
             <div className="grid grid-cols-3 gap-4 py-6">
               <div className="text-center">
                 <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-2">
-                  <Heart className="w-6 h-6 icon-fresh" />
+                  <Heart className="w-6 h-6 text-green-600" />
                 </div>
                 <p className="text-sm font-medium text-gray-700">100% Fresh</p>
               </div>
               <div className="text-center">
                 <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-2">
-                  <Clock className="w-6 h-6 icon-speed" />
+                  <Clock className="w-6 h-6 text-orange-600" />
                 </div>
                 <p className="text-sm font-medium text-gray-700">Same Day</p>
               </div>
               <div className="text-center">
                 <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-2">
-                  <Star className="w-6 h-6 icon-premium" />
+                  <Star className="w-6 h-6 text-blue-600" />
                 </div>
                 <p className="text-sm font-medium text-gray-700">Premium Quality</p>
               </div>
