@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'wouter';
 import { ShoppingCart, Truck, Star, Heart, Award, Clock } from 'lucide-react';
+import heroImage from '@assets/generated_images/Fresh_fruit_hero_display_7afffe66.png';
 
 const Hero = () => {
   return (
@@ -90,7 +91,7 @@ const Hero = () => {
           <div className="relative">
             <div className="relative z-10 group">
               <img
-                src="https://images.pexels.com/photos/1128678/pexels-photo-1128678.jpeg?auto=compress&cs=tinysrgb&w=800"
+                src={heroImage}
                 alt="Fresh fruits display"
                 className="rounded-2xl shadow-2xl w-full transform group-hover:scale-105 transition-transform duration-500"
               />
