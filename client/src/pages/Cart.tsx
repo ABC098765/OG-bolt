@@ -98,7 +98,7 @@ const Cart = () => {
                   <div className="flex-1">
                     <h3 className="text-lg font-semibold text-gray-900">{item.name}</h3>
                     <p className="text-gray-600">
-                      {item.displayPrice || item.priceLabel || `₹${(item.priceValue || item.unitPrice || item.price || 0)}`}
+                      {item.displayPrice || `₹${(item.priceValue || item.unitPrice || item.price || 0)}`}
                     </p>
                   </div>
 
