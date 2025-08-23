@@ -192,7 +192,8 @@ export class FirestoreService {
     quantity: number;
     totalPrice: number;
     priceLabel?: string; // new
-  priceValue?: number; // new
+    priceValue?: number; // new
+    displayPrice?: string; // new - for proper price display
   }): Promise<void> {
     try {
       const cartRef = collection(db, 'users', userId, 'cart');
@@ -206,7 +207,7 @@ export class FirestoreService {
       String(cartItem.priceLabel || '').replace(/[^\d.]/g, '')
     ) || 0;
 
-    const finalPriceLabel = cartItem.priceLabel
+    const finalPriceLabel = cartItem.displayPrice || cartItem.priceLabel
       || `₹${finalPriceValue}/${cartItem.unit || 'box'}`;
       
       if (existingDoc.exists()) {

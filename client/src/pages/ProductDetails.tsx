@@ -101,7 +101,7 @@ const ProductDetails = () => {
     console.log('ProductDetails - Adding to cart:', {
       name: product.name,
       displayPrice: product.displayPrice,
-      price: productPrice,
+      numericPrice: productPrice,
       unit: product.unit
     });
 
