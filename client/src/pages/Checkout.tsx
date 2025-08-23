@@ -201,6 +201,15 @@ const Checkout = () => {
       const deliveryFee = subtotal >= 1000 ? 0 : subtotal >= 500 ? 20 : 40;
       const totalAmount = subtotal + deliveryFee;
 
+      // Debug logging to track quantities
+      console.log('=== DEBUG ORDER CREATION ===');
+      cartState.items.forEach(item => {
+        console.log(`Item: ${item.name}`);
+        console.log(`  Cart Quantity: ${item.quantity}`);
+        console.log(`  Cart Amount: ${item.amount}`);
+        console.log(`  Cart Unit: ${item.unit}`);
+      });
+
       // Prepare order data
       const orderData = {
         user_id: authState.user!.id,
@@ -229,6 +238,12 @@ const Checkout = () => {
             if (normalizedUnit.includes('box')) return `${itemQuantity} box`;
             return `${itemQuantity} pcs`;
           })();
+
+          // Debug log what we're sending to order
+          console.log(`  ORDER ITEM: ${item.name}`);
+          console.log(`    Original amount: ${item.amount}`);
+          console.log(`    Calculated amount: ${correctAmount}`);
+          console.log(`    Quantity being sent: ${itemQuantity}`);
 
           return {
             product_id: item.productId || item.id?.toString() || '',
