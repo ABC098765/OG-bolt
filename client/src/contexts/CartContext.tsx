@@ -149,6 +149,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     if (!authState.user) return;
 
     try {
+      
       const productPrice = (() => {
         // Try different price sources in order of preference
         const priceString = product.displayPrice || product.price || product.unitPriceDisplay || '';
@@ -190,13 +191,14 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         unitPrice: productPrice,
         priceValue: productPrice,
         displayPrice: product.displayPrice, // Preserve the original displayPrice
-        priceLabel: product.displayPrice || product.priceLabel || `₹${productPrice}/${product.unit || 'box'}`,
+        priceLabel: product.displayPrice, // Use displayPrice directly as priceLabel
         amount: getDefaultAmount(product.unit),
         unit: product.unit || 'piece',
         imageUrls: productImages,
         quantity: 1,
         totalPrice: productPrice
       };
+
 
       await firestoreService.addToCart(authState.user.id, cartItem);
 
