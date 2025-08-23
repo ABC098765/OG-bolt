@@ -101,10 +101,6 @@ const AuthModal = () => {
         return;
       }
 
-      if (!recaptchaCompleted) {
-        setError('Please complete the reCAPTCHA verification first');
-        return;
-      }
 
       if (!recaptchaVerifierRef.current) {
         setError('reCAPTCHA not initialized. Please refresh and try again.');
@@ -197,10 +193,6 @@ const AuthModal = () => {
     setOtp('');
     setError('');
     
-    if (!recaptchaCompleted) {
-      setError('Please complete the reCAPTCHA verification first');
-      return;
-    }
     
     setIsLoading(true);
     

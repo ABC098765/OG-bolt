@@ -205,10 +205,6 @@ const Profile = () => {
       return;
     }
 
-    if (!isRecaptchaSolved) {
-      setOtpError('Please complete the reCAPTCHA verification first.');
-      return;
-    }
     
     setIsOtpLoading(true);
     setOtpError('');
