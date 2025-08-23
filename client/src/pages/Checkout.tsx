@@ -225,8 +225,8 @@ const Checkout = () => {
       // Clear cart
       await clearCart();
 
-      // Navigate to success page or orders
-      navigate('/orders');
+      // Navigate to success page
+      navigate('/order-success');
       
     } catch (error) {
       console.error('Error creating order:', error);

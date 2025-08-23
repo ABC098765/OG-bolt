@@ -14,6 +14,7 @@ import Orders from './pages/Orders';
 import Profile from './pages/Profile';
 import Checkout from './pages/Checkout';
 import OrderDetails from './pages/OrderDetails';
+import OrderSuccess from './pages/OrderSuccess';
 import TermsAndConditions from './pages/TermsAndConditions';
 import ProductDetails from './pages/ProductDetails';
 import Notifications from './pages/Notifications';
@@ -34,6 +35,7 @@ function App() {
             <Route path="/profile" component={Profile} />
             <Route path="/checkout" component={Checkout} />
             <Route path="/order/:orderId" component={OrderDetails} />
+            <Route path="/order-success" component={OrderSuccess} />
             <Route path="/terms-and-conditions" component={TermsAndConditions} />
             <Route path="/product/:productId" component={ProductDetails} />
             <Route path="/notifications" component={Notifications} />
