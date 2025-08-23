@@ -83,7 +83,7 @@ const Products = () => {
       id: product.id,
       name: product.name,
       price: productPrice,
-      displayPrice: product.displayPrice,
+      displayPrice: product.displayPrice || product.price,
       image: productImage,
       unit: product.unit || 'piece'
     });

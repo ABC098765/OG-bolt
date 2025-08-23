@@ -149,6 +149,9 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     if (!authState.user) return;
 
     try {
+      console.log('🛒 Adding to cart - Product data:', product);
+      console.log('🛒 Product displayPrice:', product.displayPrice);
+      console.log('🛒 Product price:', product.price);
       
       const productPrice = (() => {
         // Try different price sources in order of preference
@@ -199,6 +202,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         totalPrice: productPrice
       };
 
+      console.log('🛒 Cart item being created:', cartItem);
 
       await firestoreService.addToCart(authState.user.id, cartItem);
 
