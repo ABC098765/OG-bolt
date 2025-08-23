@@ -27,11 +27,15 @@ export interface FirestoreAddress {
 export interface FirestoreOrderItem {
   product_id: string;
   name: string;
+  quantity: number;
+  amount: string;
+  unit: string;
   displayPrice: string;
+  unitPriceDisplay: string;
   numericPrice: number;
   price: number;
+  totalPrice: number;
   total_price: number;
-  quantity: number;
   imageUrls?: string[];
 }
 

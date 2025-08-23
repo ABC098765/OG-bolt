@@ -128,10 +128,20 @@ const OrderDetails = () => {
     }
   };
 
-  // Calculate pricing
+  // Calculate pricing - using same logic as Android app
   const subtotal = order.items.reduce((sum: number, item: any) => {
-    const itemTotalPrice = item.total_price || (item.price || item.numericPrice || 0) * (item.quantity || 1);
-    return sum + itemTotalPrice;
+    // First try totalPrice (camelCase - what Android expects)
+    if (item.totalPrice != null && item.totalPrice > 0) {
+      return sum + item.totalPrice;
+    }
+    // Fallback to total_price (snake_case)
+    if (item.total_price != null && item.total_price > 0) {
+      return sum + item.total_price;
+    }
+    // Last fallback: calculate from price and quantity
+    const itemPrice = item.price || item.numericPrice || 0;
+    const itemQuantity = item.quantity || 1;
+    return sum + (itemPrice * itemQuantity);
   }, 0);
 
   return (
@@ -217,7 +227,7 @@ const OrderDetails = () => {
                   </div>
                   <div className="text-right">
                     <p className="font-semibold text-gray-900">Qty: {item.quantity}</p>
-                    <p className="text-lg font-bold text-green-600">₹{item.total_price || (item.price || item.numericPrice || 0) * (item.quantity || 1)}</p>
+                    <p className="text-lg font-bold text-green-600">₹{item.totalPrice || item.total_price || (item.price || item.numericPrice || 0) * (item.quantity || 1)}</p>
                   </div>
                 </div>
               ))}
