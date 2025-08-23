@@ -192,7 +192,7 @@ const Products = () => {
                     
                     <div className="flex items-center justify-between">
                       <span className="text-xl font-bold text-green-600">
-                        ₹{product.displayPrice ? product.displayPrice.replace('₹', '') : productPrice}
+                        {product.displayPrice || `₹${productPrice}`}
                       </span>
                       <button 
                         onClick={(e) => {
