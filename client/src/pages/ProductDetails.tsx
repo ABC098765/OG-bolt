@@ -101,7 +101,7 @@ const ProductDetails = () => {
       id: product.id,
       name: product.name,
       price: productPrice,
-      displayPrice: product.displayPrice,
+      displayPrice: product.displayPrice, // Keep original displayPrice format like "₹150-₹400/kg"
       image: productImage,
       unit: product.unit || 'piece'
     });
