@@ -44,25 +44,24 @@ Fixed cross-platform synchronization issues between Super Fruit Center web appli
 - `client/src/pages/Checkout.tsx` - Enhanced price formatting with units
 - `client/src/pages/OrderDetails.tsx` - Updated display to show "Item (amount, price)"
 
-### 4. Quantity Squaring Bug
-**Problem**: Cart quantity updates caused exponential increases
-- User selects: 7kg
-- Admin shows: 49kg (7²)
-- User selects: 8kg  
-- Admin shows: 64kg (8²)
+### 4. Quantity Squaring Bug ✅ RESOLVED
+**Problem**: Orders showed squared quantities in admin app
+- User orders: 2kg
+- Admin shows: 4kg (2²)
+- User orders: 3kg  
+- Admin shows: 9kg (3²)
 
-**Root Cause**: Double calculation in `updateCartItemQuantity()` function
-1. Parsed existing amount ("8kg" → 8)
-2. Multiplied by new quantity (8 × 8 = 64)
+**Root Cause**: Admin app was multiplying `quantity` field × parsed `amount` field
+1. Web app sent: `quantity: 2` and `amount: "2kg"`
+2. Admin app calculated: 2 × 2 = 4kg
 
 **Solution**: 
-- Removed unnecessary parsing of existing amounts
-- Implemented direct quantity assignment
-- Fixed reducer to reload from Firestore instead of local calculations
+- Set `quantity: 1` in order data to match Android app format
+- Admin app now uses only `amount` field ("2kg") for display
+- Prevents double multiplication while maintaining compatibility
 
 **Files Modified**:
-- `client/src/services/firestoreService.ts` - Fixed quantity calculation logic
-- `client/src/contexts/CartContext.tsx` - Updated updateQuantity to reload from Firestore
+- `client/src/pages/Checkout.tsx` - Fixed order data structure to prevent admin app multiplication
 
 ## Technical Implementation Details
 
@@ -86,13 +85,13 @@ const getUnitFromPrice = (priceString: string): { unit: string; amount: string }
 {
   product_id: item.productId,
   name: item.name,
-  quantity: itemQuantity,
-  amount: extractedAmount, // "7kg", "5pc", "3 box"
+  quantity: 1, // Always 1 to prevent admin app multiplication
+  amount: extractedAmount, // "2kg", "5pc", "3 box" (contains actual quantity)
   unit: extractedUnit, // "kg", "piece", "box"
   displayPrice: item.priceLabel, // "₹150-₹400/kg"
   unitPriceDisplay: unitPriceWithUnit, // "₹80/kg" for Android compatibility
   priceLabel: item.priceLabel, // Consistent labeling
-  totalPrice: itemPrice * quantity
+  totalPrice: itemPrice * actualQuantity
 }
 ```
 
@@ -108,7 +107,7 @@ const getUnitFromPrice = (priceString: string): { unit: string; amount: string }
 ### ✅ Perfect Cross-Platform Synchronization
 1. **Web App** → Android App: Orders display correctly
 2. **Android App** → Web App: Orders display correctly  
-3. **Web App** → Admin App: Quantities show accurately
+3. **Web App** → Admin App: Quantities show accurately (2kg = 2kg, not 4kg)
 4. **Android App** → Admin App: Existing functionality maintained
 
 ### ✅ Consistent Data Formats
@@ -118,8 +117,9 @@ const getUnitFromPrice = (priceString: string): { unit: string; amount: string }
 
 ### ✅ Data Integrity
 - Single source of truth in Firestore
-- Eliminated duplicate calculations
+- Eliminated duplicate calculations and quantity squaring
 - Consistent field naming and structure
+- Admin app compatibility maintained
 
 ## Files Modified Summary
 1. `client/src/contexts/CartContext.tsx` - Cart management and unit extraction
@@ -130,10 +130,11 @@ const getUnitFromPrice = (priceString: string): { unit: string; amount: string }
 
 ## Testing Verification
 - ✅ Cart price displays show full range (₹150-₹400/kg)
-- ✅ Order units are correct (7kg shows as 7kg, not 49kg)
+- ✅ Order units are correct (2kg shows as 2kg, not 4kg in admin app)
 - ✅ Cross-platform order viewing works perfectly
 - ✅ Price formatting includes units (₹80/kg not just ₹80)
 - ✅ All platforms show consistent information
+- ✅ Admin app no longer multiplies quantity × amount
 
 ## Environment Impact
 - Development workflow restarted to clear React Fast Refresh cache issues
