@@ -29,6 +29,8 @@ export interface FirestoreOrderItem {
   name: string;
   displayPrice: string;
   numericPrice: number;
+  price: number;
+  total_price: number;
   quantity: number;
   imageUrls?: string[];
 }

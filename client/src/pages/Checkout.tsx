@@ -210,14 +210,22 @@ const Checkout = () => {
         payment_status: selectedPaymentMethod === 'cod' ? 'pending' : 'paid',
         payment_id: selectedPaymentMethod === 'cod' ? 'COD' : 'ONLINE_PAYMENT',
         order_status: 'ordered',
-        items: cartState.items.map(item => ({
-          product_id: item.productId || item.id?.toString() || '',
-          name: item.name,
-          quantity: item.quantity,
-          displayPrice: item.priceLabel || item.displayPrice || `₹${item.unitPrice || item.priceValue || 0}`,
-          numericPrice: item.unitPrice || item.priceValue || 0,
-          imageUrls: item.imageUrls || [item.image].filter((url): url is string => url !== undefined),
-        })),
+        items: cartState.items.map(item => {
+          const itemPrice = item.unitPrice || item.priceValue || 0;
+          const itemQuantity = item.quantity || 1;
+          const totalPrice = itemPrice * itemQuantity;
+          
+          return {
+            product_id: item.productId || item.id?.toString() || '',
+            name: item.name,
+            quantity: itemQuantity,
+            displayPrice: item.priceLabel || item.displayPrice || `₹${itemPrice}`,
+            numericPrice: itemPrice,
+            price: itemPrice,
+            total_price: totalPrice,
+            imageUrls: item.imageUrls || [item.image].filter((url): url is string => url !== undefined),
+          };
+        }),
       };
 
       // Create order
