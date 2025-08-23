@@ -118,6 +118,29 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
   }
 };
 
+// Function to extract unit from price string (matching Android app logic)
+const getUnitFromPrice = (priceString: string): { unit: string; amount: string } => {
+  const price = priceString.toLowerCase();
+  if (price.endsWith('/kg')) {
+    return { unit: 'kg', amount: '1kg' };
+  } else if (price.endsWith('/piece')) {
+    return { unit: 'piece', amount: '1pc' };
+  } else if (price.endsWith('/box')) {
+    return { unit: 'box', amount: '1 box' };
+  } else {
+    // Default fallback based on common patterns
+    if (price.includes('/kg') || price.includes('kg')) {
+      return { unit: 'kg', amount: '1kg' };
+    } else if (price.includes('/piece') || price.includes('piece')) {
+      return { unit: 'piece', amount: '1pc' };
+    } else if (price.includes('/box') || price.includes('box')) {
+      return { unit: 'box', amount: '1 box' };
+    }
+  }
+  // Final fallback
+  return { unit: 'piece', amount: '1 pcs' };
+};
+
 const getDefaultAmount = (unit: string): string => {
   const normalizedUnit = unit?.toLowerCase() || 'piece';
   if (normalizedUnit.includes('kg') || normalizedUnit.includes('g')) return '1kg';
@@ -203,6 +226,10 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         ];
 
 
+      // Extract unit from price string like Android app does
+      const priceString = product.displayPrice || product.price || '';
+      const { unit: extractedUnit, amount: extractedAmount } = getUnitFromPrice(priceString);
+
       const cartItem = {
         productId: product.id.toString(),
         name: product.name,
@@ -210,8 +237,8 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         priceValue: productPrice,
         displayPrice: product.displayPrice || product.price || `₹${productPrice}`, // Use displayPrice or fallback to product.price to maintain Android app sync
         priceLabel: product.displayPrice || product.price || `₹${productPrice}`, // Keep original displayPrice format like "₹150-₹400/kg"
-        amount: getDefaultAmount(product.unit),
-        unit: product.unit || 'piece',
+        amount: extractedAmount, // Use extracted amount like "1kg" instead of "1 pcs"
+        unit: extractedUnit, // Use extracted unit like "kg" instead of "piece"
         imageUrls: productImages,
         quantity: 1,
         totalPrice: productPrice
