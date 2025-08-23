@@ -152,9 +152,8 @@ const ProductDetails = () => {
               <div className="mb-8">
                 <div className="flex items-baseline">
                   <span className="text-4xl font-bold text-green-600">
-                    {product.displayPrice ? product.displayPrice : `₹${productPrice}`}
+                    {product.displayPrice || `₹${productPrice}`}
                   </span>
-                  <span className="text-xl text-gray-600 ml-2">{product.displayPrice && product.displayPrice.includes('/') ? '' : `per ${product.unit || 'piece'}`}</span>
                 </div>
                 
                 {/* Available Units */}
