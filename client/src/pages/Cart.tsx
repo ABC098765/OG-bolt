@@ -87,7 +87,7 @@ const Cart = () => {
           {/* Cart Items */}
           <div className="lg:col-span-2 space-y-4">
             {state.items.map((item) => (
-              <div key={item.id} className="bg-white rounded-2xl shadow-lg p-6">
+              <div key={item.productId} className="bg-white rounded-2xl shadow-lg p-6">
                 <div className="flex items-center space-x-4">
                   <img
                     src={item.imageUrls?.[0] || item.image || 'https://images.pexels.com/photos/1128678/pexels-photo-1128678.jpeg?auto=compress&cs=tinysrgb&w=400'}
@@ -97,7 +97,12 @@ const Cart = () => {
                   
                   <div className="flex-1">
                     <h3 className="text-lg font-semibold text-gray-900">{item.name}</h3>
-                    <p className="text-gray-600">{item.priceLabel || `₹${item.unitPrice}/box`}</p>
+                    <p className="text-gray-600">
+                      {item.priceLabel && !item.priceLabel.includes('NaN') 
+                        ? item.priceLabel 
+                        : `₹${(item.priceValue || item.unitPrice || item.price || 0)}/${item.unit || 'box'}`
+                      }
+                    </p>
                   </div>
 
                   <div className="flex items-center space-x-3">
@@ -122,8 +127,8 @@ const Cart = () => {
 
                   <div className="text-right">
                     <p className="text-lg font-bold text-green-600">
-  ₹{(item.priceValue || item.unitPrice) * item.quantity}
-</p>
+                      ₹{((item.priceValue || item.unitPrice || item.price || 0) * item.quantity) || 0}
+                    </p>
 
                     <button
                       onClick={() => removeItem(item.productId)}

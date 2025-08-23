@@ -50,9 +50,9 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
         ...state,
         items: action.payload,
         total: action.payload.reduce((sum, item) => {
-          const price = Number(item.priceValue ?? item.unitPrice ?? 0);
-          const qty = Number(item.quantity ?? 0);
-          const itemTotal = !isNaN(price * qty) ? price * qty : 0;
+          const price = Number(item.priceValue) || Number(item.unitPrice) || Number(item.price) || 0;
+          const qty = Number(item.quantity) || 0;
+          const itemTotal = price > 0 && qty > 0 ? price * qty : 0;
           return sum + itemTotal;
         }, 0),
         loading: false
@@ -72,9 +72,9 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
         ...state,
         items: newItems,
         total: newItems.reduce((sum, item) => {
-          const price = Number(item.priceValue ?? item.unitPrice ?? 0);
-          const qty = Number(item.quantity ?? 0);
-          const itemTotal = !isNaN(price * qty) ? price * qty : 0;
+          const price = Number(item.priceValue) || Number(item.unitPrice) || Number(item.price) || 0;
+          const qty = Number(item.quantity) || 0;
+          const itemTotal = price > 0 && qty > 0 ? price * qty : 0;
           return sum + itemTotal;
         }, 0)
       };
@@ -86,7 +86,7 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
           ? {
               ...item,
               quantity: action.payload.quantity,
-              totalPrice: Number(item.priceValue ?? item.unitPrice ?? 0) * action.payload.quantity
+              totalPrice: (Number(item.priceValue) || Number(item.unitPrice) || Number(item.price) || 0) * action.payload.quantity
             }
           : item
       );
@@ -94,9 +94,9 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
         ...state,
         items: updatedItems,
         total: updatedItems.reduce((sum, item) => {
-          const price = Number(item.priceValue ?? item.unitPrice ?? 0);
-          const qty = Number(item.quantity ?? 0);
-          const itemTotal = !isNaN(price * qty) ? price * qty : 0;
+          const price = Number(item.priceValue) || Number(item.unitPrice) || Number(item.price) || 0;
+          const qty = Number(item.quantity) || 0;
+          const itemTotal = price > 0 && qty > 0 ? price * qty : 0;
           return sum + itemTotal;
         }, 0)
       };
