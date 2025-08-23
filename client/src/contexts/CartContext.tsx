@@ -216,7 +216,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         name: product.name,
         unitPrice: productPrice,
         priceValue: productPrice,
-        displayPrice: product.displayPrice, // Preserve the original displayPrice for reference
+        displayPrice: product.displayPrice || `₹${productPrice}`, // Ensure displayPrice is always set for cart display
         priceLabel: product.displayPrice || `₹${productPrice}`, // Keep original displayPrice format like "₹150-₹400/kg"
         amount: getDefaultAmount(product.unit),
         unit: product.unit || 'piece',
