@@ -22,6 +22,7 @@ const ProductDetails = () => {
         try {
           setLoading(true);
           const productData = await firestoreService.getProduct(productId);
+          console.log('ProductDetails - Loaded product data:', productData);
           setProduct(productData);
         } catch (error) {
           console.error('Error loading product:', error);
@@ -101,6 +102,7 @@ const ProductDetails = () => {
     console.log('ProductDetails - Adding to cart:', {
       name: product.name,
       displayPrice: product.displayPrice,
+      price: product.price,
       numericPrice: productPrice,
       unit: product.unit
     });
