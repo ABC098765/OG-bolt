@@ -228,8 +228,8 @@ export class FirestoreService {
           unit: existingData.unit,
           imageUrls: existingData.imageUrls || existingData.image_urls || cartItem.imageUrls,
           image_urls: existingData.image_urls || existingData.imageUrls || cartItem.imageUrls,
-           priceLabel: finalPriceLabel, // added
-        priceValue: finalPriceValue  // added
+          priceLabel: finalPriceLabel, // Use the new displayPrice if provided
+          priceValue: finalPriceValue  // added
         });
       } else {
         // Add new item to cart with productId as document ID
