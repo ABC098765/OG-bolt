@@ -87,6 +87,7 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
           ? {
               ...item,
               quantity: action.payload.quantity,
+              amount: getDefaultAmountForQuantity(item.unit, action.payload.quantity),
               totalPrice: (Number(item.priceValue) || Number(item.unitPrice) || Number(item.price) || 0) * action.payload.quantity
             }
           : item
@@ -115,6 +116,22 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
     default:
       return state;
   }
+};
+
+const getDefaultAmount = (unit: string): string => {
+  const normalizedUnit = unit?.toLowerCase() || 'piece';
+  if (normalizedUnit.includes('kg') || normalizedUnit.includes('g')) return '1kg';
+  if (normalizedUnit.includes('piece') || normalizedUnit.includes('pc')) return '1 pcs';
+  if (normalizedUnit.includes('box')) return '1 box';
+  return '1 pcs';
+};
+
+const getDefaultAmountForQuantity = (unit: string, quantity: number): string => {
+  const normalizedUnit = unit?.toLowerCase() || 'piece';
+  if (normalizedUnit.includes('kg') || normalizedUnit.includes('g')) return `${quantity}kg`;
+  if (normalizedUnit.includes('piece') || normalizedUnit.includes('pc')) return `${quantity} pcs`;
+  if (normalizedUnit.includes('box')) return `${quantity} box`;
+  return `${quantity} pcs`;
 };
 
 export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
@@ -190,8 +207,8 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         name: product.name,
         unitPrice: productPrice,
         priceValue: productPrice,
-        displayPrice: product.displayPrice, // Preserve the original displayPrice
-        priceLabel: product.displayPrice, // Use displayPrice directly as priceLabel
+        displayPrice: product.displayPrice, // Preserve the original displayPrice for reference
+        priceLabel: `₹${productPrice}${product.unit ? '/' + product.unit : ''}`, // Create clean price label using extracted price
         amount: getDefaultAmount(product.unit),
         unit: product.unit || 'piece',
         imageUrls: productImages,
@@ -210,13 +227,6 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   };
 
-  const getDefaultAmount = (unit: string): string => {
-    const normalizedUnit = unit?.toLowerCase() || 'piece';
-    if (normalizedUnit.includes('kg') || normalizedUnit.includes('g')) return '1kg';
-    if (normalizedUnit.includes('piece') || normalizedUnit.includes('pc')) return '1 pcs';
-    if (normalizedUnit.includes('box')) return '1 box';
-    return '1 pcs';
-  };
 
   const updateQuantity = async (productId: string, quantity: number) => {
     if (!authState.user) return;

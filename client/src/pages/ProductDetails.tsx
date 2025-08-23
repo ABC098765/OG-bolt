@@ -75,7 +75,36 @@ const ProductDetails = () => {
       return;
     }
 
-    addToCart(product);
+    // Extract numeric price for cart calculations (same logic as Products.tsx)
+    const productPrice = (() => {
+      if (product.displayPrice && typeof product.displayPrice === 'string') {
+        // Handle range prices like "₹80-₹250/kg" - extract the first (lower) price
+        const rangeMatch = product.displayPrice.match(/₹?(\d+(?:\.\d+)?)\s*-\s*₹?(\d+(?:\.\d+)?)/);
+        if (rangeMatch) {
+          return Number(rangeMatch[1]); // Return the lower price from range
+        }
+        // Handle single prices like "₹25/kg" or "25"
+        const singleMatch = product.displayPrice.match(/₹?(\d+(?:\.\d+)?)/);
+        if (singleMatch) {
+          return Number(singleMatch[1]);
+        }
+        // Fallback
+        const numericPart = product.displayPrice.replace(/[^\d.]/g, '');
+        return parseFloat(numericPart) || 0;
+      }
+      return product.price || 0;
+    })();
+    
+    const productImage = product.imageUrls?.[0] || product.image || 'https://images.pexels.com/photos/1128678/pexels-photo-1128678.jpeg?auto=compress&cs=tinysrgb&w=400';
+
+    addToCart({
+      id: product.id,
+      name: product.name,
+      price: productPrice,
+      displayPrice: product.displayPrice,
+      image: productImage,
+      unit: product.unit || 'piece'
+    });
   };
 
   const productPrice = product.displayPrice ? parseFloat(product.displayPrice.replace('₹', '')) : product.price;
