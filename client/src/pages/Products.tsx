@@ -68,13 +68,22 @@ const Products = () => {
       return;
     }
 
-    const productPrice = product.displayPrice ? parseFloat(product.displayPrice.replace('₹', '')) : product.price;
+    // Extract numeric price for cart calculations
+    const productPrice = (() => {
+      if (product.displayPrice && typeof product.displayPrice === 'string') {
+        const numericPart = product.displayPrice.replace(/[^\d.]/g, '');
+        return parseFloat(numericPart) || 0;
+      }
+      return product.price || 0;
+    })();
+    
     const productImage = product.imageUrls?.[0] || product.image || 'https://images.pexels.com/photos/1128678/pexels-photo-1128678.jpeg?auto=compress&cs=tinysrgb&w=400';
 
     addToCart({
       id: product.id,
       name: product.name,
       price: productPrice,
+      displayPrice: product.displayPrice,
       image: productImage,
       unit: product.unit || 'piece'
     });
@@ -150,7 +159,7 @@ const Products = () => {
         ) : (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {filteredProducts.map((product) => {
-              const productPrice = product.displayPrice ? parseFloat(product.displayPrice.replace('₹', '')) : product.price;
+              // Since prices are stored as strings with ₹ already included, use displayPrice directly
               const productImages = product.imageUrls || product.image_urls || [];
               const primaryImage = productImages[0] || product.image || 'https://images.pexels.com/photos/1128678/pexels-photo-1128678.jpeg?auto=compress&cs=tinysrgb&w=400';
               const isInStock = product.inStock !== false && (product.stock === undefined || product.stock > 0);
@@ -192,7 +201,7 @@ const Products = () => {
                     
                     <div className="flex items-center justify-between">
                       <span className="text-xl font-bold text-green-600">
-                        {product.displayPrice || `₹${productPrice}`}
+                        {product.displayPrice || product.price || 'Price not available'}
                       </span>
                       <button 
                         onClick={(e) => {
