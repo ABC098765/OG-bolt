@@ -22,7 +22,6 @@ const ProductDetails = () => {
         try {
           setLoading(true);
           const productData = await firestoreService.getProduct(productId);
-          console.log('ProductDetails - Loaded product data:', productData);
           setProduct(productData);
         } catch (error) {
           console.error('Error loading product:', error);
@@ -98,14 +97,6 @@ const ProductDetails = () => {
     
     const productImage = product.imageUrls?.[0] || product.image || 'https://images.pexels.com/photos/1128678/pexels-photo-1128678.jpeg?auto=compress&cs=tinysrgb&w=400';
 
-    // Debug log to see what displayPrice we're passing
-    console.log('ProductDetails - Adding to cart:', {
-      name: product.name,
-      displayPrice: product.displayPrice,
-      price: product.price,
-      numericPrice: productPrice,
-      unit: product.unit
-    });
 
     addToCart({
       id: product.id,

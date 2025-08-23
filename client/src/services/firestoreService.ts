@@ -210,13 +210,6 @@ export class FirestoreService {
     const finalPriceLabel = cartItem.displayPrice || cartItem.priceLabel
       || `₹${finalPriceValue}/${cartItem.unit || 'box'}`;
     
-    // Debug log to see what's happening with displayPrice
-    console.log('FirestoreService - Processing cart item:', {
-      displayPrice: cartItem.displayPrice,
-      priceLabel: cartItem.priceLabel,
-      finalPriceLabel: finalPriceLabel,
-      productId: cartItem.productId
-    });
       
       if (existingDoc.exists()) {
         // Update existing item - sum amounts like Android app

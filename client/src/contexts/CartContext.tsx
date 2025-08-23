@@ -202,22 +202,14 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
           'https://images.pexels.com/photos/1128678/pexels-photo-1128678.jpeg?auto=compress&cs=tinysrgb&w=400'
         ];
 
-      // Debug log to see what we're receiving
-      console.log('CartContext - Adding to cart:', {
-        name: product.name,
-        displayPrice: product.displayPrice,
-        price: product.price,
-        productPrice: productPrice,
-        unit: product.unit
-      });
 
       const cartItem = {
         productId: product.id.toString(),
         name: product.name,
         unitPrice: productPrice,
         priceValue: productPrice,
-        displayPrice: product.displayPrice || `₹${productPrice}`, // Ensure displayPrice is always set for cart display
-        priceLabel: product.displayPrice || `₹${productPrice}`, // Keep original displayPrice format like "₹150-₹400/kg"
+        displayPrice: product.displayPrice || product.price || `₹${productPrice}`, // Use displayPrice or fallback to product.price to maintain Android app sync
+        priceLabel: product.displayPrice || product.price || `₹${productPrice}`, // Keep original displayPrice format like "₹150-₹400/kg"
         amount: getDefaultAmount(product.unit),
         unit: product.unit || 'piece',
         imageUrls: productImages,
