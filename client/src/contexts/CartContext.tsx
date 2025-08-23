@@ -261,12 +261,10 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
     try {
       await firestoreService.updateCartItemQuantity(authState.user.id, productId, quantity);
-
-      if (quantity <= 0) {
-        dispatch({ type: 'REMOVE_ITEM', payload: productId });
-      } else {
-        dispatch({ type: 'UPDATE_QUANTITY', payload: { productId, quantity } });
-      }
+      
+      // Instead of using local reducer calculations, reload cart from Firestore to get accurate data
+      const cartItems = await firestoreService.getUserCart(authState.user.id);
+      dispatch({ type: 'SET_CART', payload: cartItems });
     } catch (error) {
       console.error('Error updating quantity:', error);
     }
