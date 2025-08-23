@@ -15,7 +15,7 @@ const FeaturedProducts = () => {
         name: product.name,
         price: product.price,
         image: product.image,
-        unit: product.unit
+        unit: product.unit || 'piece'
       }
     });
   };
@@ -47,31 +47,37 @@ const FeaturedProducts = () => {
         <div className="grid md:grid-cols-3 gap-8 mb-12">
           {[
             {
+              id: "featured-mango-1",
               name: "Premium Alphonso Mangoes",
               price: "₹299",
               originalPrice: "₹399",
               image: "https://images.pexels.com/photos/918327/pexels-photo-918327.jpeg?auto=compress&cs=tinysrgb&w=400",
               rating: 4.8,
-              badge: "Bestseller"
+              badge: "Bestseller",
+              unit: "kg"
             },
             {
+              id: "featured-strawberry-1",
               name: "Fresh Strawberries",
               price: "₹199",
               originalPrice: "₹249",
               image: "https://images.pexels.com/photos/89778/strawberries-frisch-ripe-sweet-89778.jpeg?auto=compress&cs=tinysrgb&w=400",
               rating: 4.9,
-              badge: "Premium"
+              badge: "Premium",
+              unit: "box"
             },
             {
+              id: "featured-apple-1",
               name: "Organic Apples",
               price: "₹149",
               originalPrice: "₹179",
               image: "https://images.pexels.com/photos/347926/pexels-photo-347926.jpeg?auto=compress&cs=tinysrgb&w=400",
               rating: 4.7,
-              badge: "Organic"
+              badge: "Organic",
+              unit: "kg"
             }
           ].map((product, index) => (
-            <div key={index} className="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-4 overflow-hidden">
+            <div key={product.id} className="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-4 overflow-hidden">
               {/* Badge */}
               <div className="absolute top-4 left-4 z-10">
                 <span className="bg-green-600 text-white px-3 py-1 rounded-full text-sm font-medium">
@@ -116,7 +122,13 @@ const FeaturedProducts = () => {
                     <span className="text-xl font-bold text-gray-900">{product.price}</span>
                     <span className="text-sm text-gray-500 line-through">{product.originalPrice}</span>
                   </div>
-                  <button className="bg-green-600 hover:bg-green-700 text-white p-2 rounded-full transition-colors">
+                  <button 
+                    onClick={(e) => {
+                      e.preventDefault();
+                      addToCart(product);
+                    }}
+                    className="bg-green-600 hover:bg-green-700 text-white p-2 rounded-full transition-colors"
+                  >
                     <ShoppingCart className="w-5 h-5" />
                   </button>
                 </div>
