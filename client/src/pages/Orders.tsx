@@ -116,15 +116,15 @@ const Orders = () => {
 
   const filteredOrders = selectedTab === 'all' 
     ? orders 
-    : orders.filter(order => order.payment_status === selectedTab);
+    : orders.filter(order => order.order_status === selectedTab);
 
   const tabs = [
     { id: 'all', name: 'All Orders', count: orders.length },
-    { id: 'pending', name: 'Pending', count: orders.filter(o => o.payment_status === 'pending').length },
-    { id: 'packed', name: 'Packed', count: orders.filter(o => o.payment_status === 'packed').length },
-    { id: 'out for delivery', name: 'Out for Delivery', count: orders.filter(o => o.payment_status === 'out for delivery').length },
-    { id: 'delivered', name: 'Delivered', count: orders.filter(o => o.payment_status === 'delivered').length },
-    { id: 'failed', name: 'Failed', count: orders.filter(o => o.payment_status === 'failed').length }
+    { id: 'ordered', name: 'Ordered', count: orders.filter(o => o.order_status === 'ordered').length },
+    { id: 'packed', name: 'Packed', count: orders.filter(o => o.order_status === 'packed').length },
+    { id: 'out for delivery', name: 'Out for Delivery', count: orders.filter(o => o.order_status === 'out for delivery').length },
+    { id: 'delivered', name: 'Delivered', count: orders.filter(o => o.order_status === 'delivered').length },
+    { id: 'failed', name: 'Failed', count: orders.filter(o => o.order_status === 'failed').length }
   ];
 
   return (
@@ -181,7 +181,7 @@ const Orders = () => {
               <div key={order.id} className="bg-white rounded-2xl shadow-lg p-6">
                 <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-6">
                   <div className="flex items-center space-x-4 mb-4 lg:mb-0">
-                    {getStatusIcon(order.payment_status)}
+                    {getStatusIcon(order.order_status)}
                     <div>
                       <h3 className="text-xl font-bold text-gray-900">#{order.id}</h3>
                       <p className="text-gray-600">
@@ -191,8 +191,8 @@ const Orders = () => {
                   </div>
                   
                   <div className="flex items-center space-x-4">
-                    <span className={`px-4 py-2 rounded-full text-sm font-semibold capitalize ${getStatusColor(order.payment_status)}`}>
-                      {order.payment_status}
+                    <span className={`px-4 py-2 rounded-full text-sm font-semibold capitalize ${getStatusColor(order.order_status)}`}>
+                      {order.order_status}
                     </span>
                     <span className="text-2xl font-bold text-green-600">
                       ₹{order.total_amount}
@@ -230,7 +230,7 @@ const Orders = () => {
                     View Details
                   </button>
                   
-                  {order.payment_status === 'delivered' && (
+                  {order.order_status === 'delivered' && (
                     <button className="flex items-center justify-center px-6 py-2 border-2 border-orange-500 text-orange-500 rounded-full hover:bg-orange-50 transition-colors font-semibold">
                       Reorder
                     </button>

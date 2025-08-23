@@ -42,6 +42,7 @@ export interface FirestoreOrder {
   delivery_fee: number;
   payment_id: string;
   payment_status: string;
+  order_status: string;
   created_at: Timestamp;
   updated_at: Timestamp;
 }

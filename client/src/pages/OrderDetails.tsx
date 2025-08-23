@@ -106,7 +106,7 @@ const OrderDetails = () => {
         return <Truck className="w-6 h-6 text-blue-500" />;
       case 'packed':
         return <Package className="w-6 h-6 text-purple-500" />;
-      case 'pending':
+      case 'ordered':
         return <Clock className="w-6 h-6 text-orange-500" />;
       default:
         return <Package className="w-6 h-6 text-gray-500" />;
@@ -121,7 +121,7 @@ const OrderDetails = () => {
         return 'bg-blue-100 text-blue-800';
       case 'packed':
         return 'bg-purple-100 text-purple-800';
-      case 'pending':
+      case 'ordered':
         return 'bg-orange-100 text-orange-800';
       default:
         return 'bg-gray-100 text-gray-800';
@@ -152,7 +152,7 @@ const OrderDetails = () => {
           <div className="bg-white rounded-2xl shadow-lg p-6">
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-6">
               <div className="flex items-center space-x-4 mb-4 lg:mb-0">
-                {getStatusIcon(order.payment_status)}
+                {getStatusIcon(order.order_status)}
                 <div>
                   <h2 className="text-2xl font-bold text-gray-900">#{order.id}</h2>
                   <div className="flex items-center space-x-4 text-gray-600">
@@ -169,8 +169,8 @@ const OrderDetails = () => {
               </div>
               
               <div className="flex items-center space-x-4">
-                <span className={`px-4 py-2 rounded-full text-sm font-semibold capitalize ${getStatusColor(order.payment_status)}`}>
-                  {order.payment_status}
+                <span className={`px-4 py-2 rounded-full text-sm font-semibold capitalize ${getStatusColor(order.order_status)}`}>
+                  {order.order_status}
                 </span>
                 <span className="text-3xl font-bold text-green-600">
                   ₹{order.total_amount}
@@ -265,7 +265,7 @@ const OrderDetails = () => {
           {/* Order Actions */}
           <div className="bg-white rounded-2xl shadow-lg p-6">
             <div className="flex flex-col sm:flex-row gap-4">
-              {order.payment_status === 'delivered' && (
+              {order.order_status === 'delivered' && (
                 <button className="flex items-center justify-center px-6 py-3 border-2 border-orange-500 text-orange-500 rounded-full hover:bg-orange-50 transition-colors font-semibold">
                   Reorder Items
                 </button>

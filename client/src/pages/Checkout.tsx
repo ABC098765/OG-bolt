@@ -209,6 +209,7 @@ const Checkout = () => {
         delivery_fee: deliveryFee,
         payment_status: selectedPaymentMethod === 'cod' ? 'pending' : 'paid',
         payment_id: selectedPaymentMethod === 'cod' ? 'COD' : 'ONLINE_PAYMENT',
+        order_status: 'ordered',
         items: cartState.items.map(item => ({
           product_id: item.id?.toString() || '',
           name: item.name,
