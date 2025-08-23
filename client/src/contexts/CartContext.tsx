@@ -190,10 +190,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         unitPrice: productPrice,
         priceValue: productPrice,
         displayPrice: product.displayPrice, // Preserve the original displayPrice
-        priceLabel:
-          product.priceLabel ||
-          product.displayPrice ||
-          `₹${productPrice}/${product.unit || 'box'}`,
+        priceLabel: product.displayPrice || product.priceLabel || `₹${productPrice}/${product.unit || 'box'}`,
         amount: getDefaultAmount(product.unit),
         unit: product.unit || 'piece',
         imageUrls: productImages,
