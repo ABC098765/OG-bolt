@@ -215,14 +215,21 @@ const Checkout = () => {
           const itemQuantity = item.quantity || 1;
           const totalPrice = itemPrice * itemQuantity;
           
+          // Create unit price display that matches Android app format
+          const unitPriceWithUnit = item.priceLabel || (item.unit === 'kg' ? `₹${itemPrice}/kg` : 
+                                                      item.unit === 'piece' ? `₹${itemPrice}/piece` : 
+                                                      item.unit === 'box' ? `₹${itemPrice}/box` : 
+                                                      `₹${itemPrice}`);
+          
           return {
             product_id: item.productId || item.id?.toString() || '',
             name: item.name,
             quantity: itemQuantity,
             amount: item.amount || `${itemQuantity} ${item.unit || 'pcs'}`,
             unit: item.unit || 'piece',
-            displayPrice: item.priceLabel || `₹${itemPrice}`,
-            unitPriceDisplay: `₹${itemPrice}`,
+            displayPrice: item.priceLabel || unitPriceWithUnit,
+            unitPriceDisplay: unitPriceWithUnit, // Include unit for Android app compatibility
+            priceLabel: item.priceLabel || unitPriceWithUnit, // Ensure priceLabel is also saved for consistency
             numericPrice: itemPrice,
             price: itemPrice,
             totalPrice: totalPrice,
