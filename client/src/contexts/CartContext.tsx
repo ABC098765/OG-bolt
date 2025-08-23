@@ -149,12 +149,30 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
     try {
       const productPrice = (() => {
-        const fallback = Number(product.price || 0);
-        if (!product.displayPrice) return fallback;
-        const match = product.displayPrice.match(/[\d,]+(\.\d+)?/);
-        if (match) return Number(match[0].replace(/,/g, ''));
-        const digits = (product.displayPrice || '').replace(/[^\d.]/g, '');
-        return digits ? Number(digits) : fallback;
+        // Try different price sources in order of preference
+        const priceString = product.displayPrice || product.price || product.unitPriceDisplay || '';
+        
+        if (typeof priceString === 'number') {
+          return priceString;
+        }
+        
+        if (typeof priceString === 'string') {
+          // Handle range prices like "₹80-₹250/kg" - extract the first (lower) price
+          const rangeMatch = priceString.match(/₹?(\d+(?:\.\d+)?)\s*-\s*₹?(\d+(?:\.\d+)?)/);
+          if (rangeMatch) {
+            return Number(rangeMatch[1]); // Return the lower price from range
+          }
+          
+          // Handle single prices like "₹25/kg" or "25"
+          const singleMatch = priceString.match(/₹?(\d+(?:\.\d+)?)/);
+          if (singleMatch) {
+            return Number(singleMatch[1]);
+          }
+        }
+        
+        // Fallback - try to extract any number from the string
+        const numericValue = String(priceString).replace(/[^\d.]/g, '');
+        return numericValue ? Number(numericValue) : 0;
       })();
 
       const productImages =
