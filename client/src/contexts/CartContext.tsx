@@ -13,6 +13,7 @@ export interface CartItem {
   totalPrice: number;
   priceLabel?: string;
   priceValue?: number;
+  displayPrice?: string;
   id?: string;
   price?: number;
   image?: string;
@@ -188,6 +189,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         name: product.name,
         unitPrice: productPrice,
         priceValue: productPrice,
+        displayPrice: product.displayPrice, // Preserve the original displayPrice
         priceLabel:
           product.priceLabel ||
           product.displayPrice ||
