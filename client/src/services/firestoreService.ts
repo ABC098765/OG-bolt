@@ -270,9 +270,16 @@ export class FirestoreService {
           const singleAmount = this.parseAmount(data.amount, data.unit);
           const totalAmount = singleAmount * quantity;
           
+          // Update amount field to reflect correct quantity like "7kg"
+          const updatedAmount = data.unit === 'kg' ? `${quantity}kg` :
+                               data.unit === 'piece' ? `${quantity}pc` :
+                               data.unit === 'box' ? `${quantity} box` :
+                               `${quantity} ${data.unit}`;
+
           await updateDoc(cartItemRef, {
             quantity: quantity,
-            totalPrice: data.unitPrice * totalAmount
+            amount: updatedAmount, // Update amount field to show correct quantity like "7kg"
+            totalPrice: data.unitPrice * quantity // Fix: use quantity directly instead of totalAmount
           });
         }
       }
