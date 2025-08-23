@@ -484,7 +484,7 @@ const Checkout = () => {
                   <div>
                     <h4 className="font-medium text-gray-900">{item.name}</h4>
                     <p className="text-sm text-gray-600">
-                      {item.quantity} × ₹{item.price} per {item.unit}
+                      {item.quantity} × {item.priceLabel || item.displayPrice || `₹${item.price}/${item.unit}`}
                     </p>
                   </div>
                 </div>
