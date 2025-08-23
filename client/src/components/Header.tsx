@@ -85,7 +85,9 @@ const Header = () => {
           <div className="hidden md:flex items-center space-x-8">
             <Link 
               to="/" 
-              className="transition-colors text-green-600 font-bold"
+              className={`transition-colors font-medium ${
+                isActive('/') ? 'text-green-600' : 'text-gray-700 hover:text-green-600'
+              }`}
             >
               Home
             </Link>
