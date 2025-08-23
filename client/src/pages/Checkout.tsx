@@ -489,7 +489,7 @@ const Checkout = () => {
                   </div>
                 </div>
                 <span className="font-semibold text-gray-900">
-                  ₹{(item.price || 0) * item.quantity}
+                  ₹{(item.unitPrice || item.priceValue || 0) * item.quantity}
                 </span>
               </div>
             ))}
