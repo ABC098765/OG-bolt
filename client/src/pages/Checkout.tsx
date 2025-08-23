@@ -221,11 +221,20 @@ const Checkout = () => {
                                                       item.unit === 'box' ? `₹${itemPrice}/box` : 
                                                       `₹${itemPrice}`);
           
+          // Calculate amount correctly to avoid quantity squaring bug
+          const correctAmount = (() => {
+            const normalizedUnit = (item.unit || 'piece').toLowerCase();
+            if (normalizedUnit.includes('kg') || normalizedUnit.includes('g')) return `${itemQuantity}kg`;
+            if (normalizedUnit.includes('piece') || normalizedUnit.includes('pc')) return `${itemQuantity} pcs`;
+            if (normalizedUnit.includes('box')) return `${itemQuantity} box`;
+            return `${itemQuantity} pcs`;
+          })();
+
           return {
             product_id: item.productId || item.id?.toString() || '',
             name: item.name,
             quantity: itemQuantity,
-            amount: item.amount || `${itemQuantity} ${item.unit || 'pcs'}`,
+            amount: correctAmount, // Always calculate from quantity to avoid squaring bug
             unit: item.unit || 'piece',
             displayPrice: item.priceLabel || unitPriceWithUnit,
             unitPriceDisplay: unitPriceWithUnit, // Include unit for Android app compatibility
