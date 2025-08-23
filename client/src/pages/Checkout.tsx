@@ -211,12 +211,12 @@ const Checkout = () => {
         payment_id: selectedPaymentMethod === 'cod' ? 'COD' : 'ONLINE_PAYMENT',
         order_status: 'ordered',
         items: cartState.items.map(item => ({
-          product_id: item.id?.toString() || '',
+          product_id: item.productId || item.id?.toString() || '',
           name: item.name,
           quantity: item.quantity,
-          displayPrice: `₹${item.price}`,
-          numericPrice: item.price || 0,
-          imageUrls: [item.image].filter((url): url is string => url !== undefined),
+          displayPrice: item.priceLabel || item.displayPrice || `₹${item.unitPrice || item.priceValue || 0}`,
+          numericPrice: item.unitPrice || item.priceValue || 0,
+          imageUrls: item.imageUrls || [item.image].filter((url): url is string => url !== undefined),
         })),
       };
 

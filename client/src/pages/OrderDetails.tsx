@@ -129,7 +129,11 @@ const OrderDetails = () => {
   };
 
   // Calculate pricing
-  const subtotal = order.items.reduce((sum: number, item: any) => sum + (item.numericPrice * item.quantity), 0);
+  const subtotal = order.items.reduce((sum: number, item: any) => {
+    const itemPrice = item.numericPrice || 0;
+    const itemQuantity = item.quantity || 1;
+    return sum + (itemPrice * itemQuantity);
+  }, 0);
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
@@ -214,7 +218,7 @@ const OrderDetails = () => {
                   </div>
                   <div className="text-right">
                     <p className="font-semibold text-gray-900">Qty: {item.quantity}</p>
-                    <p className="text-lg font-bold text-green-600">₹{item.numericPrice * item.quantity}</p>
+                    <p className="text-lg font-bold text-green-600">₹{(item.numericPrice || 0) * (item.quantity || 1)}</p>
                   </div>
                 </div>
               ))}
