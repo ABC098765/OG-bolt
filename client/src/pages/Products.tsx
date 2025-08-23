@@ -6,6 +6,76 @@ import { useCart } from '../contexts/CartContext';
 import { useAuth } from '../contexts/AuthContext';
 import { firestoreService } from '../services/firestoreService';
 
+// Fallback products when Firestore fails - moved outside component to prevent re-creation
+const fallbackProducts = [
+  {
+    id: 'apple-1',
+    name: 'Fresh Apples',
+    category: 'Fruits',
+    price: 120,
+    displayPrice: '₹120',
+    unit: 'kg',
+    imageUrls: ['https://images.pexels.com/photos/102104/pexels-photo-102104.jpeg?auto=compress&cs=tinysrgb&w=400'],
+    inStock: true,
+    description: 'Fresh, crispy red apples perfect for snacking and cooking.'
+  },
+  {
+    id: 'banana-1',
+    name: 'Fresh Bananas',
+    category: 'Fruits',
+    price: 60,
+    displayPrice: '₹60',
+    unit: 'kg',
+    imageUrls: ['https://images.pexels.com/photos/61127/pexels-photo-61127.jpeg?auto=compress&cs=tinysrgb&w=400'],
+    inStock: true,
+    description: 'Ripe yellow bananas rich in potassium and natural sweetness.'
+  },
+  {
+    id: 'orange-1',
+    name: 'Fresh Oranges',
+    category: 'Fruits',
+    price: 80,
+    displayPrice: '₹80',
+    unit: 'kg',
+    imageUrls: ['https://images.pexels.com/photos/1414110/pexels-photo-1414110.jpeg?auto=compress&cs=tinysrgb&w=400'],
+    inStock: true,
+    description: 'Juicy oranges packed with vitamin C and refreshing flavor.'
+  },
+  {
+    id: 'mango-1',
+    name: 'Fresh Mangoes',
+    category: 'Fruits',
+    price: 200,
+    displayPrice: '₹200',
+    unit: 'kg',
+    imageUrls: ['https://images.pexels.com/photos/1128678/pexels-photo-1128678.jpeg?auto=compress&cs=tinysrgb&w=400'],
+    inStock: true,
+    description: 'Sweet and juicy mangoes, the king of fruits.'
+  },
+  {
+    id: 'grapes-1',
+    name: 'Fresh Grapes',
+    category: 'Fruits',
+    price: 150,
+    displayPrice: '₹150',
+    unit: 'kg',
+    imageUrls: ['https://images.pexels.com/photos/708777/pexels-photo-708777.jpeg?auto=compress&cs=tinysrgb&w=400'],
+    inStock: true,
+    description: 'Sweet purple grapes perfect for snacking.'
+  },
+  {
+    id: 'strawberry-1',
+    name: 'Fresh Strawberries',
+    category: 'Fruits',
+    price: 300,
+    displayPrice: '₹300',
+    unit: 'kg',
+    imageUrls: ['https://images.pexels.com/photos/89778/strawberries-red-fruit-royalty-free-89778.jpeg?auto=compress&cs=tinysrgb&w=400'],
+    inStock: true,
+    description: 'Fresh red strawberries bursting with flavor.'
+  }
+];
+
 const Products = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
@@ -15,75 +85,6 @@ const Products = () => {
     { id: 'all', name: 'All Products' }
   ]);
   
-  // Fallback products when Firestore fails
-  const fallbackProducts = [
-    {
-      id: 'apple-1',
-      name: 'Fresh Apples',
-      category: 'Fruits',
-      price: 120,
-      displayPrice: '₹120',
-      unit: 'kg',
-      imageUrls: ['https://images.pexels.com/photos/102104/pexels-photo-102104.jpeg?auto=compress&cs=tinysrgb&w=400'],
-      inStock: true,
-      description: 'Fresh, crispy red apples perfect for snacking and cooking.'
-    },
-    {
-      id: 'banana-1',
-      name: 'Fresh Bananas',
-      category: 'Fruits',
-      price: 60,
-      displayPrice: '₹60',
-      unit: 'kg',
-      imageUrls: ['https://images.pexels.com/photos/61127/pexels-photo-61127.jpeg?auto=compress&cs=tinysrgb&w=400'],
-      inStock: true,
-      description: 'Ripe yellow bananas rich in potassium and natural sweetness.'
-    },
-    {
-      id: 'orange-1',
-      name: 'Fresh Oranges',
-      category: 'Fruits',
-      price: 80,
-      displayPrice: '₹80',
-      unit: 'kg',
-      imageUrls: ['https://images.pexels.com/photos/1414110/pexels-photo-1414110.jpeg?auto=compress&cs=tinysrgb&w=400'],
-      inStock: true,
-      description: 'Juicy oranges packed with vitamin C and refreshing flavor.'
-    },
-    {
-      id: 'mango-1',
-      name: 'Fresh Mangoes',
-      category: 'Fruits',
-      price: 200,
-      displayPrice: '₹200',
-      unit: 'kg',
-      imageUrls: ['https://images.pexels.com/photos/1128678/pexels-photo-1128678.jpeg?auto=compress&cs=tinysrgb&w=400'],
-      inStock: true,
-      description: 'Sweet and juicy mangoes, the king of fruits.'
-    },
-    {
-      id: 'grapes-1',
-      name: 'Fresh Grapes',
-      category: 'Fruits',
-      price: 150,
-      displayPrice: '₹150',
-      unit: 'kg',
-      imageUrls: ['https://images.pexels.com/photos/708777/pexels-photo-708777.jpeg?auto=compress&cs=tinysrgb&w=400'],
-      inStock: true,
-      description: 'Sweet purple grapes perfect for snacking.'
-    },
-    {
-      id: 'strawberry-1',
-      name: 'Fresh Strawberries',
-      category: 'Fruits',
-      price: 300,
-      displayPrice: '₹300',
-      unit: 'kg',
-      imageUrls: ['https://images.pexels.com/photos/89778/strawberries-red-fruit-royalty-free-89778.jpeg?auto=compress&cs=tinysrgb&w=400'],
-      inStock: true,
-      description: 'Fresh red strawberries bursting with flavor.'
-    }
-  ];
   const [, setLocation] = useLocation();
   const navigate = (path: string) => setLocation(path);
   const { addToCart } = useCart();
@@ -131,7 +132,7 @@ const Products = () => {
     };
 
     loadProducts();
-  }, [fallbackProducts]);
+  }, []); // Removed fallbackProducts dependency to prevent infinite loop
 
   const filteredProducts = products.filter(product => {
     const matchesCategory = selectedCategory === 'all' || product.category === selectedCategory;
@@ -254,7 +255,7 @@ const Products = () => {
                     
                     <div className="flex items-center justify-between">
                       <span className="text-xl font-bold text-green-600">
-                        {product.displayPrice ? product.displayPrice.replace('₹', '') : productPrice}
+                        ₹{product.displayPrice ? product.displayPrice.replace('₹', '') : productPrice}
                       </span>
                       <button 
                         onClick={(e) => {
@@ -285,7 +286,7 @@ const Products = () => {
           </div>
         )}
 
-        {filteredProducts.length === 0 && (
+        {filteredProducts.length === 0 && !loading && (
           <div className="text-center py-12">
             <p className="text-xl text-gray-600">No products found matching your criteria.</p>
           </div>
