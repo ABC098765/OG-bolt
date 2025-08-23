@@ -1,86 +1,18 @@
 import React, { useState } from 'react';
 import { useEffect } from 'react';
 import { useLocation } from 'wouter';
-import { Filter, Search, ShoppingCart } from 'lucide-react';
+import { Filter, Search, ShoppingCart, RefreshCw, AlertCircle } from 'lucide-react';
 import { useCart } from '../contexts/CartContext';
 import { useAuth } from '../contexts/AuthContext';
 import { firestoreService } from '../services/firestoreService';
 
-// Fallback products when Firestore fails - moved outside component to prevent re-creation
-const fallbackProducts = [
-  {
-    id: 'apple-1',
-    name: 'Fresh Apples',
-    category: 'Fruits',
-    price: 120,
-    displayPrice: '₹120',
-    unit: 'kg',
-    imageUrls: ['https://images.pexels.com/photos/102104/pexels-photo-102104.jpeg?auto=compress&cs=tinysrgb&w=400'],
-    inStock: true,
-    description: 'Fresh, crispy red apples perfect for snacking and cooking.'
-  },
-  {
-    id: 'banana-1',
-    name: 'Fresh Bananas',
-    category: 'Fruits',
-    price: 60,
-    displayPrice: '₹60',
-    unit: 'kg',
-    imageUrls: ['https://images.pexels.com/photos/61127/pexels-photo-61127.jpeg?auto=compress&cs=tinysrgb&w=400'],
-    inStock: true,
-    description: 'Ripe yellow bananas rich in potassium and natural sweetness.'
-  },
-  {
-    id: 'orange-1',
-    name: 'Fresh Oranges',
-    category: 'Fruits',
-    price: 80,
-    displayPrice: '₹80',
-    unit: 'kg',
-    imageUrls: ['https://images.pexels.com/photos/1414110/pexels-photo-1414110.jpeg?auto=compress&cs=tinysrgb&w=400'],
-    inStock: true,
-    description: 'Juicy oranges packed with vitamin C and refreshing flavor.'
-  },
-  {
-    id: 'mango-1',
-    name: 'Fresh Mangoes',
-    category: 'Fruits',
-    price: 200,
-    displayPrice: '₹200',
-    unit: 'kg',
-    imageUrls: ['https://images.pexels.com/photos/1128678/pexels-photo-1128678.jpeg?auto=compress&cs=tinysrgb&w=400'],
-    inStock: true,
-    description: 'Sweet and juicy mangoes, the king of fruits.'
-  },
-  {
-    id: 'grapes-1',
-    name: 'Fresh Grapes',
-    category: 'Fruits',
-    price: 150,
-    displayPrice: '₹150',
-    unit: 'kg',
-    imageUrls: ['https://images.pexels.com/photos/708777/pexels-photo-708777.jpeg?auto=compress&cs=tinysrgb&w=400'],
-    inStock: true,
-    description: 'Sweet purple grapes perfect for snacking.'
-  },
-  {
-    id: 'strawberry-1',
-    name: 'Fresh Strawberries',
-    category: 'Fruits',
-    price: 300,
-    displayPrice: '₹300',
-    unit: 'kg',
-    imageUrls: ['https://images.pexels.com/photos/89778/strawberries-red-fruit-royalty-free-89778.jpeg?auto=compress&cs=tinysrgb&w=400'],
-    inStock: true,
-    description: 'Fresh red strawberries bursting with flavor.'
-  }
-];
 
 const Products = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [categories, setCategories] = useState([
     { id: 'all', name: 'All Products' }
   ]);
@@ -91,48 +23,38 @@ const Products = () => {
   const { state: authState, dispatch: authDispatch } = useAuth();
 
   // Load products from Firestore
-  useEffect(() => {
-    const loadProducts = async () => {
-      try {
-        setLoading(true);
-        const productsData = await firestoreService.getProducts();
+  const loadProducts = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const productsData = await firestoreService.getProducts();
+      
+      if (productsData && productsData.length > 0) {
+        setProducts(productsData);
         
-        if (productsData && productsData.length > 0) {
-          setProducts(productsData);
-          
-          // Extract unique categories from products
-          const uniqueCategories = Array.from(new Set(productsData.map(product => product.category)));
-          const categoryOptions = [
-            { id: 'all', name: 'All Products' },
-            ...uniqueCategories.map(cat => ({ id: cat, name: cat }))
-          ];
-          setCategories(categoryOptions);
-        } else {
-          // Use fallback products if Firestore is empty
-          console.log('No products found in Firestore, using fallback products');
-          setProducts(fallbackProducts);
-          const categoryOptions = [
-            { id: 'all', name: 'All Products' },
-            { id: 'Fruits', name: 'Fruits' }
-          ];
-          setCategories(categoryOptions);
-        }
-      } catch (error) {
-        console.error('Error loading products from Firestore, using fallback products:', error);
-        // Use fallback products when Firestore fails
-        setProducts(fallbackProducts);
+        // Extract unique categories from products
+        const uniqueCategories = Array.from(new Set(productsData.map(product => product.category)));
         const categoryOptions = [
           { id: 'all', name: 'All Products' },
-          { id: 'Fruits', name: 'Fruits' }
+          ...uniqueCategories.map(cat => ({ id: cat, name: cat }))
         ];
         setCategories(categoryOptions);
-      } finally {
-        setLoading(false);
+      } else {
+        setError('No products found in the database.');
+        setProducts([]);
       }
-    };
+    } catch (error) {
+      console.error('Error loading products:', error);
+      setError('Failed to load products. Please check your connection and try again.');
+      setProducts([]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     loadProducts();
-  }, []); // Removed fallbackProducts dependency to prevent infinite loop
+  }, []);
 
   const filteredProducts = products.filter(product => {
     const matchesCategory = selectedCategory === 'all' || product.category === selectedCategory;
@@ -210,6 +132,21 @@ const Products = () => {
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto mb-4"></div>
             <p className="text-xl text-gray-600">Loading products...</p>
           </div>
+        ) : error ? (
+          <div className="text-center py-16">
+            <div className="flex flex-col items-center max-w-md mx-auto">
+              <AlertCircle className="w-16 h-16 text-red-500 mb-4" />
+              <h2 className="text-2xl font-bold text-gray-900 mb-2">Failed to Load Products</h2>
+              <p className="text-gray-600 mb-6 text-center">{error}</p>
+              <button
+                onClick={loadProducts}
+                className="bg-green-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-green-700 transition-colors flex items-center"
+              >
+                <RefreshCw className="w-5 h-5 mr-2" />
+                Retry
+              </button>
+            </div>
+          </div>
         ) : (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {filteredProducts.map((product) => {
@@ -286,7 +223,7 @@ const Products = () => {
           </div>
         )}
 
-        {filteredProducts.length === 0 && !loading && (
+        {filteredProducts.length === 0 && !loading && !error && (
           <div className="text-center py-12">
             <p className="text-xl text-gray-600">No products found matching your criteria.</p>
           </div>
