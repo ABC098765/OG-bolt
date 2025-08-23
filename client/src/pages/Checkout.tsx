@@ -233,8 +233,8 @@ const Checkout = () => {
           return {
             product_id: item.productId || item.id?.toString() || '',
             name: item.name,
-            quantity: itemQuantity,
-            amount: correctAmount, // Always calculate from quantity to avoid squaring bug
+            quantity: 1, // Always 1 to match Android app format - admin calculates from amount
+            amount: correctAmount, // This contains the actual quantity like "2kg"
             unit: item.unit || 'piece',
             displayPrice: item.priceLabel || unitPriceWithUnit,
             unitPriceDisplay: unitPriceWithUnit, // Include unit for Android app compatibility
