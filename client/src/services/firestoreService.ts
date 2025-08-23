@@ -267,10 +267,8 @@ export class FirestoreService {
         const cartDoc = await getDoc(cartItemRef);
         if (cartDoc.exists()) {
           const data = cartDoc.data();
-          const singleAmount = this.parseAmount(data.amount, data.unit);
-          const totalAmount = singleAmount * quantity;
           
-          // Update amount field to reflect correct quantity like "7kg"
+          // Directly create the amount string without parsing existing amount to avoid squaring
           const updatedAmount = data.unit === 'kg' ? `${quantity}kg` :
                                data.unit === 'piece' ? `${quantity}pc` :
                                data.unit === 'box' ? `${quantity} box` :
@@ -278,8 +276,8 @@ export class FirestoreService {
 
           await updateDoc(cartItemRef, {
             quantity: quantity,
-            amount: updatedAmount, // Update amount field to show correct quantity like "7kg"
-            totalPrice: data.unitPrice * quantity // Fix: use quantity directly instead of totalAmount
+            amount: updatedAmount, // Direct quantity like "8kg" without double calculation
+            totalPrice: data.unitPrice * quantity // Simple calculation: unitPrice × quantity
           });
         }
       }
