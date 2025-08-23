@@ -152,7 +152,7 @@ const ProductDetails = () => {
               <div className="mb-8">
                 <div className="flex items-baseline">
                   <span className="text-4xl font-bold text-green-600">
-                    {product.displayPrice || `₹${productPrice}`}
+                    {product.displayPrice || (typeof product.price === 'string' && product.price.includes('₹') ? product.price : `₹${productPrice}`)}
                   </span>
                 </div>
                 
