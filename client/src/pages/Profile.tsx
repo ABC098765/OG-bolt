@@ -51,7 +51,7 @@ const Profile = () => {
         }
         
         const verifier = new RecaptchaVerifier(auth, 'profile-recaptcha-container', {
-          size: 'normal',
+          size: 'invisible',
           callback: () => {
             console.log('Profile reCAPTCHA solved');
             setIsRecaptchaSolved(true);

@@ -60,7 +60,7 @@ const AuthModal = () => {
         }
         
         const verifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
-          size: 'normal',
+          size: 'invisible',
           callback: () => {
             console.log('reCAPTCHA solved');
             setRecaptchaCompleted(true);

@@ -26,7 +26,7 @@ export class AuthService {
   initializeRecaptcha(containerId: string) {
     if (!this.recaptchaVerifier) {
       this.recaptchaVerifier = new RecaptchaVerifier(auth, containerId, {
-        size: 'normal',
+        size: 'invisible',
         callback: () => {
           console.log('reCAPTCHA solved');
         },
