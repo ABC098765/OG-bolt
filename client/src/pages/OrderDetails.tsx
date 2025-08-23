@@ -221,8 +221,9 @@ const OrderDetails = () => {
                       className="w-16 h-16 object-cover rounded-lg"
                     />
                     <div>
-                      <h4 className="font-semibold text-gray-900">{item.name}</h4>
-                      <p className="text-gray-600">{item.displayPrice}</p>
+                      <h4 className="font-semibold text-gray-900">
+                        {item.name} ({item.amount}, {item.priceLabel || item.displayPrice})
+                      </h4>
                     </div>
                   </div>
                   <div className="text-right">
