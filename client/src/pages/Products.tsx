@@ -65,31 +65,11 @@ const Products = () => {
     return matchesCategory && matchesSearch;
   });
 
-  const handleAddToCart = async (product: any, event: React.MouseEvent) => {
+  const handleAddToCart = async (product: any) => {
     if (!authState.isAuthenticated) {
       authDispatch({ type: 'SHOW_AUTH_MODAL' });
       return;
     }
-
-    // Create fruit animation effect
-    const button = event.currentTarget as HTMLButtonElement;
-    const buttonRect = button.getBoundingClientRect();
-    
-    // Create animated fruit element
-    const fruitElement = document.createElement('div');
-    fruitElement.innerHTML = '🍎'; // Use appropriate fruit emoji
-    fruitElement.className = 'fixed text-xl pointer-events-none z-50 animate-fruit-to-cart';
-    fruitElement.style.left = `${buttonRect.left + buttonRect.width / 2}px`;
-    fruitElement.style.top = `${buttonRect.top + buttonRect.height / 2}px`;
-    
-    document.body.appendChild(fruitElement);
-    
-    // Remove element after animation
-    setTimeout(() => {
-      if (document.body.contains(fruitElement)) {
-        document.body.removeChild(fruitElement);
-      }
-    }, 800);
 
     try {
       // Extract numeric price for cart calculations
@@ -236,13 +216,13 @@ const Products = () => {
                       <button 
                         onClick={async (e) => {
                           e.stopPropagation();
-                          await handleAddToCart(product, e);
+                          await handleAddToCart(product);
                         }}
-                        className={`px-4 py-2 rounded-full font-medium cart-button flex items-center ${
+                        className={`px-4 py-2 rounded-full font-medium transition-colors ${
                           isInStock 
-                            ? 'bg-orange-500 text-white hover:bg-orange-600 hover:animate-button-pulse' 
+                            ? 'bg-orange-500 text-white hover:bg-orange-600' 
                             : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                        }`}
+                        } flex items-center`}
                         disabled={!isInStock}
                       >
                         {isInStock ? (

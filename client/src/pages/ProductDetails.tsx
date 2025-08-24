@@ -69,29 +69,11 @@ const ProductDetails = () => {
     );
   }
 
-  const handleAddToCart = (event: React.MouseEvent) => {
+  const handleAddToCart = () => {
     if (!authState.isAuthenticated) {
       authDispatch({ type: 'SHOW_AUTH_MODAL' });
       return;
     }
-
-    // Create fruit animation effect
-    const button = event.currentTarget as HTMLButtonElement;
-    const buttonRect = button.getBoundingClientRect();
-    
-    // Create animated fruit element
-    const fruitElement = document.createElement('div');
-    fruitElement.innerHTML = '🍎'; // Use appropriate fruit emoji based on product
-    fruitElement.className = 'fixed text-2xl pointer-events-none z-50 animate-fruit-to-cart';
-    fruitElement.style.left = `${buttonRect.left + buttonRect.width / 2}px`;
-    fruitElement.style.top = `${buttonRect.top + buttonRect.height / 2}px`;
-    
-    document.body.appendChild(fruitElement);
-    
-    // Remove element after animation
-    setTimeout(() => {
-      document.body.removeChild(fruitElement);
-    }, 800);
 
     // Extract numeric price for cart calculations (same logic as Products.tsx)
     const productPrice = (() => {
@@ -114,6 +96,7 @@ const ProductDetails = () => {
     })();
     
     const productImage = product.imageUrls?.[0] || product.image || 'https://images.pexels.com/photos/1128678/pexels-photo-1128678.jpeg?auto=compress&cs=tinysrgb&w=400';
+
 
     addToCart({
       id: product.id,
@@ -224,9 +207,9 @@ const ProductDetails = () => {
                 <button 
                   onClick={handleAddToCart}
                   disabled={!isInStock}
-                  className={`w-full py-4 px-8 rounded-full font-semibold text-lg flex items-center justify-center cart-button ${
+                  className={`w-full py-4 px-8 rounded-full font-semibold text-lg transition-colors flex items-center justify-center ${
                     isInStock 
-                      ? 'bg-green-600 text-white hover:bg-green-700 hover:animate-button-pulse' 
+                      ? 'bg-green-600 text-white hover:bg-green-700' 
                       : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                   }`}
                 >

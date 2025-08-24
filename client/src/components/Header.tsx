@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link, useLocation } from 'wouter';
 import { Menu, X, Phone, MapPin, ShoppingCart, LogOut, Bell } from 'lucide-react';
 import { useCart } from '../contexts/CartContext';
@@ -9,20 +9,10 @@ import { firestoreService } from '../services/firestoreService';
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
-  const [cartShake, setCartShake] = useState(false);
   const [location, setLocation] = useLocation();
   const navigate = (path: string) => setLocation(path);
   const { state } = useCart();
   const { state: authState, dispatch: authDispatch } = useAuth();
-
-  // Cart shake animation when items change
-  useEffect(() => {
-    const totalItems = state.items.reduce((sum, item) => sum + item.quantity, 0);
-    if (totalItems > 0) {
-      setCartShake(true);
-      setTimeout(() => setCartShake(false), 500);
-    }
-  }, [state.items]);
 
   // Load unread notifications count
   React.useEffect(() => {
@@ -113,7 +103,7 @@ const Header = () => {
               to="/cart" 
               className={`transition-colors font-medium ${
                 isActive('/cart') ? 'text-green-600' : 'text-gray-700 hover:text-green-600'
-              } flex items-center ${cartShake ? 'animate-cart-shake' : ''}`}
+              } flex items-center`}
             >
               <ShoppingCart className="w-4 h-4 mr-1" />
               Cart ({state.items.reduce((sum, item) => sum + item.quantity, 0)})

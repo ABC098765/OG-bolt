@@ -4,7 +4,6 @@ import { ShoppingCart, Truck, Star, Heart, Award, Clock } from 'lucide-react';
 import heroImage from '@assets/generated_images/Fresh_fruit_hero_display_7afffe66.png';
 
 const Hero = () => {
-
   return (
     <section id="home" className="relative overflow-hidden bg-gradient-to-br from-green-50 via-emerald-50 to-orange-50 py-20">
 
@@ -19,13 +18,15 @@ const Hero = () => {
 
             <div className="space-y-6">
               <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold text-gray-900 leading-tight">
-                Fresh <span className="text-green-600">Fruits</span><br />
-                Delivered to Your <span className="text-orange-500 underline-animated">
-                  Doorstep
+                Fresh <span className="text-green-600 underline-animated">
+                  Fruits
+                </span><br />
+                Delivered <span className="text-orange-500 underline-gradient">
+                  Daily
                 </span>
               </h1>
               <p className="text-xl text-gray-600 leading-relaxed max-w-xl">
-                Experience the finest selection of farm-fresh fruits with our premium delivery service. 
+                Experience the finest selection of farm-fresh fruits at Super Fruit Center. 
                 From exotic imports to local favorites, we bring nature's sweetness directly to your doorstep.
               </p>
             </div>
