@@ -12,7 +12,9 @@ import {
   orderBy,
   limit,
   serverTimestamp,
-  Timestamp
+  Timestamp,
+  onSnapshot,
+  Unsubscribe
 } from 'firebase/firestore';
 import { db } from '../config/firebase';
 import { FirestoreOrder, FirestoreNotification, FirestoreAddress } from '../types/firestore';
@@ -69,6 +71,51 @@ export class FirestoreService {
     } catch (error) {
       console.error('Error getting order:', error);
       return null;
+    }
+  }
+
+  // Real-time listeners for orders
+  subscribeToUserOrders(userId: string, callback: (orders: FirestoreOrder[]) => void): Unsubscribe {
+    try {
+      const ordersRef = collection(db, 'orders');
+      const q = query(
+        ordersRef,
+        where('user_id', '==', userId),
+        orderBy('created_at', 'desc')
+      );
+      
+      return onSnapshot(q, (querySnapshot) => {
+        const orders = querySnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        })) as FirestoreOrder[];
+        callback(orders);
+      }, (error) => {
+        console.error('Error in user orders subscription:', error);
+      });
+    } catch (error) {
+      console.error('Error setting up user orders subscription:', error);
+      return () => {}; // Return empty unsubscribe function
+    }
+  }
+
+  subscribeToOrder(orderId: string, callback: (order: FirestoreOrder | null) => void): Unsubscribe {
+    try {
+      const orderRef = doc(db, 'orders', orderId);
+      
+      return onSnapshot(orderRef, (docSnapshot) => {
+        if (docSnapshot.exists()) {
+          const order = { id: orderId, ...docSnapshot.data() } as FirestoreOrder;
+          callback(order);
+        } else {
+          callback(null);
+        }
+      }, (error) => {
+        console.error('Error in order subscription:', error);
+      });
+    } catch (error) {
+      console.error('Error setting up order subscription:', error);
+      return () => {}; // Return empty unsubscribe function
     }
   }
 

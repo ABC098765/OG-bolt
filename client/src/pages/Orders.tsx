@@ -20,23 +20,35 @@ const Orders = () => {
     }
   }, [authState.isAuthenticated, authDispatch]);
 
-  // Load orders from Firestore
+  // Subscribe to real-time orders updates
   React.useEffect(() => {
-    const loadOrders = async () => {
-      if (authState.isAuthenticated && authState.user) {
-        try {
-          setLoading(true);
-          const userOrders = await firestoreService.getUserOrders(authState.user.id);
-          setOrders(userOrders);
-        } catch (error) {
-          console.error('Error loading orders:', error);
-        } finally {
-          setLoading(false);
-        }
+    let unsubscribe: (() => void) | null = null;
+
+    if (authState.isAuthenticated && authState.user) {
+      try {
+        setLoading(true);
+        console.log('🔄 Setting up real-time orders listener for user:', authState.user.id);
+        
+        unsubscribe = firestoreService.subscribeToUserOrders(
+          authState.user.id,
+          (userOrders) => {
+            console.log('📦 Orders updated:', userOrders.length, 'orders');
+            setOrders(userOrders);
+            setLoading(false);
+          }
+        );
+      } catch (error) {
+        console.error('Error setting up orders subscription:', error);
+        setLoading(false);
+      }
+    }
+
+    return () => {
+      if (unsubscribe) {
+        console.log('🔌 Cleaning up orders listener');
+        unsubscribe();
       }
     };
-
-    loadOrders();
   }, [authState.isAuthenticated, authState.user]);
 
   // Show loading or sign in prompt if not authenticated
