@@ -367,7 +367,7 @@ const OrderDetails = () => {
                     />
                     <div>
                       <h4 className="font-semibold text-gray-900">
-                        {item.name} ({item.amount}, {item.priceLabel || item.displayPrice})
+                        {item.name}
                       </h4>
                     </div>
                   </div>
