@@ -220,6 +220,121 @@ const OrderDetails = () => {
             </div>
           </div>
 
+          {/* Order Tracking Status Bar */}
+          <div className="bg-white rounded-2xl shadow-lg p-6">
+            <h3 className="text-xl font-bold text-gray-900 mb-6">Order Tracking</h3>
+            <div className="relative">
+              {(() => {
+                const currentStatus = order.order_status?.toLowerCase()?.trim();
+                const steps = [
+                  { 
+                    id: 'ordered', 
+                    name: 'Order Placed', 
+                    icon: <Clock className="w-5 h-5" />,
+                    color: 'orange'
+                  },
+                  { 
+                    id: 'packed', 
+                    name: 'Packed', 
+                    icon: <Package className="w-5 h-5" />,
+                    color: 'purple'
+                  },
+                  { 
+                    id: 'out for delivery', 
+                    name: 'Out for Delivery', 
+                    icon: <Truck className="w-5 h-5" />,
+                    color: 'blue'
+                  },
+                  { 
+                    id: 'delivered', 
+                    name: 'Delivered', 
+                    icon: <CheckCircle className="w-5 h-5" />,
+                    color: 'green'
+                  }
+                ];
+
+                const currentStepIndex = steps.findIndex(step => step.id === currentStatus);
+                const isValidStatus = currentStepIndex !== -1;
+
+                return (
+                  <div className="flex items-center justify-between relative">
+                    {/* Progress Line */}
+                    <div className="absolute top-6 left-8 right-8 h-0.5 bg-gray-200 -z-10">
+                      <div 
+                        className="h-full bg-green-500 transition-all duration-500 ease-in-out"
+                        style={{ 
+                          width: isValidStatus ? `${(currentStepIndex / (steps.length - 1)) * 100}%` : '0%' 
+                        }}
+                      />
+                    </div>
+
+                    {steps.map((step, index) => {
+                      const isActive = step.id === currentStatus;
+                      const isCompleted = isValidStatus && index <= currentStepIndex;
+                      
+                      // Get specific colors for each step
+                      const getActiveColors = (color: string) => {
+                        switch (color) {
+                          case 'orange': return 'bg-orange-500 border-orange-500 text-white shadow-lg scale-110';
+                          case 'purple': return 'bg-purple-500 border-purple-500 text-white shadow-lg scale-110';
+                          case 'blue': return 'bg-blue-500 border-blue-500 text-white shadow-lg scale-110';
+                          case 'green': return 'bg-green-500 border-green-500 text-white shadow-lg scale-110';
+                          default: return 'bg-gray-500 border-gray-500 text-white shadow-lg scale-110';
+                        }
+                      };
+
+                      const getActiveTextColor = (color: string) => {
+                        switch (color) {
+                          case 'orange': return 'text-orange-600';
+                          case 'purple': return 'text-purple-600';
+                          case 'blue': return 'text-blue-600';
+                          case 'green': return 'text-green-600';
+                          default: return 'text-gray-600';
+                        }
+                      };
+
+                      return (
+                        <div key={step.id} className="flex flex-col items-center relative z-10">
+                          <div 
+                            className={`w-12 h-12 rounded-full flex items-center justify-center border-2 transition-all duration-300 ${
+                              isActive 
+                                ? getActiveColors(step.color)
+                                : isCompleted 
+                                ? 'bg-green-500 border-green-500 text-white' 
+                                : 'bg-white border-gray-300 text-gray-400'
+                            }`}
+                          >
+                            {isCompleted && !isActive ? (
+                              <CheckCircle className="w-5 h-5" />
+                            ) : (
+                              step.icon
+                            )}
+                          </div>
+                          <div className="mt-3 text-center">
+                            <p 
+                              className={`text-sm font-semibold ${
+                                isActive 
+                                  ? getActiveTextColor(step.color)
+                                  : isCompleted 
+                                  ? 'text-green-600' 
+                                  : 'text-gray-400'
+                              }`}
+                            >
+                              {step.name}
+                            </p>
+                            {isActive && (
+                              <p className="text-xs text-gray-500 mt-1">Current Status</p>
+                            )}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                );
+              })()}
+            </div>
+          </div>
+
           {/* Delivery Address */}
           <div className="bg-white rounded-2xl shadow-lg p-6">
             <div className="flex items-center mb-4">
