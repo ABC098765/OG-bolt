@@ -429,20 +429,28 @@ const OrderDetails = () => {
                     try {
                       console.log('🔄 Reordering items from order:', order.id);
                       
-                      // Add each item from the order to cart
+                      // Add each item from the order to cart with fresh product data
                       for (const item of order.items) {
-                        const productForCart = {
-                          id: item.product_id || `${order.id}-${item.name}`,
-                          name: item.name,
-                          displayPrice: item.displayPrice || item.unitPriceDisplay || `₹${item.price || item.numericPrice}`,
-                          price: item.displayPrice || item.unitPriceDisplay || `₹${item.price || item.numericPrice}`,
-                          imageUrls: item.imageUrls || [],
-                          unit: item.unit || 'piece',
-                          amount: item.amount || '1 pcs'
-                        };
-                        
-                        console.log('➕ Adding item to cart:', productForCart.name);
-                        await addToCart(productForCart);
+                        try {
+                          console.log('🔍 Fetching fresh product data for:', item.product_id);
+                          
+                          // Fetch current product details from database
+                          const currentProduct = await firestoreService.getProduct(item.product_id);
+                          
+                          if (currentProduct) {
+                            console.log('✅ Found current product:', currentProduct.name);
+                            console.log('💰 Current price:', currentProduct.displayPrice || currentProduct.price);
+                            
+                            // Use current product data instead of old order data
+                            await addToCart(currentProduct);
+                          } else {
+                            console.log('⚠️ Product not found, skipping:', item.name);
+                            // Could show a notification that some products are no longer available
+                          }
+                        } catch (error) {
+                          console.error('❌ Error fetching product:', item.product_id, error);
+                          // Could show a notification about unavailable products
+                        }
                       }
                       
                       console.log('✅ All items reordered successfully!');
