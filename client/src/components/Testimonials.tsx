@@ -1,11 +1,48 @@
-import React from 'react';
-import { Smartphone, Download, Star, Play } from 'lucide-react';
+import React, { useState } from 'react';
+import { Smartphone, Download, Star, Play, X } from 'lucide-react';
 
 import og_replit_sfc from "@assets/og replit sfc.png";
 
 const AndroidApp = () => {
+  const [showComingSoon, setShowComingSoon] = useState(false);
+
   return (
-    <section className="py-20 bg-gradient-to-br from-green-50 to-emerald-50 relative overflow-hidden">
+    <>
+      {/* Coming Soon Modal */}
+      {showComingSoon && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl p-8 max-w-md w-full mx-4 relative animate-in zoom-in duration-300">
+            <button
+              onClick={() => setShowComingSoon(false)}
+              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
+              data-testid="button-close-modal"
+            >
+              <X className="w-6 h-6" />
+            </button>
+            
+            <div className="text-center">
+              <div className="w-20 h-20 bg-gradient-to-br from-green-600 to-emerald-600 rounded-2xl mx-auto mb-6 flex items-center justify-center">
+                <Play className="w-10 h-10 text-white fill-current" />
+              </div>
+              
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Coming Soon!</h3>
+              <p className="text-gray-600 mb-6">
+                Our Android app is currently in development. Stay tuned for the launch!
+              </p>
+              
+              <button
+                onClick={() => setShowComingSoon(false)}
+                className="bg-green-600 text-white px-6 py-3 rounded-xl hover:bg-green-700 transition-colors font-medium"
+                data-testid="button-ok-modal"
+              >
+                Got it!
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <section className="py-20 bg-gradient-to-br from-green-50 to-emerald-50 relative overflow-hidden">
       {/* Background decorations */}
       <div className="absolute top-20 right-20 w-32 h-32 bg-gradient-to-r from-green-300 to-emerald-300 rounded-full opacity-20 animate-float"></div>
       <div className="absolute bottom-20 left-20 w-24 h-24 bg-gradient-to-r from-orange-300 to-yellow-300 rounded-full opacity-20 animate-float" style={{ animationDelay: '1s' }}></div>
@@ -86,7 +123,11 @@ const AndroidApp = () => {
 
             {/* Download Button */}
             <div className="pt-6">
-              <button className="group flex items-center justify-center bg-black text-white px-8 py-4 rounded-2xl hover:bg-gray-800 transition-all transform hover:scale-105 shadow-lg">
+              <button
+                onClick={() => setShowComingSoon(true)}
+                className="group flex items-center justify-center bg-black text-white px-8 py-4 rounded-2xl hover:bg-gray-800 transition-all transform hover:scale-105 shadow-lg"
+                data-testid="button-google-play"
+              >
                 <Play className="w-6 h-6 mr-3 fill-current" />
                 <div className="text-left">
                   <div className="text-xs text-gray-300">GET IT ON</div>
@@ -157,6 +198,7 @@ const AndroidApp = () => {
         </div>
       </div>
     </section>
+    </>
   );
 };
 
