@@ -32,7 +32,9 @@ const OrderDetails = () => {
         unsubscribe = firestoreService.subscribeToOrder(
           orderId,
           (orderData) => {
-            console.log('📦 Order updated:', orderData?.order_status);
+            console.log('📦 Order updated - Full data:', orderData);
+            console.log('📦 Status received:', orderData?.order_status);
+            console.log('📦 Previous order:', order?.order_status);
             setOrder(orderData);
             setLoading(false);
           }
@@ -111,10 +113,14 @@ const OrderDetails = () => {
   }
 
   const getStatusIcon = (status: string) => {
-    switch (status) {
+    const normalizedStatus = status?.toLowerCase()?.trim();
+    console.log('🎯 Rendering status icon for:', status, '→', normalizedStatus);
+    
+    switch (normalizedStatus) {
       case 'delivered':
         return <CheckCircle className="w-6 h-6 text-green-500" />;
       case 'out for delivery':
+      case 'outfordelivery':
         return <Truck className="w-6 h-6 text-blue-500" />;
       case 'packed':
         return <Package className="w-6 h-6 text-purple-500" />;
@@ -126,10 +132,13 @@ const OrderDetails = () => {
   };
 
   const getStatusColor = (status: string) => {
-    switch (status) {
+    const normalizedStatus = status?.toLowerCase()?.trim();
+    
+    switch (normalizedStatus) {
       case 'delivered':
         return 'bg-green-100 text-green-800';
       case 'out for delivery':
+      case 'outfordelivery':
         return 'bg-blue-100 text-blue-800';
       case 'packed':
         return 'bg-purple-100 text-purple-800';

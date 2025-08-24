@@ -33,6 +33,7 @@ const Orders = () => {
           authState.user.id,
           (userOrders) => {
             console.log('📦 Orders updated:', userOrders.length, 'orders');
+            console.log('📦 Order statuses:', userOrders.map(o => ({ id: o.id, status: o.order_status })));
             setOrders(userOrders);
             setLoading(false);
           }
@@ -89,10 +90,13 @@ const Orders = () => {
   }
 
   const getStatusIcon = (status: string) => {
-    switch (status) {
+    const normalizedStatus = status?.toLowerCase()?.trim();
+    
+    switch (normalizedStatus) {
       case 'delivered':
         return <CheckCircle className="w-5 h-5 text-green-500" />;
       case 'out for delivery':
+      case 'outfordelivery':
         return <Truck className="w-5 h-5 text-blue-500" />;
       case 'packed':
         return <Package className="w-5 h-5 text-purple-500" />;
@@ -108,10 +112,13 @@ const Orders = () => {
   };
 
   const getStatusColor = (status: string) => {
-    switch (status) {
+    const normalizedStatus = status?.toLowerCase()?.trim();
+    
+    switch (normalizedStatus) {
       case 'delivered':
         return 'bg-green-100 text-green-800';
       case 'out for delivery':
+      case 'outfordelivery':
         return 'bg-blue-100 text-blue-800';
       case 'packed':
         return 'bg-purple-100 text-purple-800';
