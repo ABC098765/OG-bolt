@@ -227,7 +227,6 @@ const OrderDetails = () => {
                     </div>
                   </div>
                   <div className="text-right">
-                    <p className="font-semibold text-gray-900">{item.quantity}</p>
                     <p className="text-lg font-bold text-green-600">₹{item.totalPrice || item.total_price || (item.price || item.numericPrice || 0) * (item.quantity || 1)}</p>
                   </div>
                 </div>
