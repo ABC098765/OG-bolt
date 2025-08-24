@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useLocation } from 'wouter';
 import { Package, Clock, CheckCircle, XCircle, Eye, Truck } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
+import { useCart } from '../contexts/CartContext';
 import { firestoreService } from '../services/firestoreService';
 import { FirestoreOrder } from '../types/firestore';
 
@@ -12,6 +13,7 @@ const Orders = () => {
   const [, setLocation] = useLocation();
   const navigate = (path: string) => setLocation(path);
   const { state: authState, dispatch: authDispatch } = useAuth();
+  const { addToCart } = useCart();
 
   // Redirect to sign in if not authenticated
   React.useEffect(() => {
@@ -260,7 +262,35 @@ const Orders = () => {
                   </button>
                   
                   {order.order_status === 'delivered' && (
-                    <button className="flex items-center justify-center px-6 py-2 border-2 border-orange-500 text-orange-500 rounded-full hover:bg-orange-50 transition-colors font-semibold">
+                    <button 
+                      onClick={async () => {
+                        try {
+                          console.log('🔄 Reordering items from order:', order.id);
+                          
+                          // Add each item from the order to cart
+                          for (const item of order.items) {
+                            const productForCart = {
+                              id: item.product_id || `${order.id}-${item.name}`,
+                              name: item.name,
+                              displayPrice: item.displayPrice || item.unitPriceDisplay || `₹${item.price || item.numericPrice}`,
+                              price: item.displayPrice || item.unitPriceDisplay || `₹${item.price || item.numericPrice}`,
+                              imageUrls: item.imageUrls || [],
+                              unit: item.unit || 'piece',
+                              amount: item.amount || '1 pcs'
+                            };
+                            
+                            console.log('➕ Adding item to cart:', productForCart.name);
+                            await addToCart(productForCart);
+                          }
+                          
+                          console.log('✅ All items reordered successfully!');
+                          navigate('/cart');
+                        } catch (error) {
+                          console.error('❌ Error reordering items:', error);
+                        }
+                      }}
+                      className="flex items-center justify-center px-6 py-2 border-2 border-orange-500 text-orange-500 rounded-full hover:bg-orange-50 transition-colors font-semibold"
+                    >
                       Reorder
                     </button>
                   )}
