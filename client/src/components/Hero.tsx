@@ -30,14 +30,29 @@ const Hero = () => {
             </div>
 
             <div className="space-y-6">
-              <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold text-gray-900 leading-tight">
-                Fresh <span className="text-green-600 underline-animated">
-                  Fruits
-                </span><br />
-                Delivered <span className="text-orange-500 underline-gradient">
-                  Daily
-                </span>
-              </h1>
+              <div className="flex items-center gap-4">
+                <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold text-gray-900 leading-tight">
+                  Fresh <span className="text-green-600 underline-animated">
+                    Fruits
+                  </span><br />
+                  Delivered <span className="text-orange-500 underline-gradient">
+                    Daily
+                  </span>
+                </h1>
+                <div className="hidden sm:block w-20 h-20 lg:w-24 lg:h-24 relative">
+                  <div className="fruit-basket-container relative w-full h-full">
+                    {/* Animated fruit basket */}
+                    <div className="absolute inset-0 flex items-center justify-center text-3xl lg:text-4xl animate-bounce" style={{ animationDuration: '2s' }}>
+                      🧺
+                    </div>
+                    {/* Floating fruits around the basket */}
+                    <div className="absolute top-0 left-2 text-lg animate-float opacity-80" style={{ animationDelay: '0s', animationDuration: '3s' }}>🍎</div>
+                    <div className="absolute top-2 right-2 text-lg animate-float opacity-70" style={{ animationDelay: '1s', animationDuration: '3.5s' }}>🍊</div>
+                    <div className="absolute bottom-2 left-0 text-lg animate-float opacity-75" style={{ animationDelay: '2s', animationDuration: '2.8s' }}>🍌</div>
+                    <div className="absolute bottom-0 right-1 text-lg animate-float opacity-85" style={{ animationDelay: '0.5s', animationDuration: '3.2s' }}>🍇</div>
+                  </div>
+                </div>
+              </div>
               <p className="text-xl text-gray-600 leading-relaxed max-w-xl">
                 Experience the finest selection of farm-fresh fruits at Super Fruit Center. 
                 From exotic imports to local favorites, we bring nature's sweetness directly to your doorstep.
