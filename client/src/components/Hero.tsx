@@ -18,30 +18,13 @@ const Hero = () => {
             </div>
 
             <div className="space-y-6">
-              {/* Animated fruit splash background */}
-              <div className="absolute inset-0 pointer-events-none overflow-hidden">
-                {/* Flying fruits with slow motion effect */}
-                <div className="absolute top-20 left-10 text-5xl opacity-80 animate-fruit-float" style={{ animationDelay: '0s' }}>🍎</div>
-                <div className="absolute top-32 right-20 text-4xl opacity-70 animate-fruit-float" style={{ animationDelay: '0.5s' }}>🍊</div>
-                <div className="absolute bottom-40 left-16 text-4xl opacity-75 animate-fruit-float" style={{ animationDelay: '1s' }}>🍌</div>
-                <div className="absolute bottom-24 right-16 text-5xl opacity-80 animate-fruit-float" style={{ animationDelay: '1.5s' }}>🥝</div>
-                <div className="absolute top-1/2 left-1/3 text-4xl opacity-65 animate-fruit-float" style={{ animationDelay: '2s' }}>🍇</div>
-                <div className="absolute top-1/3 right-1/3 text-4xl opacity-60 animate-fruit-float" style={{ animationDelay: '2.5s' }}>🍓</div>
-                
-                {/* Juice splash effects */}
-                <div className="absolute top-24 left-14 w-16 h-16 bg-red-400 rounded-full blur-md animate-splash" style={{ animationDelay: '0.2s' }}></div>
-                <div className="absolute top-36 right-24 w-12 h-12 bg-orange-400 rounded-full blur-md animate-splash" style={{ animationDelay: '0.7s' }}></div>
-                <div className="absolute bottom-44 left-20 w-14 h-14 bg-yellow-400 rounded-full blur-md animate-splash" style={{ animationDelay: '1.2s' }}></div>
-                <div className="absolute bottom-28 right-20 w-10 h-10 bg-green-400 rounded-full blur-md animate-splash" style={{ animationDelay: '1.7s' }}></div>
-              </div>
-
-              {/* Updated tagline */}
-              <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold text-gray-900 leading-tight relative z-10">
-                <span className="text-green-600">Super Fresh.</span><br />
-                <span className="text-orange-500">Super Healthy.</span><br />
-                <span className="text-blue-600 underline-gradient">Super Fruit Center.</span>
+              <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold text-gray-900 leading-tight">
+                Fresh <span className="text-green-600">Fruits</span><br />
+                Delivered to Your <span className="text-orange-500 underline-animated">
+                  Doorstep
+                </span>
               </h1>
-              <p className="text-xl text-gray-600 leading-relaxed max-w-xl relative z-10">
+              <p className="text-xl text-gray-600 leading-relaxed max-w-xl">
                 Experience the finest selection of farm-fresh fruits with our premium delivery service. 
                 From exotic imports to local favorites, we bring nature's sweetness directly to your doorstep.
               </p>
