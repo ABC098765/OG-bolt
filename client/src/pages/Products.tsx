@@ -27,13 +27,16 @@ const Products = () => {
     try {
       setLoading(true);
       setError(null);
-      const productsData = await firestoreService.getProducts();
+      const productsData = await firestoreService.getProducts().catch((err) => {
+        console.error('Firebase products error:', err);
+        throw err;
+      });
       
       if (productsData && productsData.length > 0) {
         setProducts(productsData);
         
         // Extract unique categories from products
-        const uniqueCategories = Array.from(new Set(productsData.map(product => product.category)));
+        const uniqueCategories = Array.from(new Set(productsData.map(product => product.category).filter(Boolean)));
         const categoryOptions = [
           { id: 'all', name: 'All Products' },
           ...uniqueCategories.map(cat => ({ id: cat, name: cat }))
@@ -62,31 +65,38 @@ const Products = () => {
     return matchesCategory && matchesSearch;
   });
 
-  const handleAddToCart = (product: any) => {
+  const handleAddToCart = async (product: any) => {
     if (!authState.isAuthenticated) {
       authDispatch({ type: 'SHOW_AUTH_MODAL' });
       return;
     }
 
-    // Extract numeric price for cart calculations
-    const productPrice = (() => {
-      if (product.displayPrice && typeof product.displayPrice === 'string') {
-        const numericPart = product.displayPrice.replace(/[^\d.]/g, '');
-        return parseFloat(numericPart) || 0;
-      }
-      return product.price || 0;
-    })();
-    
-    const productImage = product.imageUrls?.[0] || product.image || 'https://images.pexels.com/photos/1128678/pexels-photo-1128678.jpeg?auto=compress&cs=tinysrgb&w=400';
+    try {
+      // Extract numeric price for cart calculations
+      const productPrice = (() => {
+        if (product.displayPrice && typeof product.displayPrice === 'string') {
+          const numericPart = product.displayPrice.replace(/[^\d.]/g, '');
+          return parseFloat(numericPart) || 0;
+        }
+        return product.price || 0;
+      })();
+      
+      const productImage = product.imageUrls?.[0] || product.image || 'https://images.pexels.com/photos/1128678/pexels-photo-1128678.jpeg?auto=compress&cs=tinysrgb&w=400';
 
-    addToCart({
-      id: product.id,
-      name: product.name,
-      price: productPrice,
-      displayPrice: product.displayPrice || product.price,
-      image: productImage,
-      unit: product.unit || 'piece'
-    });
+      await addToCart({
+        id: product.id,
+        name: product.name,
+        price: productPrice,
+        displayPrice: product.displayPrice || product.price,
+        image: productImage,
+        unit: product.unit || 'piece'
+      }).catch((err) => {
+        console.error('Add to cart error:', err);
+        throw err;
+      });
+    } catch (error) {
+      console.error('Error adding product to cart:', error);
+    }
   };
 
   return (
@@ -204,9 +214,9 @@ const Products = () => {
                         {product.displayPrice || product.price || 'Price not available'}
                       </span>
                       <button 
-                        onClick={(e) => {
+                        onClick={async (e) => {
                           e.stopPropagation();
-                          handleAddToCart(product);
+                          await handleAddToCart(product);
                         }}
                         className={`px-4 py-2 rounded-full font-medium transition-colors ${
                           isInStock 
