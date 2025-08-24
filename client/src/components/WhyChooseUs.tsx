@@ -1,28 +1,14 @@
 import React from 'react';
-import { Shield, Truck, Heart, Clock, Award, Leaf } from 'lucide-react';
+import { Truck, Clock, Award } from 'lucide-react';
 
 const WhyChooseUs = () => {
   const features = [
-    {
-      icon: Heart,
-      title: "Farm Fresh Quality",
-      description: "Handpicked fruits directly from trusted farms, ensuring maximum freshness and taste.",
-      color: "text-red-500",
-      bgColor: "bg-red-50"
-    },
     {
       icon: Truck,
       title: "Fast Delivery",
       description: "Same-day delivery available in most areas. Fresh fruits at your doorstep in hours.",
       color: "text-blue-500",
       bgColor: "bg-blue-50"
-    },
-    {
-      icon: Shield,
-      title: "Quality Guarantee",
-      description: "100% satisfaction guaranteed or your money back. We stand behind our quality.",
-      color: "text-green-500",
-      bgColor: "bg-green-50"
     },
     {
       icon: Clock,
@@ -37,13 +23,6 @@ const WhyChooseUs = () => {
       description: "Carefully curated selection of exotic and local fruits of the highest quality.",
       color: "text-yellow-500",
       bgColor: "bg-yellow-50"
-    },
-    {
-      icon: Leaf,
-      title: "Eco-Friendly",
-      description: "Sustainable packaging and supporting local farmers for a greener tomorrow.",
-      color: "text-emerald-500",
-      bgColor: "bg-emerald-50"
     }
   ];
 
