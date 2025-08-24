@@ -118,7 +118,9 @@ const Header = () => {
             </Link>
             <Link 
               to="/profile" 
-              className="transition-colors text-gray-700 hover:text-green-600 font-bold"
+              className={`transition-colors font-medium ${
+                isActive('/profile') ? 'text-green-600' : 'text-gray-700 hover:text-green-600'
+              }`}
             >
               Profile
             </Link>
