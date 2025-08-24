@@ -33,8 +33,18 @@ const Orders = () => {
           authState.user.id,
           (userOrders) => {
             console.log('📦 Orders updated:', userOrders.length, 'orders');
-            console.log('📦 Order statuses:', userOrders.map(o => ({ id: o.id, status: o.order_status })));
-            setOrders(userOrders);
+            
+            // Fix orders to use payment_status as order_status if available
+            const fixedOrders = userOrders.map(order => {
+              if (order.payment_status && order.payment_status !== order.order_status) {
+                console.log('🔧 Fixing order', order.id, '- using payment_status:', order.payment_status);
+                return { ...order, order_status: order.payment_status };
+              }
+              return order;
+            });
+            
+            console.log('📦 Fixed order statuses:', fixedOrders.map(o => ({ id: o.id, status: o.order_status })));
+            setOrders(fixedOrders);
             setLoading(false);
           }
         );

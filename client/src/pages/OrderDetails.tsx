@@ -33,8 +33,15 @@ const OrderDetails = () => {
           orderId,
           (orderData) => {
             console.log('📦 Order updated - Full data:', orderData);
-            console.log('📦 Status received:', orderData?.order_status);
-            console.log('📦 Previous order:', order?.order_status);
+            console.log('📦 order_status field:', orderData?.order_status);
+            console.log('📦 payment_status field:', orderData?.payment_status);
+            
+            // Admin panel updates payment_status instead of order_status
+            if (orderData && orderData.payment_status) {
+              orderData.order_status = orderData.payment_status;
+              console.log('✅ Using payment_status as order_status:', orderData.payment_status);
+            }
+            
             setOrder(orderData);
             setLoading(false);
           }
