@@ -2,6 +2,129 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Fruit animations */
+@keyframes fruit-float {
+  0% {
+    transform: translateY(0) rotate(0deg) scale(0);
+    opacity: 0;
+  }
+  20% {
+    transform: translateY(-20px) rotate(5deg) scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(-10px) rotate(-3deg) scale(1);
+  }
+  100% {
+    transform: translateY(0) rotate(0deg) scale(1);
+  }
+}
+
+@keyframes fruit-float-continuous {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-15px) rotate(10deg);
+  }
+}
+
+@keyframes splash {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  30% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+/* Cart animation keyframes */
+@keyframes cart-shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-2px); }
+  75% { transform: translateX(2px); }
+}
+
+@keyframes fruit-to-cart {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(0.8) translateY(-30px);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(0.3) translateY(-50px) translateX(50px);
+    opacity: 0;
+  }
+}
+
+/* Button pulse animation */
+@keyframes button-pulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 4px 14px 0 rgba(34, 197, 94, 0.4);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 8px 20px 0 rgba(34, 197, 94, 0.6);
+  }
+}
+
+.animate-fruit-float {
+  animation: fruit-float 2s ease-out forwards, fruit-float-continuous 3s ease-in-out 2s infinite;
+}
+
+.animate-splash {
+  animation: splash 2s ease-out forwards;
+}
+
+.animate-cart-shake {
+  animation: cart-shake 0.5s ease-in-out;
+}
+
+.animate-fruit-to-cart {
+  animation: fruit-to-cart 0.8s ease-out forwards;
+}
+
+.animate-button-pulse {
+  animation: button-pulse 1.5s ease-in-out infinite;
+}
+
+/* Enhanced button hover effects */
+.cart-button {
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.cart-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(34, 197, 94, 0.4);
+}
+
+.cart-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s;
+}
+
+.cart-button:hover::before {
+  left: 100%;
+}
+
 /* Custom animations and styles */
 @keyframes shine {
   0% { transform: translateX(-100%); }
