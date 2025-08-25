@@ -100,20 +100,20 @@ const Products = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
       <div className="max-w-7xl mx-auto px-4">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
             Our <span className="text-green-600">Fresh Products</span>
           </h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
             Discover our complete selection of premium fresh fruits, sourced daily from the finest farms.
           </p>
         </div>
 
         {/* Filters */}
-        <div className="bg-white rounded-2xl shadow-lg p-6 mb-8">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 mb-8">
           <div className="flex flex-col lg:flex-row gap-6 items-center">
             {/* Search */}
             <div className="relative flex-1 max-w-md">
@@ -123,17 +123,17 @@ const Products = () => {
                 placeholder="Search products..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
               />
             </div>
 
             {/* Category Filter */}
             <div className="flex items-center space-x-2">
-              <Filter className="w-5 h-5 text-gray-600" />
+              <Filter className="w-5 h-5 text-gray-600 dark:text-gray-300" />
               <select
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
-                className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent bg-white"
+                className="px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent bg-white dark:bg-gray-700 dark:text-white"
               >
                 {categories.map(category => (
                   <option key={category.id} value={category.id}>
@@ -149,14 +149,14 @@ const Products = () => {
         {loading ? (
           <div className="text-center py-16">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto mb-4"></div>
-            <p className="text-xl text-gray-600">Loading products...</p>
+            <p className="text-xl text-gray-600 dark:text-gray-300">Loading products...</p>
           </div>
         ) : error ? (
           <div className="text-center py-16">
             <div className="flex flex-col items-center max-w-md mx-auto">
               <AlertCircle className="w-16 h-16 text-red-500 mb-4" />
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">Failed to Load Products</h2>
-              <p className="text-gray-600 mb-6 text-center">{error}</p>
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Failed to Load Products</h2>
+              <p className="text-gray-600 dark:text-gray-300 mb-6 text-center">{error}</p>
               <button
                 onClick={loadProducts}
                 className="bg-green-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-green-700 transition-colors flex items-center"
@@ -177,7 +177,7 @@ const Products = () => {
               return (
                 <div
                   key={product.id}
-                  className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100 cursor-pointer"
+                  className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100 dark:border-gray-700 cursor-pointer"
                   onClick={() => navigate(`/product/${product.id}`)}
                 >
                   <div className="relative overflow-hidden rounded-t-2xl">
@@ -197,10 +197,10 @@ const Products = () => {
                   
                   <div className="p-6">
                     <div className="flex items-center justify-between mb-2">
-                      <h3 className="text-lg font-semibold text-gray-900">{product.name}</h3>
+                      <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{product.name}</h3>
                     </div>
                     
-                    <p className="text-gray-600 mb-4 text-sm">
+                    <p className="text-gray-600 dark:text-gray-300 mb-4 text-sm">
                       {product.description 
                         ? product.description.length > 80 
                           ? `${product.description.substring(0, 80)}...`
@@ -244,7 +244,7 @@ const Products = () => {
 
         {filteredProducts.length === 0 && !loading && !error && (
           <div className="text-center py-12">
-            <p className="text-xl text-gray-600">No products found matching your criteria.</p>
+            <p className="text-xl text-gray-600 dark:text-gray-300">No products found matching your criteria.</p>
           </div>
         )}
       </div>

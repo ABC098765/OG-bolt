@@ -38,7 +38,7 @@ const Header = () => {
   };
 
   return (
-    <header className="bg-red-50/40 backdrop-blur-md shadow-md sticky top-0 z-50 rounded-b-2xl mx-4">
+    <header className="bg-red-50/40 dark:bg-gray-800/90 backdrop-blur-md shadow-md sticky top-0 z-50 rounded-b-2xl mx-4">
       {/* Top bar */}
       <div className="bg-green-600 text-white py-2 pt-[0px] pb-[0px] rounded-t-2xl">
         <div className="max-w-7xl mx-auto px-4 flex justify-between items-center text-sm">
@@ -61,7 +61,7 @@ const Header = () => {
       <nav className="max-w-7xl mx-auto px-4 py-4 pt-[12px] pb-[12px] pl-[8px] pr-[8px]">
         <div className="flex justify-between items-center">
           <div className="flex items-center">
-            <div className="flex items-center text-2xl font-bold text-green-600">
+            <div className="flex items-center text-2xl font-bold text-green-600 dark:text-green-400">
               <img 
                 src="/logo-placeholder.png" 
                 alt="Super Fruit Center Logo" 
@@ -86,7 +86,7 @@ const Header = () => {
             <Link 
               to="/" 
               className={`transition-colors font-medium ${
-                isActive('/') ? 'text-green-600' : 'text-gray-700 hover:text-green-600'
+                isActive('/') ? 'text-green-600 dark:text-green-400' : 'text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400'
               }`}
             >
               Home
@@ -94,7 +94,7 @@ const Header = () => {
             <Link 
               to="/products" 
               className={`transition-colors font-medium ${
-                isActive('/products') ? 'text-green-600' : 'text-gray-700 hover:text-green-600'
+                isActive('/products') ? 'text-green-600 dark:text-green-400' : 'text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400'
               }`}
             >
               Products
@@ -102,7 +102,7 @@ const Header = () => {
             <Link 
               to="/cart" 
               className={`transition-colors font-medium ${
-                isActive('/cart') ? 'text-green-600' : 'text-gray-700 hover:text-green-600'
+                isActive('/cart') ? 'text-green-600 dark:text-green-400' : 'text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400'
               } flex items-center`}
             >
               <ShoppingCart className="w-4 h-4 mr-1" />
@@ -111,7 +111,7 @@ const Header = () => {
             <Link 
               to="/orders" 
               className={`transition-colors font-medium ${
-                isActive('/orders') ? 'text-green-600' : 'text-gray-700 hover:text-green-600'
+                isActive('/orders') ? 'text-green-600 dark:text-green-400' : 'text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400'
               }`}
             >
               Orders
@@ -119,7 +119,7 @@ const Header = () => {
             <Link 
               to="/profile" 
               className={`transition-colors font-medium ${
-                isActive('/profile') ? 'text-green-600' : 'text-gray-700 hover:text-green-600'
+                isActive('/profile') ? 'text-green-600 dark:text-green-400' : 'text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400'
               }`}
             >
               Profile
@@ -127,7 +127,7 @@ const Header = () => {
             <Link 
               to="/notifications" 
               className={`transition-colors font-medium ${
-                isActive('/notifications') ? 'text-green-600' : 'text-gray-700 hover:text-green-600'
+                isActive('/notifications') ? 'text-green-600 dark:text-green-400' : 'text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400'
               } relative`}
             >
               <Bell className="w-5 h-5" />
@@ -139,7 +139,7 @@ const Header = () => {
             </Link>
             {authState.isAuthenticated ? (
               <div className="flex items-center space-x-4">
-                <span className="text-gray-700 font-medium">
+                <span className="text-gray-700 dark:text-gray-300 font-medium">
                   Hi, {authState.user?.name}
                 </span>
               </div>
@@ -155,7 +155,7 @@ const Header = () => {
 
           {/* Mobile menu button */}
           <button
-            className="md:hidden"
+            className="md:hidden text-gray-700 dark:text-gray-300"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
             {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -164,12 +164,12 @@ const Header = () => {
 
         {/* Mobile menu */}
         {isMenuOpen && (
-          <div className="md:hidden mt-4 pb-4 border-t">
+          <div className="md:hidden mt-4 pb-4 border-t border-gray-200 dark:border-gray-700">
             <div className="flex flex-col space-y-4 pt-4">
               <Link 
                 to="/" 
                 className={`transition-colors font-medium ${
-                  isActive('/') ? 'text-green-600' : 'text-gray-700 hover:text-green-600'
+                  isActive('/') ? 'text-green-600 dark:text-green-400' : 'text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400'
                 }`}
                 onClick={() => setIsMenuOpen(false)}
               >
@@ -178,7 +178,7 @@ const Header = () => {
               <Link 
                 to="/products" 
                 className={`transition-colors font-medium ${
-                  isActive('/products') ? 'text-green-600' : 'text-gray-700 hover:text-green-600'
+                  isActive('/products') ? 'text-green-600 dark:text-green-400' : 'text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400'
                 }`}
                 onClick={() => setIsMenuOpen(false)}
               >
@@ -187,7 +187,7 @@ const Header = () => {
               <Link 
                 to="/cart" 
                 className={`transition-colors font-medium ${
-                  isActive('/cart') ? 'text-green-600' : 'text-gray-700 hover:text-green-600'
+                  isActive('/cart') ? 'text-green-600 dark:text-green-400' : 'text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400'
                 } flex items-center`}
                 onClick={() => setIsMenuOpen(false)}
               >
@@ -197,7 +197,7 @@ const Header = () => {
               <Link 
                 to="/orders" 
                 className={`transition-colors font-medium ${
-                  isActive('/orders') ? 'text-green-600' : 'text-gray-700 hover:text-green-600'
+                  isActive('/orders') ? 'text-green-600 dark:text-green-400' : 'text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400'
                 }`}
                 onClick={() => setIsMenuOpen(false)}
               >
@@ -206,7 +206,7 @@ const Header = () => {
               <Link 
                 to="/profile" 
                 className={`transition-colors font-medium ${
-                  isActive('/profile') ? 'text-green-600' : 'text-gray-700 hover:text-green-600'
+                  isActive('/profile') ? 'text-green-600 dark:text-green-400' : 'text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400'
                 }`}
                 onClick={() => setIsMenuOpen(false)}
               >
@@ -215,7 +215,7 @@ const Header = () => {
               <Link 
                 to="/notifications" 
                 className={`transition-colors font-medium ${
-                  isActive('/notifications') ? 'text-green-600' : 'text-gray-700 hover:text-green-600'
+                  isActive('/notifications') ? 'text-green-600 dark:text-green-400' : 'text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400'
                 } relative flex items-center`}
                 onClick={() => setIsMenuOpen(false)}
               >
@@ -228,7 +228,7 @@ const Header = () => {
               </Link>
               {authState.isAuthenticated ? (
                 <div className="space-y-4">
-                  <span className="text-gray-700 font-medium">
+                  <span className="text-gray-700 dark:text-gray-300 font-medium">
                     Hi, {authState.user?.name}
                   </span>
                 </div>

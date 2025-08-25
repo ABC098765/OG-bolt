@@ -5,19 +5,19 @@ import heroImage from '@assets/generated_images/Fresh_fruit_hero_display_7afffe6
 
 const Hero = () => {
   return (
-    <section id="home" className="relative overflow-hidden bg-gradient-to-br from-green-50 via-emerald-50 to-orange-50 py-20">
+    <section id="home" className="relative overflow-hidden bg-gradient-to-br from-green-50 via-emerald-50 to-orange-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-20">
 
       <div className="max-w-7xl mx-auto px-4 relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div className="space-y-8">
             {/* Badge */}
-            <div className="inline-flex items-center px-4 py-2 bg-green-100 text-green-800 rounded-full text-sm font-medium">
+            <div className="inline-flex items-center px-4 py-2 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-full text-sm font-medium">
               <Award className="w-4 h-4 mr-2" />
               #1 Fresh Fruit Delivery Service
             </div>
 
             <div className="space-y-6">
-              <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold text-gray-900 leading-tight">
+              <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold text-gray-900 dark:text-white leading-tight">
                 Fresh <span className="text-green-600 underline-animated">
                   Fruits
                 </span><br />
@@ -25,7 +25,7 @@ const Hero = () => {
                   Daily
                 </span>
               </h1>
-              <p className="text-xl text-gray-600 leading-relaxed max-w-xl">
+              <p className="text-xl text-gray-600 dark:text-gray-300 leading-relaxed max-w-xl">
                 Experience the finest selection of farm-fresh fruits at Super Fruit Center. 
                 From exotic imports to local favorites, we bring nature's sweetness directly to your doorstep.
               </p>
@@ -34,22 +34,22 @@ const Hero = () => {
             {/* Features */}
             <div className="grid grid-cols-3 gap-4 py-6">
               <div className="text-center">
-                <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-2 feature-badge feature-badge-1">
+                <div className="w-12 h-12 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mx-auto mb-2 feature-badge feature-badge-1">
                   <Heart className="w-6 h-6 text-green-600 relative z-10" />
                 </div>
-                <p className="text-sm font-medium text-gray-700">100% Fresh</p>
+                <p className="text-sm font-medium text-gray-700 dark:text-gray-300">100% Fresh</p>
               </div>
               <div className="text-center">
-                <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-2 feature-badge feature-badge-2">
+                <div className="w-12 h-12 bg-orange-100 dark:bg-orange-900 rounded-full flex items-center justify-center mx-auto mb-2 feature-badge feature-badge-2">
                   <Clock className="w-6 h-6 text-orange-600 relative z-10" />
                 </div>
-                <p className="text-sm font-medium text-gray-700">Same Day</p>
+                <p className="text-sm font-medium text-gray-700 dark:text-gray-300">Same Day</p>
               </div>
               <div className="text-center">
-                <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-2 feature-badge feature-badge-3">
+                <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center mx-auto mb-2 feature-badge feature-badge-3">
                   <Star className="w-6 h-6 text-blue-600 relative z-10" />
                 </div>
-                <p className="text-sm font-medium text-gray-700">Premium Quality</p>
+                <p className="text-sm font-medium text-gray-700 dark:text-gray-300">Premium Quality</p>
               </div>
             </div>
 
