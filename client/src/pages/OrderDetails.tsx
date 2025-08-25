@@ -65,12 +65,12 @@ const OrderDetails = () => {
   // Show loading or sign in prompt if not authenticated
   if (!authState.isAuthenticated) {
     return (
-      <div className="min-h-screen bg-gray-50 py-8">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
         <div className="max-w-4xl mx-auto px-4">
           <div className="text-center py-16">
             <Package className="w-24 h-24 text-gray-300 mx-auto mb-6" />
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Sign in required</h2>
-            <p className="text-xl text-gray-600 mb-8">
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">Sign in required</h2>
+            <p className="text-xl text-gray-600 dark:text-gray-300 mb-8">
               Please sign in to view your order details.
             </p>
             <button 
@@ -88,11 +88,11 @@ const OrderDetails = () => {
   // Show loading state
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 py-8">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
         <div className="max-w-4xl mx-auto px-4">
           <div className="text-center py-16">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto mb-4"></div>
-            <p className="text-xl text-gray-600">Loading order details...</p>
+            <p className="text-xl text-gray-600 dark:text-gray-300">Loading order details...</p>
           </div>
         </div>
       </div>
@@ -101,12 +101,12 @@ const OrderDetails = () => {
 
   if (!order) {
     return (
-      <div className="min-h-screen bg-gray-50 py-8">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
         <div className="max-w-4xl mx-auto px-4">
           <div className="text-center py-16">
             <Package className="w-24 h-24 text-gray-300 mx-auto mb-6" />
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Order Not Found</h2>
-            <p className="text-xl text-gray-600 mb-8">
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">Order Not Found</h2>
+            <p className="text-xl text-gray-600 dark:text-gray-300 mb-8">
               The order you're looking for doesn't exist or has been removed.
             </p>
             <button 
@@ -175,7 +175,7 @@ const OrderDetails = () => {
   }, 0);
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
       <div className="max-w-4xl mx-auto px-4">
         <div className="mb-8">
           <button 
@@ -185,20 +185,20 @@ const OrderDetails = () => {
             <ArrowLeft className="w-5 h-5 mr-2" />
             Back to Orders
           </button>
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
             Order <span className="text-green-600">Details</span>
           </h1>
         </div>
 
         <div className="space-y-6">
           {/* Order Header */}
-          <div className="bg-white rounded-2xl shadow-lg p-6">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-6">
               <div className="flex items-center space-x-4 mb-4 lg:mb-0">
                 {getStatusIcon(order.order_status)}
                 <div>
-                  <h2 className="text-2xl font-bold text-gray-900">#{order.id}</h2>
-                  <div className="flex items-center space-x-4 text-gray-600">
+                  <h2 className="text-2xl font-bold text-gray-900 dark:text-white">#{order.id}</h2>
+                  <div className="flex items-center space-x-4 text-gray-600 dark:text-gray-300">
                     <div className="flex items-center">
                       <Calendar className="w-4 h-4 mr-1" />
                       <span>Placed on {firestoreService.timestampToDate(order.created_at).toLocaleDateString()}</span>
@@ -223,8 +223,8 @@ const OrderDetails = () => {
           </div>
 
           {/* Order Tracking Status Bar */}
-          <div className="bg-white rounded-2xl shadow-lg p-6">
-            <h3 className="text-xl font-bold text-gray-900 mb-6">Order Tracking</h3>
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
+            <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-6">Order Tracking</h3>
             <div className="relative">
               {(() => {
                 const currentStatus = order.order_status?.toLowerCase()?.trim();
@@ -338,13 +338,13 @@ const OrderDetails = () => {
           </div>
 
           {/* Delivery Address */}
-          <div className="bg-white rounded-2xl shadow-lg p-6">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
             <div className="flex items-center mb-4">
               <MapPin className="w-6 h-6 text-green-600 mr-3" />
-              <h3 className="text-xl font-bold text-gray-900">Delivery Address</h3>
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white">Delivery Address</h3>
             </div>
-            <div className="bg-gray-50 rounded-lg p-4">
-              <p className="text-gray-800 leading-relaxed">
+            <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+              <p className="text-gray-800 dark:text-gray-200 leading-relaxed">
                 <strong>{order.address.name}</strong><br />
                 Flat: {order.address.flatNo}<br />
                 Building: {order.address.buildingName}<br />
@@ -354,11 +354,11 @@ const OrderDetails = () => {
           </div>
 
           {/* Items Ordered */}
-          <div className="bg-white rounded-2xl shadow-lg p-6">
-            <h3 className="text-xl font-bold text-gray-900 mb-6">Items Ordered</h3>
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
+            <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-6">Items Ordered</h3>
             <div className="space-y-4">
               {order.items.map((item: any, index: number) => (
-                <div key={index} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                <div key={index} className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
                   <div className="flex items-center space-x-4">
                     <img
                       src={item.imageUrls?.[0] || 'https://images.pexels.com/photos/1128678/pexels-photo-1128678.jpeg?auto=compress&cs=tinysrgb&w=400'}
@@ -366,7 +366,7 @@ const OrderDetails = () => {
                       className="w-16 h-16 object-cover rounded-lg"
                     />
                     <div>
-                      <h4 className="font-semibold text-gray-900">
+                      <h4 className="font-semibold text-gray-900 dark:text-white">
                         {item.name} ({item.amount}, {item.priceLabel || item.displayPrice})
                       </h4>
                     </div>
@@ -380,19 +380,19 @@ const OrderDetails = () => {
           </div>
 
           {/* Price Breakdown */}
-          <div className="bg-white rounded-2xl shadow-lg p-6">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
             <div className="flex items-center mb-4">
               <CreditCard className="w-6 h-6 text-green-600 mr-3" />
-              <h3 className="text-xl font-bold text-gray-900">Price Details</h3>
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white">Price Details</h3>
             </div>
             <div className="space-y-3">
               <div className="flex justify-between py-2">
-                <span className="text-gray-600">Subtotal ({order.items.length} items)</span>
+                <span className="text-gray-600 dark:text-gray-300">Subtotal ({order.items.length} items)</span>
                 <span className="font-semibold">₹{subtotal}</span>
               </div>
               
               <div className="flex justify-between py-2">
-                <span className="text-gray-600">Delivery Fee</span>
+                <span className="text-gray-600 dark:text-gray-300">Delivery Fee</span>
                 <span className="font-semibold">
                   {order.delivery_fee === 0 ? (
                     <span className="text-green-600">FREE</span>
@@ -409,9 +409,9 @@ const OrderDetails = () => {
                 </div>
               </div>
               
-              <div className="bg-gray-50 rounded-lg p-3 mt-4">
+              <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-3 mt-4">
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">Payment Method</span>
+                  <span className="text-gray-600 dark:text-gray-300">Payment Method</span>
                   <span className="font-medium">
                     {order.payment_id === 'COD' ? 'Cash on Delivery' : 'Online Payment'}
                   </span>
@@ -421,7 +421,7 @@ const OrderDetails = () => {
           </div>
 
           {/* Order Actions */}
-          <div className="bg-white rounded-2xl shadow-lg p-6">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
             <div className="flex flex-col sm:flex-row gap-4">
               {order.order_status === 'delivered' && (
                 <button 

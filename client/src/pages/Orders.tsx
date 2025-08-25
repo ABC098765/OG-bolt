@@ -67,12 +67,12 @@ const Orders = () => {
   // Show loading or sign in prompt if not authenticated
   if (!authState.isAuthenticated) {
     return (
-      <div className="min-h-screen bg-gray-50 py-8">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
         <div className="max-w-4xl mx-auto px-4">
           <div className="text-center py-16">
             <Package className="w-24 h-24 text-gray-300 mx-auto mb-6" />
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Sign in required</h2>
-            <p className="text-xl text-gray-600 mb-8">
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">Sign in required</h2>
+            <p className="text-xl text-gray-600 dark:text-gray-300 mb-8">
               Please sign in to view your order history and track your orders.
             </p>
             <button 
@@ -90,11 +90,11 @@ const Orders = () => {
   // Show loading state
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 py-8">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
         <div className="max-w-6xl mx-auto px-4">
           <div className="text-center py-16">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto mb-4"></div>
-            <p className="text-xl text-gray-600">Loading your orders...</p>
+            <p className="text-xl text-gray-600 dark:text-gray-300">Loading your orders...</p>
           </div>
         </div>
       </div>
@@ -159,19 +159,19 @@ const Orders = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
       <div className="max-w-6xl mx-auto px-4">
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
             Your <span className="text-green-600">Orders</span>
           </h1>
-          <p className="text-xl text-gray-600">
+          <p className="text-xl text-gray-600 dark:text-gray-300">
             Track and manage your fruit orders
           </p>
         </div>
 
         {/* Tabs */}
-        <div className="bg-white rounded-2xl shadow-lg p-6 mb-8">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 mb-8">
           <div className="flex flex-wrap gap-4">
             {tabs.map((tab) => (
               <button
@@ -180,7 +180,7 @@ const Orders = () => {
                 className={`px-6 py-3 rounded-full font-semibold transition-colors ${
                   selectedTab === tab.id
                     ? 'bg-green-600 text-white'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
                 }`}
               >
                 {tab.name} ({tab.count})
@@ -192,10 +192,10 @@ const Orders = () => {
         {/* Orders List */}
         <div className="space-y-6">
           {filteredOrders.length === 0 ? (
-            <div className="text-center py-16 bg-white rounded-2xl shadow-lg">
+            <div className="text-center py-16 bg-white dark:bg-gray-800 rounded-2xl shadow-lg">
               <Package className="w-24 h-24 text-gray-300 mx-auto mb-6" />
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">No orders found</h3>
-              <p className="text-gray-600 mb-8">
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">No orders found</h3>
+              <p className="text-gray-600 dark:text-gray-300 mb-8">
                 {selectedTab === 'all' 
                   ? "You haven't placed any orders yet." 
                   : `No ${selectedTab} orders found.`}
@@ -209,13 +209,13 @@ const Orders = () => {
             </div>
           ) : (
             filteredOrders.map((order) => (
-              <div key={order.id} className="bg-white rounded-2xl shadow-lg p-6">
+              <div key={order.id} className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
                 <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-6">
                   <div className="flex items-center space-x-4 mb-4 lg:mb-0">
                     {getStatusIcon(order.order_status)}
                     <div>
-                      <h3 className="text-xl font-bold text-gray-900">#{order.id}</h3>
-                      <p className="text-gray-600">
+                      <h3 className="text-xl font-bold text-gray-900 dark:text-white">#{order.id}</h3>
+                      <p className="text-gray-600 dark:text-gray-300">
                         Placed on {firestoreService.timestampToDate(order.created_at).toLocaleDateString()}
                       </p>
                     </div>
@@ -233,7 +233,7 @@ const Orders = () => {
 
                 {/* Order Items */}
                 <div className="mt-6">
-                  <h4 className="text-lg font-semibold text-gray-900 mb-4">Items Ordered</h4>
+                  <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Items Ordered</h4>
                   <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
                     {order.items.map((item, index) => (
                       <div key={index} className="text-center">
@@ -242,8 +242,8 @@ const Orders = () => {
                           alt={item.name}
                           className="w-16 h-16 object-cover rounded-lg mx-auto mb-2"
                         />
-                        <p className="text-sm font-medium text-gray-900 truncate">{item.name}</p>
-                        <p className="text-xs text-gray-600">Qty: {item.quantity}</p>
+                        <p className="text-sm font-medium text-gray-900 dark:text-white truncate">{item.name}</p>
+                        <p className="text-xs text-gray-600 dark:text-gray-300">Qty: {item.quantity}</p>
                       </div>
                     ))}
                   </div>
