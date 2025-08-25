@@ -4,9 +4,11 @@ import { useAuth } from '../contexts/AuthContext';
 import { authService } from '../services/authService';
 import { auth } from '../config/firebase';
 import { RecaptchaVerifier, ConfirmationResult, signInWithPhoneNumber, signInWithRedirect, GoogleAuthProvider, signInWithPopup, getRedirectResult } from 'firebase/auth';
+import { useLocation } from 'wouter';
 
 const AuthModal = () => {
   const { state, dispatch } = useAuth();
+  const [, setLocation] = useLocation();
   const [authMethod, setAuthMethod] = useState<'options' | 'phone' | 'create'>('options');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [userName, setUserName] = useState('');
@@ -339,14 +341,16 @@ const AuthModal = () => {
                 />
                 <span className="text-sm text-gray-600 leading-5">
                   I agree to the{' '}
-                  <a 
-                    href="/terms-and-conditions" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="text-green-600 hover:text-green-700 underline"
+                  <button
+                    type="button"
+                    onClick={() => {
+                      handleClose();
+                      setLocation('/terms-and-conditions');
+                    }}
+                    className="text-green-600 hover:text-green-700 underline cursor-pointer"
                   >
                     Privacy Policy & Terms and Conditions
-                  </a>
+                  </button>
                 </span>
               </label>
             </div>
