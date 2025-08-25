@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { User, Mail, Phone, MapPin, Calendar, Edit3, Save, X, Check, LogOut } from 'lucide-react';
+import { User, Mail, Phone, MapPin, Calendar, Edit3, Save, X, Check, LogOut, Moon, Sun } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
+import { useTheme } from '../contexts/ThemeContext';
 import { authService } from '../services/authService';
 import { useLocation } from 'wouter';
 import { RecaptchaVerifier, signInWithPhoneNumber, ConfirmationResult } from 'firebase/auth';
@@ -8,6 +9,7 @@ import { auth } from '../config/firebase';
 
 const Profile = () => {
   const { state: authState, dispatch: authDispatch } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const [, setLocation] = useLocation();
   const navigate = (path: string) => setLocation(path);
   const [isEditing, setIsEditing] = useState(false);
@@ -93,12 +95,12 @@ const Profile = () => {
   // Show loading or sign in prompt if not authenticated
   if (!authState.isAuthenticated) {
     return (
-      <div className="min-h-screen bg-gray-50 py-8">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
         <div className="max-w-4xl mx-auto px-4">
           <div className="text-center py-16">
-            <User className="w-24 h-24 text-gray-300 mx-auto mb-6" />
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Sign in required</h2>
-            <p className="text-xl text-gray-600 mb-8">
+            <User className="w-24 h-24 text-gray-300 dark:text-gray-600 mx-auto mb-6" />
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">Sign in required</h2>
+            <p className="text-xl text-gray-600 dark:text-gray-300 mb-8">
               Please sign in to view and manage your profile information.
             </p>
             <button 
@@ -112,8 +114,8 @@ const Profile = () => {
 
         {/* Account Actions */}
         <div className="lg:col-span-3 mt-8">
-          <div className="bg-white rounded-2xl shadow-lg p-6">
-            <h3 className="text-2xl font-bold text-gray-900 mb-6">Account Actions</h3>
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
+            <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Account Actions</h3>
             <div className="flex justify-center">
               <button
                 onClick={async () => {
@@ -324,13 +326,13 @@ const Profile = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
       <div className="max-w-4xl mx-auto px-4">
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
             Your <span className="text-green-600">Profile</span>
           </h1>
-          <p className="text-xl text-gray-600">
+          <p className="text-xl text-gray-600 dark:text-gray-300">
             Manage your account information and preferences
           </p>
         </div>
@@ -338,24 +340,24 @@ const Profile = () => {
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Profile Card */}
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-2xl shadow-lg p-6 text-center">
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 text-center">
               <div className="relative inline-block mb-6">
                 {renderAvatar(selectedAvatar)}
               </div>
               
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
                 {profileData.firstName} {profileData.lastName}
               </h2>
-              <p className="text-gray-600 mb-6">{profileData.email}</p>
+              <p className="text-gray-600 dark:text-gray-300 mb-6">{profileData.email}</p>
               
             </div>
           </div>
 
           {/* Profile Information */}
           <div className="lg:col-span-2">
-            <div className="bg-white rounded-2xl shadow-lg p-6">
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
               <div className="flex items-center justify-between mb-6">
-                <h3 className="text-2xl font-bold text-gray-900">Personal Information</h3>
+                <h3 className="text-2xl font-bold text-gray-900 dark:text-white">Personal Information</h3>
                 {!isEditing ? (
                   <button
                     onClick={() => setIsEditing(true)}
@@ -386,7 +388,7 @@ const Profile = () => {
 
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     <User className="w-4 h-4 inline mr-2" />
                     First Name
                   </label>
@@ -395,15 +397,15 @@ const Profile = () => {
                       type="text"
                       value={editData.firstName}
                       onChange={(e) => setEditData({...editData, firstName: e.target.value})}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                      className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                     />
                   ) : (
-                    <p className="px-4 py-3 bg-gray-50 rounded-lg">{profileData.firstName}</p>
+                    <p className="px-4 py-3 bg-gray-50 dark:bg-gray-700 dark:text-white rounded-lg">{profileData.firstName}</p>
                   )}
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     <User className="w-4 h-4 inline mr-2" />
                     Last Name
                   </label>
@@ -412,15 +414,15 @@ const Profile = () => {
                       type="text"
                       value={editData.lastName}
                       onChange={(e) => setEditData({...editData, lastName: e.target.value})}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                      className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                     />
                   ) : (
-                    <p className="px-4 py-3 bg-gray-50 rounded-lg">{profileData.lastName}</p>
+                    <p className="px-4 py-3 bg-gray-50 dark:bg-gray-700 dark:text-white rounded-lg">{profileData.lastName}</p>
                   )}
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     <Mail className="w-4 h-4 inline mr-2" />
                     Email Address
                   </label>
@@ -429,21 +431,21 @@ const Profile = () => {
                       type="email"
                       value={editData.email}
                       onChange={(e) => setEditData({...editData, email: e.target.value})}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                      className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                     />
                   ) : (
-                    <p className="px-4 py-3 bg-gray-50 rounded-lg">{profileData.email}</p>
+                    <p className="px-4 py-3 bg-gray-50 dark:bg-gray-700 dark:text-white rounded-lg">{profileData.email}</p>
                   )}
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     <Phone className="w-4 h-4 inline mr-2" />
                     Phone Number
                   </label>
                   {isEditing ? (
                     <div className="flex items-center space-x-3">
-                      <div className="flex-1 px-4 py-3 bg-gray-50 rounded-lg">
+                      <div className="flex-1 px-4 py-3 bg-gray-50 dark:bg-gray-700 dark:text-white rounded-lg">
                         {profileData.phone.replace('+91', '').replace(/\D/g, '') || 'Not provided'}
                       </div>
                       <button
@@ -455,7 +457,7 @@ const Profile = () => {
                       </button>
                     </div>
                   ) : (
-                    <p className="px-4 py-3 bg-gray-50 rounded-lg">
+                    <p className="px-4 py-3 bg-gray-50 dark:bg-gray-700 dark:text-white rounded-lg">
                       {profileData.phone.replace('+91', '').replace(/\D/g, '') || 'Not provided'}
                     </p>
                   )}
@@ -467,9 +469,29 @@ const Profile = () => {
 
         {/* Account Actions */}
         <div className="mt-8">
-          <div className="bg-white rounded-2xl shadow-lg p-6">
-            <h3 className="text-2xl font-bold text-gray-900 mb-6">Account Actions</h3>
-            <div className="flex justify-center">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
+            <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Account Actions</h3>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              {/* Dark Mode Toggle */}
+              <button
+                onClick={toggleTheme}
+                className="flex items-center px-6 py-3 bg-gray-600 dark:bg-gray-700 text-white rounded-full hover:bg-gray-700 dark:hover:bg-gray-600 transition-colors font-semibold"
+                data-testid="button-toggle-theme"
+              >
+                {theme === 'light' ? (
+                  <>
+                    <Moon className="w-5 h-5 mr-2" />
+                    Dark Mode
+                  </>
+                ) : (
+                  <>
+                    <Sun className="w-5 h-5 mr-2" />
+                    Light Mode
+                  </>
+                )}
+              </button>
+              
+              {/* Sign Out Button */}
               <button
                 onClick={async () => {
                   if (window.confirm('Are you sure you want to sign out?')) {
@@ -482,6 +504,7 @@ const Profile = () => {
                   }
                 }}
                 className="flex items-center px-6 py-3 bg-red-600 text-white rounded-full hover:bg-red-700 transition-colors font-semibold"
+                data-testid="button-sign-out"
               >
                 <LogOut className="w-5 h-5 mr-2" />
                 Sign Out
