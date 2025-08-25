@@ -74,12 +74,15 @@ class FCMService {
       console.error('❌ FCM: Error getting token:', error);
       
       // Show user-friendly error messages
-      if (error.code === 'messaging/unsupported-browser') {
-        console.error('❌ FCM: Browser not supported for notifications');
-      } else if (error.code === 'messaging/permission-blocked') {
-        console.error('❌ FCM: Notification permission blocked by user');
-      } else if (error.code === 'messaging/vapid-key-required') {
-        console.error('❌ FCM: VAPID key required but not provided');
+      if (error && typeof error === 'object' && 'code' in error) {
+        const errorCode = (error as any).code;
+        if (errorCode === 'messaging/unsupported-browser') {
+          console.error('❌ FCM: Browser not supported for notifications');
+        } else if (errorCode === 'messaging/permission-blocked') {
+          console.error('❌ FCM: Notification permission blocked by user');
+        } else if (errorCode === 'messaging/vapid-key-required') {
+          console.error('❌ FCM: VAPID key required but not provided');
+        }
       }
       
       return null;
@@ -103,38 +106,50 @@ class FCMService {
 
   // Listen for foreground messages
   onMessage(callback: (payload: any) => void) {
-    if (!this.messaging) {
-      console.log('❌ FCM: Messaging not initialized, cannot listen for messages');
-      return;
-    }
+    try {
+      if (!this.messaging) {
+        console.log('❌ FCM: Messaging not initialized, cannot listen for messages');
+        return;
+      }
 
-    console.log('👂 FCM: Setting up foreground message listener');
-    onMessage(this.messaging, (payload) => {
-      console.log('📨 FCM: Message received in foreground:', payload);
-      callback(payload);
-    });
+      console.log('👂 FCM: Setting up foreground message listener');
+      onMessage(this.messaging, (payload) => {
+        try {
+          console.log('📨 FCM: Message received in foreground:', payload);
+          callback(payload);
+        } catch (error) {
+          console.error('❌ FCM: Error in message callback:', error);
+        }
+      });
+    } catch (error) {
+      console.error('❌ FCM: Error setting up message listener:', error);
+    }
   }
 
   // Show notification manually (for foreground messages)
   showNotification(title: string, body: string, icon?: string) {
-    console.log('🔔 FCM: Showing notification:', { title, body });
-    
-    if ('Notification' in window && Notification.permission === 'granted') {
-      const notification = new Notification(title, {
-        body,
-        icon: icon || '/vite.svg',
-        badge: '/vite.svg',
-        requireInteraction: true
-      });
+    try {
+      console.log('🔔 FCM: Showing notification:', { title, body });
       
-      // Auto close after 5 seconds
-      setTimeout(() => {
-        notification.close();
-      }, 5000);
-      
-      return notification;
-    } else {
-      console.log('❌ FCM: Cannot show notification - permission not granted');
+      if ('Notification' in window && Notification.permission === 'granted') {
+        const notification = new Notification(title, {
+          body,
+          icon: icon || '/vite.svg',
+          badge: '/vite.svg',
+          requireInteraction: true
+        });
+        
+        // Auto close after 5 seconds
+        setTimeout(() => {
+          notification.close();
+        }, 5000);
+        
+        return notification;
+      } else {
+        console.log('❌ FCM: Cannot show notification - permission not granted');
+      }
+    } catch (error) {
+      console.error('❌ FCM: Error showing notification:', error);
     }
   }
 

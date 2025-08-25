@@ -128,12 +128,20 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   // Listen for foreground FCM messages
   useEffect(() => {
-    fcmService.onMessage((payload) => {
-      // Show notification when app is in foreground
-      const title = payload.notification?.title || 'New Notification';
-      const body = payload.notification?.body || '';
-      fcmService.showNotification(title, body);
-    });
+    try {
+      fcmService.onMessage((payload) => {
+        try {
+          // Show notification when app is in foreground
+          const title = payload.notification?.title || 'New Notification';
+          const body = payload.notification?.body || '';
+          fcmService.showNotification(title, body);
+        } catch (error) {
+          console.error('Error handling FCM message:', error);
+        }
+      });
+    } catch (error) {
+      console.error('Error setting up FCM message listener:', error);
+    }
   }, []);
   return (
     <AuthContext.Provider value={{ state, dispatch }}>
