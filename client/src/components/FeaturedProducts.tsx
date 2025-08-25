@@ -21,7 +21,7 @@ const FeaturedProducts = () => {
   };
 
   return (
-    <section id="products" className="py-20 bg-gradient-to-br from-gray-50 to-green-50 relative overflow-hidden">
+    <section id="products" className="py-20 bg-gradient-to-br from-gray-50 to-green-50 dark:from-gray-900 dark:to-gray-800 relative overflow-hidden">
       {/* Background decorations */}
       <div className="absolute top-10 right-10 w-20 h-20 bg-green-200 rounded-full opacity-30 animate-float"></div>
       <div className="absolute bottom-10 left-10 w-16 h-16 bg-orange-200 rounded-full opacity-30 animate-float" style={{ animationDelay: '1s' }}></div>
@@ -29,16 +29,16 @@ const FeaturedProducts = () => {
       
       <div className="max-w-7xl mx-auto px-4 relative z-10">
         <div className="text-center mb-16">
-          <div className="inline-flex items-center px-4 py-2 bg-green-100 text-green-800 rounded-full text-sm font-medium mb-6">
+          <div className="inline-flex items-center px-4 py-2 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-full text-sm font-medium mb-6">
             <Star className="w-4 h-4 mr-2" />
             Bestsellers This Week
           </div>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-6">
             Featured <span className="text-green-600 underline-animated">
               Fresh Fruits
             </span>
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
             Discover our handpicked selection of the freshest, highest-quality fruits sourced directly from trusted farms and delivered to your doorstep.
           </p>
         </div>
@@ -77,7 +77,7 @@ const FeaturedProducts = () => {
               unit: "kg"
             }
           ].map((product, index) => (
-            <div key={product.id} className="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-4 overflow-hidden">
+            <div key={product.id} className="group relative bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-4 overflow-hidden">
               {/* Badge */}
               <div className="absolute top-4 left-4 z-10">
                 <span className="bg-green-600 text-white px-3 py-1 rounded-full text-sm font-medium">
@@ -110,17 +110,17 @@ const FeaturedProducts = () => {
                       <Star key={i} className={`w-4 h-4 ${i < Math.floor(product.rating) ? 'text-yellow-400 fill-current' : 'text-gray-300'}`} />
                     ))}
                   </div>
-                  <span className="text-sm text-gray-600 ml-2">({product.rating})</span>
+                  <span className="text-sm text-gray-600 dark:text-gray-300 ml-2">({product.rating})</span>
                 </div>
 
-                <h3 className="text-lg font-semibold text-gray-900 mb-3 group-hover:text-green-600 transition-colors">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3 group-hover:text-green-600 transition-colors">
                   {product.name}
                 </h3>
 
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2">
-                    <span className="text-xl font-bold text-gray-900">{product.price}</span>
-                    <span className="text-sm text-gray-500 line-through">{product.originalPrice}</span>
+                    <span className="text-xl font-bold text-gray-900 dark:text-white">{product.price}</span>
+                    <span className="text-sm text-gray-500 dark:text-gray-400 line-through">{product.originalPrice}</span>
                   </div>
                   <button 
                     onClick={(e) => {

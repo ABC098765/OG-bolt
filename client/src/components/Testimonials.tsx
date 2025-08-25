@@ -11,7 +11,7 @@ const AndroidApp = () => {
       {/* Coming Soon Modal */}
       {showComingSoon && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl p-8 max-w-md w-full mx-4 relative animate-in zoom-in duration-300">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 max-w-md w-full mx-4 relative animate-in zoom-in duration-300">
             <button
               onClick={() => setShowComingSoon(false)}
               className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
@@ -25,8 +25,8 @@ const AndroidApp = () => {
                 <Play className="w-10 h-10 text-white fill-current" />
               </div>
               
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">Coming Soon!</h3>
-              <p className="text-gray-600 mb-6">
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Coming Soon!</h3>
+              <p className="text-gray-600 dark:text-gray-300 mb-6">
                 Our Android app is currently in development. Stay tuned for the launch!
               </p>
               
@@ -42,22 +42,22 @@ const AndroidApp = () => {
         </div>
       )}
 
-      <section className="py-20 bg-gradient-to-br from-green-50 to-emerald-50 relative overflow-hidden">
+      <section className="py-20 bg-gradient-to-br from-green-50 to-emerald-50 dark:from-gray-900 dark:to-gray-800 relative overflow-hidden">
       {/* Background decorations */}
       <div className="absolute top-20 right-20 w-32 h-32 bg-gradient-to-r from-green-300 to-emerald-300 rounded-full opacity-20 animate-float"></div>
       <div className="absolute bottom-20 left-20 w-24 h-24 bg-gradient-to-r from-orange-300 to-yellow-300 rounded-full opacity-20 animate-float" style={{ animationDelay: '1s' }}></div>
       <div className="max-w-7xl mx-auto px-4 relative z-10">
         <div className="text-center mb-16">
-          <div className="inline-flex items-center px-4 py-2 bg-green-100 text-green-800 rounded-full text-sm font-medium mb-6">
+          <div className="inline-flex items-center px-4 py-2 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-full text-sm font-medium mb-6">
             <Smartphone className="w-4 h-4 mr-2" />
             Download Now
           </div>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-6">
             Our <span className="text-green-600 underline-gradient">
               Android App
             </span>
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
             Experience the convenience of fresh fruit shopping with our mobile app. Order anytime, anywhere with just a few taps.
           </p>
         </div>
@@ -83,40 +83,40 @@ const AndroidApp = () => {
                 />
               </div>
               <div>
-                <h3 className="text-3xl font-bold text-gray-900">SUPER FRUIT CENTER</h3>
-                <p className="text-gray-600">Fresh Fruits Delivered Daily</p>
+                <h3 className="text-3xl font-bold text-gray-900 dark:text-white">SUPER FRUIT CENTER</h3>
+                <p className="text-gray-600 dark:text-gray-300">Fresh Fruits Delivered Daily</p>
               </div>
             </div>
 
             {/* Features */}
             <div className="space-y-6">
               <div className="flex items-start space-x-4">
-                <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+                <div className="w-12 h-12 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center flex-shrink-0">
                   <Smartphone className="w-6 h-6 text-green-600" />
                 </div>
                 <div>
-                  <h4 className="text-lg font-semibold text-gray-900 mb-2">Easy Mobile Ordering</h4>
-                  <p className="text-gray-600">Browse our complete catalog and place orders with intuitive mobile interface.</p>
+                  <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Easy Mobile Ordering</h4>
+                  <p className="text-gray-600 dark:text-gray-300">Browse our complete catalog and place orders with intuitive mobile interface.</p>
                 </div>
               </div>
 
               <div className="flex items-start space-x-4">
-                <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center flex-shrink-0">
+                <div className="w-12 h-12 bg-orange-100 dark:bg-orange-900 rounded-full flex items-center justify-center flex-shrink-0">
                   <Star className="w-6 h-6 text-orange-600" />
                 </div>
                 <div>
-                  <h4 className="text-lg font-semibold text-gray-900 mb-2">Real-time Tracking</h4>
-                  <p className="text-gray-600">Track your order from store to doorstep with live delivery updates.</p>
+                  <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Real-time Tracking</h4>
+                  <p className="text-gray-600 dark:text-gray-300">Track your order from store to doorstep with live delivery updates.</p>
                 </div>
               </div>
 
               <div className="flex items-start space-x-4">
-                <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center flex-shrink-0">
                   <Download className="w-6 h-6 text-blue-600" />
                 </div>
                 <div>
-                  <h4 className="text-lg font-semibold text-gray-900 mb-2">Exclusive App Offers</h4>
-                  <p className="text-gray-600">Get special discounts and early access to new fruits only on mobile.</p>
+                  <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Exclusive App Offers</h4>
+                  <p className="text-gray-600 dark:text-gray-300">Get special discounts and early access to new fruits only on mobile.</p>
                 </div>
               </div>
             </div>

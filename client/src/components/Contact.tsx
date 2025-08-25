@@ -3,13 +3,13 @@ import { Phone, Mail, MapPin, Clock, Facebook, Instagram, Twitter } from 'lucide
 
 const Contact = () => {
   return (
-    <section id="contact" className="py-20 bg-white">
+    <section id="contact" className="py-20 bg-white dark:bg-gray-900">
       <div className="max-w-7xl mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-gray-900 mb-4">
+          <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
             Get In <span className="text-green-600">Touch</span>
           </h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
             Visit our store, give us a call, or reach out online. We're here to help you find the perfect fresh fruits.
           </p>
         </div>
@@ -19,44 +19,44 @@ const Contact = () => {
           <div className="grid md:grid-cols-2 gap-8">
             <div className="space-y-6">
               <div className="flex items-start space-x-4">
-                <div className="flex-shrink-0 p-3 bg-green-100 rounded-lg">
+                <div className="flex-shrink-0 p-3 bg-green-100 dark:bg-green-900 rounded-lg">
                   <MapPin className="w-6 h-6 text-green-600" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-1">Visit Our Store</h3>
-                  <p className="text-gray-600">123 Fresh Street<br />Fruit Valley, FV 12345</p>
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">Visit Our Store</h3>
+                  <p className="text-gray-600 dark:text-gray-300">123 Fresh Street<br />Fruit Valley, FV 12345</p>
                 </div>
               </div>
 
               <div className="flex items-start space-x-4">
-                <div className="flex-shrink-0 p-3 bg-orange-100 rounded-lg">
+                <div className="flex-shrink-0 p-3 bg-orange-100 dark:bg-orange-900 rounded-lg">
                   <Phone className="w-6 h-6 text-orange-500" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-1">Call Us</h3>
-                  <p className="text-gray-600">(555) 123-4567<br />Toll-free: (800) 123-FRUIT</p>
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">Call Us</h3>
+                  <p className="text-gray-600 dark:text-gray-300">(555) 123-4567<br />Toll-free: (800) 123-FRUIT</p>
                 </div>
               </div>
 
               <div className="flex items-start space-x-4">
-                <div className="flex-shrink-0 p-3 bg-blue-100 rounded-lg">
+                <div className="flex-shrink-0 p-3 bg-blue-100 dark:bg-blue-900 rounded-lg">
                   <Mail className="w-6 h-6 text-blue-600" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-1">Email Us</h3>
-                  <p className="text-gray-600">info@superfruitcenter.com<br />orders@superfruitcenter.com</p>
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">Email Us</h3>
+                  <p className="text-gray-600 dark:text-gray-300">info@superfruitcenter.com<br />orders@superfruitcenter.com</p>
                 </div>
               </div>
             </div>
             
             <div className="space-y-6">
               <div className="flex items-start space-x-4">
-                <div className="flex-shrink-0 p-3 bg-purple-100 rounded-lg">
+                <div className="flex-shrink-0 p-3 bg-purple-100 dark:bg-purple-900 rounded-lg">
                   <Clock className="w-6 h-6 text-purple-600" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-1">Store Hours</h3>
-                  <div className="text-gray-600 space-y-1">
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">Store Hours</h3>
+                  <div className="text-gray-600 dark:text-gray-300 space-y-1">
                     <p>Monday - Saturday: 8:00 AM - 8:00 PM</p>
                     <p>Sunday: 9:00 AM - 6:00 PM</p>
                   </div>
