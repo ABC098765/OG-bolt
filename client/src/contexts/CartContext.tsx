@@ -169,32 +169,37 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   React.useEffect(() => {
     let unsubscribe: (() => void) | null = null;
 
-    if (authState.isAuthenticated && authState.user) {
+    if (authState.user?.id) {
       try {
+        console.log('🛒 Cart: Setting up real-time subscription for user:', authState.user.id);
         dispatch({ type: 'SET_LOADING', payload: true });
         
         // Set up real-time cart subscription for bidirectional sync
         unsubscribe = firestoreService.subscribeToUserCart(
           authState.user.id,
           (cartItems) => {
+            console.log('🛒 Cart: Real-time update received:', cartItems.length, 'items');
             dispatch({ type: 'SET_CART', payload: cartItems });
           }
         );
       } catch (error) {
-        console.error('Error setting up cart subscription:', error);
+        console.error('🛒 Cart: Error setting up subscription:', error);
         dispatch({ type: 'SET_LOADING', payload: false });
       }
-    } else {
+    } else if (authState.loading === false && !authState.user) {
+      // Only clear cart if user is definitely logged out (not during loading)
+      console.log('🛒 Cart: User logged out, clearing cart');
       dispatch({ type: 'CLEAR_CART' });
     }
 
     // Cleanup subscription on unmount or when user changes
     return () => {
       if (unsubscribe) {
+        console.log('🛒 Cart: Cleaning up subscription');
         unsubscribe();
       }
     };
-  }, [authState.isAuthenticated, authState.user]);
+  }, [authState.user?.id, authState.loading]);
 
   const addToCart = async (product: any) => {
     if (!authState.user) return;

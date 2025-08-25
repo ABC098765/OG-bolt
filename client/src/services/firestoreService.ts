@@ -121,11 +121,16 @@ export class FirestoreService {
 
   subscribeToUserCart(userId: string, callback: (cartItems: any[]) => void): Unsubscribe {
     try {
+      console.log('🔥 Firestore: Setting up cart subscription for user:', userId);
       const cartRef = collection(db, 'users', userId, 'cart');
       
       return onSnapshot(cartRef, (querySnapshot) => {
+        console.log('🔥 Firestore: Cart snapshot received, docs:', querySnapshot.docs.length);
+        
         const cartItems = querySnapshot.docs.map(doc => {
           const data = doc.data() as any;
+          console.log('🔥 Firestore: Processing cart item:', doc.id, data);
+          
           let numericUnitPrice = Number(
             data.priceValue ?? data.unitPrice ??
             String(data.unitPrice || data.displayPrice || data.priceLabel || '')
@@ -149,12 +154,14 @@ export class FirestoreService {
             priceLabel 
           };
         });
+        
+        console.log('🔥 Firestore: Calling callback with', cartItems.length, 'processed items');
         callback(cartItems);
       }, (error) => {
-        console.error('Error in cart subscription:', error);
+        console.error('🔥 Firestore: Error in cart subscription:', error);
       });
     } catch (error) {
-      console.error('Error setting up cart subscription:', error);
+      console.error('🔥 Firestore: Error setting up cart subscription:', error);
       return () => {}; // Return empty unsubscribe function
     }
   }
