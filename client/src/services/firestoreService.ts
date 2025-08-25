@@ -119,6 +119,46 @@ export class FirestoreService {
     }
   }
 
+  subscribeToUserCart(userId: string, callback: (cartItems: any[]) => void): Unsubscribe {
+    try {
+      const cartRef = collection(db, 'users', userId, 'cart');
+      
+      return onSnapshot(cartRef, (querySnapshot) => {
+        const cartItems = querySnapshot.docs.map(doc => {
+          const data = doc.data() as any;
+          let numericUnitPrice = Number(
+            data.priceValue ?? data.unitPrice ??
+            String(data.unitPrice || data.displayPrice || data.priceLabel || '')
+              .replace(/[^\d.]/g, '')
+          );
+
+          if (isNaN(numericUnitPrice)) {
+            numericUnitPrice = 0; // ultimate fallback
+          }
+          
+          const priceLabel =
+            data.displayPrice ||
+            data.priceLabel ||
+            (numericUnitPrice ? `₹${numericUnitPrice}/${data.unit || 'box'}` : 'Price unavailable');
+
+          return {
+            productId: doc.id,
+            ...data,
+            unitPrice: numericUnitPrice, // ensure always a number
+            priceValue: numericUnitPrice,  // keep in sync
+            priceLabel 
+          };
+        });
+        callback(cartItems);
+      }, (error) => {
+        console.error('Error in cart subscription:', error);
+      });
+    } catch (error) {
+      console.error('Error setting up cart subscription:', error);
+      return () => {}; // Return empty unsubscribe function
+    }
+  }
+
   // Notifications
   async getUserNotifications(userId: string): Promise<FirestoreNotification[]> {
     try {

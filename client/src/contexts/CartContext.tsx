@@ -167,22 +167,33 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const { state: authState } = useAuth();
 
   React.useEffect(() => {
-    const loadCart = async () => {
-      if (authState.isAuthenticated && authState.user) {
-        try {
-          dispatch({ type: 'SET_LOADING', payload: true });
-          const cartItems = await firestoreService.getUserCart(authState.user.id);
-          dispatch({ type: 'SET_CART', payload: cartItems });
-        } catch (error) {
-          console.error('Error loading cart:', error);
-          dispatch({ type: 'SET_LOADING', payload: false });
-        }
-      } else {
-        dispatch({ type: 'CLEAR_CART' });
+    let unsubscribe: (() => void) | null = null;
+
+    if (authState.isAuthenticated && authState.user) {
+      try {
+        dispatch({ type: 'SET_LOADING', payload: true });
+        
+        // Set up real-time cart subscription for bidirectional sync
+        unsubscribe = firestoreService.subscribeToUserCart(
+          authState.user.id,
+          (cartItems) => {
+            dispatch({ type: 'SET_CART', payload: cartItems });
+          }
+        );
+      } catch (error) {
+        console.error('Error setting up cart subscription:', error);
+        dispatch({ type: 'SET_LOADING', payload: false });
+      }
+    } else {
+      dispatch({ type: 'CLEAR_CART' });
+    }
+
+    // Cleanup subscription on unmount or when user changes
+    return () => {
+      if (unsubscribe) {
+        unsubscribe();
       }
     };
-
-    loadCart();
   }, [authState.isAuthenticated, authState.user]);
 
   const addToCart = async (product: any) => {
@@ -246,9 +257,8 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
 
       await firestoreService.addToCart(authState.user.id, cartItem);
-
-      const cartItems = await firestoreService.getUserCart(authState.user.id);
-      dispatch({ type: 'SET_CART', payload: cartItems });
+      
+      // Real-time subscription will handle cart updates automatically
       dispatch({ type: 'ADD_ITEM', payload: { name: product.name } });
     } catch (error) {
       console.error('Error adding to cart:', error);
@@ -262,9 +272,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     try {
       await firestoreService.updateCartItemQuantity(authState.user.id, productId, quantity);
       
-      // Instead of using local reducer calculations, reload cart from Firestore to get accurate data
-      const cartItems = await firestoreService.getUserCart(authState.user.id);
-      dispatch({ type: 'SET_CART', payload: cartItems });
+      // Real-time subscription will handle cart updates automatically
     } catch (error) {
       console.error('Error updating quantity:', error);
     }
@@ -275,7 +283,8 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
     try {
       await firestoreService.removeFromCart(authState.user.id, productId);
-      dispatch({ type: 'REMOVE_ITEM', payload: productId });
+      
+      // Real-time subscription will handle cart updates automatically
     } catch (error) {
       console.error('Error removing item:', error);
     }
