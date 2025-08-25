@@ -332,8 +332,22 @@ export class FirestoreService {
       } else {
         // Add new item to cart with productId as document ID
         // Ensure compatibility with Android app by including both field formats
-        // Compute price label and value safely
-          await setDoc(cartItemRef, {
+        console.log('🔥 Firestore: Adding NEW cart item with structure:', {
+          productId: cartItem.productId,
+          name: cartItem.name,
+          unitPrice: finalPriceValue,
+          priceValue: finalPriceValue,
+          amount: cartItem.amount,
+          unit: cartItem.unit,
+          quantity: 1,
+          totalPrice: finalPriceValue,
+          priceLabel: finalPriceLabel,
+          displayPrice: cartItem.displayPrice || finalPriceLabel,
+          price: finalPriceLabel,
+          unitPriceDisplay: finalPriceLabel
+        });
+        
+        const newCartItem = {
           productId: cartItem.productId,
           name: cartItem.name,
           unitPrice: finalPriceValue,
@@ -350,7 +364,10 @@ export class FirestoreService {
           displayPrice: cartItem.displayPrice || finalPriceLabel,
           price: finalPriceLabel,
           unitPriceDisplay: finalPriceLabel
-        });
+        };
+        
+        await setDoc(cartItemRef, newCartItem);
+        console.log('✅ Firestore: Successfully added cart item to path:', `users/${userId}/cart/${cartItem.productId}`);
       }
     } catch (error) {
       console.error('Error adding to cart:', error);
