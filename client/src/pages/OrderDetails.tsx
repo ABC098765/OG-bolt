@@ -388,12 +388,12 @@ const OrderDetails = () => {
             <div className="space-y-3">
               <div className="flex justify-between py-2">
                 <span className="text-gray-600 dark:text-gray-300">Subtotal ({order.items.length} items)</span>
-                <span className="font-semibold">₹{subtotal}</span>
+                <span className="font-semibold text-gray-900 dark:text-white">₹{subtotal}</span>
               </div>
               
               <div className="flex justify-between py-2">
                 <span className="text-gray-600 dark:text-gray-300">Delivery Fee</span>
-                <span className="font-semibold">
+                <span className="font-semibold text-gray-900 dark:text-white">
                   {order.delivery_fee === 0 ? (
                     <span className="text-green-600">FREE</span>
                   ) : (
@@ -404,7 +404,7 @@ const OrderDetails = () => {
               
               <div className="border-t pt-3">
                 <div className="flex justify-between text-xl font-bold">
-                  <span>Total Amount</span>
+                  <span className="text-gray-900 dark:text-white">Total Amount</span>
                   <span className="text-green-600">₹{order.total_amount}</span>
                 </div>
               </div>
@@ -412,7 +412,7 @@ const OrderDetails = () => {
               <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-3 mt-4">
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-600 dark:text-gray-300">Payment Method</span>
-                  <span className="font-medium">
+                  <span className="font-medium text-gray-900 dark:text-white">
                     {order.payment_id === 'COD' ? 'Cash on Delivery' : 'Online Payment'}
                   </span>
                 </div>

@@ -65,7 +65,7 @@ const Header = () => {
               <img 
                 src="/logo-placeholder.png" 
                 alt="Super Fruit Center Logo" 
-                className="w-12 h-12 pt-[3px] pb-[3px] mt-[0px] mb-[0px] ml-[6px] mr-[6px] pl-[0px] pr-[0px] bg-transparent mix-blend-multiply object-contain"
+                className="w-12 h-12 pt-[3px] pb-[3px] mt-[0px] mb-[0px] ml-[6px] mr-[6px] pl-[0px] pr-[0px] bg-transparent object-contain"
                 style={{ backgroundColor: 'transparent' }}
                 onError={(e) => {
                   // Fallback to text if logo not found

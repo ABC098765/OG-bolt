@@ -100,10 +100,10 @@ const TermsAndConditions = () => {
                 <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">8. Delivery Charges</h3>
                 <div className="text-gray-700 dark:text-gray-300 space-y-2">
                   <p>Our delivery charges are structured as follows:</p>
-                  <ul className="list-disc list-inside ml-4 space-y-1">
-                    <li><strong>Orders below ₹500:</strong> ₹40 delivery charge</li>
-                    <li><strong>Orders ₹500 - ₹999:</strong> ₹20 delivery charge</li>
-                    <li><strong>Orders ₹1000 and above:</strong> FREE delivery</li>
+                  <ul className="list-disc list-inside ml-4 space-y-1 text-gray-700 dark:text-gray-300">
+                    <li><strong className="text-gray-900 dark:text-white">Orders below ₹500:</strong> ₹40 delivery charge</li>
+                    <li><strong className="text-gray-900 dark:text-white">Orders ₹500 - ₹999:</strong> ₹20 delivery charge</li>
+                    <li><strong className="text-gray-900 dark:text-white">Orders ₹1000 and above:</strong> FREE delivery</li>
                   </ul>
                   <p className="mt-3">
                     Delivery charges are calculated based on the subtotal of your order. 
