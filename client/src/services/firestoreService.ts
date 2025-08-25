@@ -315,16 +315,19 @@ export class FirestoreService {
         await updateDoc(cartItemRef, {
           amount: this.amountToString(totalAmount, existingData.unit),
           quantity: 1, // Always 1 as per Android logic
-          totalPrice: existingData.unitPrice * totalAmount,
+          totalPrice: finalPriceValue * totalAmount,
           // Ensure all Android app fields are present
           productId: cartItem.productId,
           name: existingData.name,
           unitPrice: finalPriceValue,
+          priceValue: finalPriceValue,
           unit: existingData.unit,
           imageUrls: existingData.imageUrls || existingData.image_urls || cartItem.imageUrls,
           image_urls: existingData.image_urls || existingData.imageUrls || cartItem.imageUrls,
-          priceLabel: finalPriceLabel, // Use the new displayPrice if provided
-          priceValue: finalPriceValue  // added
+          priceLabel: finalPriceLabel,
+          displayPrice: cartItem.displayPrice || finalPriceLabel,
+          price: finalPriceLabel,
+          unitPriceDisplay: finalPriceLabel
         });
       } else {
         // Add new item to cart with productId as document ID
@@ -333,17 +336,20 @@ export class FirestoreService {
           await setDoc(cartItemRef, {
           productId: cartItem.productId,
           name: cartItem.name,
-          unitPrice: cartItem.unitPrice,
+          unitPrice: finalPriceValue,
+          priceValue: finalPriceValue,
           amount: cartItem.amount,
           unit: cartItem.unit,
           imageUrls: cartItem.imageUrls,
           image_urls: cartItem.imageUrls, // Android app compatibility
           quantity: 1, // Always 1 as per Android logic
-          totalPrice: cartItem.totalPrice,
-          // Add timestamp for Android app compatibility
+          totalPrice: finalPriceValue, // Use consistent pricing
+          // Add ALL Android app expected fields
           addedAt: serverTimestamp(),
-          priceLabel: finalPriceLabel, // added
-        priceValue: finalPriceValue  // added
+          priceLabel: finalPriceLabel,
+          displayPrice: cartItem.displayPrice || finalPriceLabel,
+          price: finalPriceLabel,
+          unitPriceDisplay: finalPriceLabel
         });
       }
     } catch (error) {
