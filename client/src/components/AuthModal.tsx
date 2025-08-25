@@ -339,12 +339,13 @@ const AuthModal = () => {
                 />
                 <span className="text-sm text-gray-600 leading-5">
                   I agree to the{' '}
-                  <a href="#" className="text-green-600 hover:text-green-700 underline">
-                    Privacy Policy
-                  </a>
-                  {' & '}
-                  <a href="#" className="text-green-600 hover:text-green-700 underline">
-                    Terms and Conditions
+                  <a 
+                    href="/terms-and-conditions" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-green-600 hover:text-green-700 underline"
+                  >
+                    Privacy Policy & Terms and Conditions
                   </a>
                 </span>
               </label>
