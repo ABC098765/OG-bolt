@@ -17,6 +17,7 @@ const AuthModal = () => {
   const [resendTimer, setResendTimer] = useState(0);
   const [confirmationResult, setConfirmationResult] = useState<ConfirmationResult | null>(null);
   const [recaptchaCompleted, setRecaptchaCompleted] = useState(false);
+  const [agreeToTerms, setAgreeToTerms] = useState(false);
   const recaptchaVerifierRef = React.useRef<RecaptchaVerifier | null>(null);
 
   // Check for redirect result on component mount
@@ -286,6 +287,7 @@ const AuthModal = () => {
     setResendTimer(0);
     setConfirmationResult(null);
     setRecaptchaCompleted(false);
+    setAgreeToTerms(false);
   };
 
   const handleClose = () => {
@@ -326,10 +328,32 @@ const AuthModal = () => {
               <p className="text-gray-600">Choose your preferred sign-in method</p>
             </div>
 
+            {/* Privacy Policy & Terms Checkbox */}
+            <div className="mb-6">
+              <label className="flex items-start space-x-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={agreeToTerms}
+                  onChange={(e) => setAgreeToTerms(e.target.checked)}
+                  className="mt-1 h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded"
+                />
+                <span className="text-sm text-gray-600 leading-5">
+                  I agree to the{' '}
+                  <a href="#" className="text-green-600 hover:text-green-700 underline">
+                    Privacy Policy
+                  </a>
+                  {' & '}
+                  <a href="#" className="text-green-600 hover:text-green-700 underline">
+                    Terms and Conditions
+                  </a>
+                </span>
+              </label>
+            </div>
+
             <div className="space-y-4">
               <button
                 onClick={handleGoogleSignIn}
-                disabled={isLoading}
+                disabled={isLoading || !agreeToTerms}
                 className="w-full flex items-center justify-center px-6 py-4 border-2 border-gray-200 rounded-lg hover:border-gray-300 hover:bg-gray-50 transition-colors font-semibold text-gray-700 disabled:opacity-50"
               >
                 <svg className="w-5 h-5 mr-3" viewBox="0 0 24 24">
@@ -343,7 +367,8 @@ const AuthModal = () => {
 
               <button
                 onClick={() => setAuthMethod('phone')}
-                className="w-full flex items-center justify-center px-6 py-4 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-semibold"
+                disabled={!agreeToTerms}
+                className="w-full flex items-center justify-center px-6 py-4 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-semibold disabled:opacity-50"
               >
                 <Phone className="w-5 h-5 mr-3" />
                 Continue with Phone
