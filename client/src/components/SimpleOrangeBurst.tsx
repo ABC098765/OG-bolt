@@ -111,18 +111,26 @@ const SimpleOrangeBurst: React.FC = () => {
       )}
       
       {/* Always Visible Text (Transparent like navbar) */}
-      <div className="relative z-20 text-center px-4">
+      <div className="relative z-20 text-center">
         <h1 
-          className="font-black whitespace-nowrap"
+          className="text-6xl sm:text-7xl lg:text-9xl font-black"
           style={{
             color: 'rgba(0, 0, 0, 0.08)', // Very transparent black like navbar
             textShadow: '0 0 1px rgba(255, 255, 255, 0.1)',
             WebkitTextStroke: '1px rgba(0, 0, 0, 0.05)',
-            fontSize: 'clamp(2rem, 12vw, 12rem)', // Flexible sizing
-            lineHeight: '0.9',
           }}
         >
-          SUPER FRUIT CENTER
+          SUPER FRUIT
+          <br />
+          <span 
+            style={{
+              color: 'rgba(0, 0, 0, 0.08)', // Same transparency
+              textShadow: '0 0 1px rgba(255, 255, 255, 0.1)',
+              WebkitTextStroke: '1px rgba(0, 0, 0, 0.05)',
+            }}
+          >
+            CENTER
+          </span>
         </h1>
       </div>
     </section>
