@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'wouter';
 import { ShoppingCart, Truck, Star, Heart, Award, Clock } from 'lucide-react';
-import heroImage from '@assets/generated_images/Fresh_fruit_hero_display_7afffe66.png';
+import OrangeBurstAnimation from './OrangeBurstAnimation';
 
 const Hero = () => {
   return (
@@ -75,15 +75,18 @@ const Hero = () => {
 
           </div>
 
-          <div className="relative">
+          <div className="relative flex justify-center items-center">
             <div className="relative z-10 group">
-              <img
-                src={heroImage}
-                alt="Fresh fruits display"
-                className="rounded-2xl shadow-2xl w-full transform group-hover:scale-105 transition-transform duration-500"
-              />
+              {/* 3D Orange Burst Animation */}
+              <div className="bg-gradient-to-br from-orange-100 to-orange-200 dark:from-gray-800 dark:to-gray-900 rounded-2xl shadow-2xl p-4 transform group-hover:scale-105 transition-transform duration-500">
+                <OrangeBurstAnimation className="mx-auto" />
+                <div className="text-center mt-4">
+                  <p className="text-orange-600 dark:text-orange-400 font-semibold text-lg">🍊 Interactive 3D Orange!</p>
+                  <p className="text-gray-600 dark:text-gray-400 text-sm">Click or wait for the burst animation</p>
+                </div>
+              </div>
+              
               {/* Overlay badges */}
-
               <div className="absolute bottom-4 right-4 bg-green-600/90 backdrop-blur-sm text-white px-3 py-2 rounded-full shadow-lg">
                 <div className="flex items-center text-sm font-medium">
                   <Truck className="w-4 h-4 mr-1" />
