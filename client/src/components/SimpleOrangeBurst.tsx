@@ -13,24 +13,24 @@ const SimpleOrangeBurst: React.FC = () => {
       timeoutId = setTimeout(() => {
         setAnimationPhase(1);
         
-        // After 3 seconds of slow forward movement, trigger burst
+        // After 4 seconds of smooth forward movement, trigger burst
         timeoutId = setTimeout(() => {
           setAnimationPhase(2);
           setTextVisible(true);
           
-          // Reset after 5 seconds
+          // Reset after 4 seconds
           timeoutId = setTimeout(() => {
             setAnimationPhase(0);
             setTextVisible(false);
-          }, 5000);
-        }, 3000);
+          }, 4000);
+        }, 4000);
       }, 1000);
     };
 
     startAnimation();
     
-    // Repeat the cycle every 11 seconds
-    const intervalId = setInterval(startAnimation, 11000);
+    // Repeat the cycle every 10 seconds
+    const intervalId = setInterval(startAnimation, 10000);
 
     return () => {
       clearTimeout(timeoutId);
@@ -44,34 +44,33 @@ const SimpleOrangeBurst: React.FC = () => {
       {/* 3D Orange */}
       <div 
         ref={orangeRef}
-        className={`absolute rounded-full transition-all ease-out ${
-          animationPhase === 0 ? 'duration-1000' : 
-          animationPhase === 1 ? 'duration-3000' : 
-          'duration-500'
-        }`}
+        className="absolute rounded-full"
         style={{
+          transition: animationPhase === 0 ? 'all 1s ease-in-out' :
+                     animationPhase === 1 ? 'all 4s cubic-bezier(0.25, 0.46, 0.45, 0.94)' :
+                     'all 0.8s ease-out',
           background: 'radial-gradient(circle at 30% 30%, #ffb347, #ff8c00, #ff6600)',
           boxShadow: animationPhase === 0 ? '0 0 10px rgba(255, 102, 0, 0.3)' :
                      animationPhase === 1 ? '0 0 80px #ff6600, 0 0 120px rgba(255, 102, 0, 0.4), inset -15px -15px 30px rgba(0,0,0,0.3)' :
                      '0 0 200px #ff6600',
-          // Start tiny and far back, grow as it comes forward
-          width: animationPhase === 0 ? '20px' :
-                 animationPhase === 1 ? '200px' :
+          // Smooth size transition from tiny to large
+          width: animationPhase === 0 ? '15px' :
+                 animationPhase === 1 ? '180px' :
                  '0px',
-          height: animationPhase === 0 ? '20px' :
-                  animationPhase === 1 ? '200px' :
+          height: animationPhase === 0 ? '15px' :
+                  animationPhase === 1 ? '180px' :
                   '0px',
-          // Movement from back to front
-          transform: animationPhase === 0 ? 'translate(-50%, -50%) scale(0.1) perspective(1000px) rotateX(0deg) rotateY(0deg)' :
-                     animationPhase === 1 ? 'translate(-50%, -50%) scale(1.2) perspective(1000px) rotateX(180deg) rotateY(360deg)' :
+          // Smooth movement from back to front
+          transform: animationPhase === 0 ? 'translate(-50%, -50%) scale(0.05) perspective(1000px) rotateX(0deg) rotateY(0deg) rotateZ(0deg)' :
+                     animationPhase === 1 ? 'translate(-50%, -50%) scale(1.0) perspective(1000px) rotateX(360deg) rotateY(720deg) rotateZ(180deg)' :
                      'translate(-50%, -50%) scale(0) perspective(1000px)',
           left: '50%',
           top: '50%',
           zIndex: 5,
-          // 3D perspective effect
-          filter: animationPhase === 0 ? 'blur(2px) brightness(0.7)' :
-                  animationPhase === 1 ? 'blur(0px) brightness(1.2)' :
-                  'blur(0px) brightness(2)',
+          // Smooth depth and clarity transition
+          filter: animationPhase === 0 ? 'blur(3px) brightness(0.5) saturate(0.7)' :
+                  animationPhase === 1 ? 'blur(0px) brightness(1.3) saturate(1.2)' :
+                  'blur(0px) brightness(2) saturate(1.5)',
           opacity: animationPhase === 2 ? 0 : 1,
         }}
       />
