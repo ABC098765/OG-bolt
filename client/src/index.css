@@ -58,6 +58,12 @@
   --chart-5: 340 75% 55%;
 }
 
+/* 3D Orange Animation Keyframes */
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
 /* Feature badge glow effects */
 .feature-badge {
   position: relative;

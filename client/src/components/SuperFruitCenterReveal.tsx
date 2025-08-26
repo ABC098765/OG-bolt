@@ -234,7 +234,9 @@ const SuperFruitCenterReveal: React.FC = () => {
               : 'opacity-0 scale-75 translate-y-8'
           }`}
           style={{
-            background: 'linear-gradient(45deg, #ff6600, #ff9500, #ffb800, #ff6600)',
+            backgroundImage: textVisible 
+              ? 'linear-gradient(45deg, #ff6600, #ff9500, #ffb800, #ff6600)'
+              : 'none',
             backgroundSize: '400% 400%',
             backgroundClip: 'text',
             WebkitBackgroundClip: 'text',
@@ -245,20 +247,21 @@ const SuperFruitCenterReveal: React.FC = () => {
         >
           SUPER FRUIT
           <br />
-          <span className="text-green-600 dark:text-green-400">CENTER</span>
-        </h1>
-        
-        {textVisible && (
-          <p 
-            className="mt-8 text-xl sm:text-2xl text-gray-700 dark:text-gray-300 opacity-0 transform translate-y-8 transition-all duration-1000 delay-500"
-            style={{ 
-              opacity: textVisible ? 1 : 0,
-              transform: textVisible ? 'translateY(0)' : 'translateY(30px)'
+          <span 
+            style={{
+              backgroundImage: textVisible 
+                ? 'linear-gradient(45deg, #16a34a, #22c55e, #4ade80, #16a34a)'
+                : 'none',
+              backgroundSize: '400% 400%',
+              backgroundClip: 'text',
+              WebkitBackgroundClip: 'text',
+              color: 'transparent',
+              animation: textVisible ? 'gradientShift 3s ease-in-out infinite reverse' : 'none',
             }}
           >
-            Fresh. Delivered. Daily.
-          </p>
-        )}
+            CENTER
+          </span>
+        </h1>
       </div>
 
       {/* Custom styles are handled by Tailwind and inline styles */}
