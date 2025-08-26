@@ -1,5 +1,6 @@
 import React from 'react';
 import Hero from '../components/Hero';
+import SuperFruitCenterReveal from '../components/SuperFruitCenterReveal';
 import WhyChooseUs from '../components/WhyChooseUs';
 import FeaturedProducts from '../components/FeaturedProducts';
 import AndroidApp from '../components/Testimonials';
@@ -9,6 +10,7 @@ const Home = () => {
   return (
     <>
       <Hero />
+      <SuperFruitCenterReveal />
       <WhyChooseUs />
       <FeaturedProducts />
       <AndroidApp />

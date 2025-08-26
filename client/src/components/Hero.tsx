@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'wouter';
 import { ShoppingCart, Truck, Star, Heart, Award, Clock } from 'lucide-react';
-import OrangeBehindTextAnimation from './OrangeBehindTextAnimation';
 import heroImage from '@assets/generated_images/Fresh_fruit_hero_display_7afffe66.png';
 
 const Hero = () => {
@@ -17,15 +16,12 @@ const Hero = () => {
               #1 Fresh Fruit Delivery Service
             </div>
 
-            <div className="space-y-6 relative">
-              {/* 3D Orange Animation Behind Text */}
-              <OrangeBehindTextAnimation />
-              
-              <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold text-gray-900 dark:text-white leading-tight relative z-10">
+            <div className="space-y-6">
+              <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold text-gray-900 dark:text-white leading-tight">
                 Fresh <span className="text-green-600 underline-animated">
                   Fruits
                 </span><br />
-                Delivered <span className="text-orange-500 underline-gradient relative z-10">
+                Delivered <span className="text-orange-500 underline-gradient">
                   Daily
                 </span>
               </h1>

@@ -11,19 +11,24 @@ Preferred communication style: Simple, everyday language.
 ## August 26, 2025 - 3D Orange Burst Animation Integration
 
 ### New Feature Added
-- **Enhancement**: Added immersive 3D orange burst animation using Three.js
-- **Location**: Integrated behind the "Fresh Fruits Delivered Daily" heading on homepage
-- **Behavior**: Orange appears from behind screen, moves forward, then bursts into animated splash particles
+- **Enhancement**: Added dramatic 3D orange burst animation with text reveal effect
+- **Location**: New full-screen section on homepage after the hero section
+- **Behavior**: 
+  - Orange emerges from behind the screen with dramatic movement
+  - Collides with screen and bursts into animated splash particles
+  - Hidden "SUPER FRUIT CENTER" text dramatically reveals during burst
+  - Animated gradient text with glow effects
 - **Technical Implementation**:
-  - Uses Three.js for WebGL 3D rendering
-  - Fixed positioning overlay with transparent background
-  - Auto-triggers every 6 seconds with randomized timing
-  - Splash particles with physics-based movement and gravity
+  - Uses Three.js for WebGL 3D rendering with full-screen canvas
+  - Frame-based animation cycling through 3 splash textures
+  - Physics-based particle system with gravity and air resistance
+  - Synchronized text reveal with opacity and transform animations
+  - Auto-cycles every 11 seconds for continuous engagement
   - Proper cleanup and memory management
 
 ### Files Added/Modified
-- **Added**: `client/src/components/OrangeBehindTextAnimation.tsx` - Main 3D animation component
-- **Modified**: `client/src/components/Hero.tsx` - Integrated animation behind hero text
+- **Added**: `client/src/components/SuperFruitCenterReveal.tsx` - Full-screen 3D animation with text reveal
+- **Modified**: `client/src/pages/Home.tsx` - Added new section to homepage
 - **Added**: Splash texture assets in `client/public/` (splash1.png, splash2.png, splash3.png)
 
 ### Dependencies Added
