@@ -8,6 +8,28 @@ Preferred communication style: Simple, everyday language.
 
 # Recent Changes
 
+## August 26, 2025 - 3D Orange Burst Animation Integration
+
+### New Feature Added
+- **Enhancement**: Added immersive 3D orange burst animation using Three.js
+- **Location**: Integrated behind the "Fresh Fruits Delivered Daily" heading on homepage
+- **Behavior**: Orange appears from behind screen, moves forward, then bursts into animated splash particles
+- **Technical Implementation**:
+  - Uses Three.js for WebGL 3D rendering
+  - Fixed positioning overlay with transparent background
+  - Auto-triggers every 6 seconds with randomized timing
+  - Splash particles with physics-based movement and gravity
+  - Proper cleanup and memory management
+
+### Files Added/Modified
+- **Added**: `client/src/components/OrangeBehindTextAnimation.tsx` - Main 3D animation component
+- **Modified**: `client/src/components/Hero.tsx` - Integrated animation behind hero text
+- **Added**: Splash texture assets in `client/public/` (splash1.png, splash2.png, splash3.png)
+
+### Dependencies Added
+- `three`: 3D graphics library for WebGL rendering
+- `@types/three`: TypeScript definitions for Three.js
+
 ## January 24, 2025 - Order Tracking & Reorder Functionality Enhancement
 
 ### Issues Identified and Fixed
