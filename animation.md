@@ -58,11 +58,17 @@ The animation simulates an orange juice splash effect that reveals hidden text. 
 - **Text stroke**: `WebkitTextStroke: '1px rgba(0, 0, 0, 0.05)'`
 - **Content**: "SUPER FRUIT" + "CENTER" (two-line layout)
 
-### Phase 6: 🚧 IN PROGRESS - Splash Text Reveal
-- **Goal**: Orange juice splash particles should "paint" the transparent text
-- **Method**: Splash particles need to interact with text positioning
-- **Effect**: Text should transition from transparent to colorful gradient
-- **Status**: Ready to implement next
+### Phase 6: ✅ COMPLETED - Splash Text Reveal
+- **Goal**: Orange juice splash particles "paint" the transparent text ✅
+- **Method**: Particles target specific text coordinates and animate toward them ✅
+- **Effect**: Text transitions from transparent to colorful gradient with particle synchronization ✅
+- **Technical Implementation**:
+  - **Particle Targeting**: 20 particles with individual target coordinates within text bounds
+  - **Color Split**: First 12 particles are orange (for "SUPER FRUIT"), last 8 are green (for "CENTER")
+  - **CSS Variables**: Uses `--target-x` and `--target-y` custom properties for dynamic targeting
+  - **Animation Sync**: Text reveal starts 300ms after burst with 8% increments every 40ms
+  - **Multi-stage Movement**: Particles expand, target text areas, then fade at text locations
+- **Status**: Fully implemented and functional
 
 ## Technical Implementation Details
 

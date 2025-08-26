@@ -3,7 +3,7 @@ import React, { useRef, useEffect, useState } from 'react';
 const SimpleOrangeBurst: React.FC = () => {
   const [textVisible, setTextVisible] = useState(false);
   const [animationPhase, setAnimationPhase] = useState(0); // 0: waiting, 1: orange moving, 2: burst, 3: reset
-  const [splashParticles, setSplashParticles] = useState<Array<{id: number, x: number, y: number, delay: number}>>([]);
+  const [splashParticles, setSplashParticles] = useState<Array<{id: number, x: number, y: number, delay: number, targetX: number, targetY: number}>>([]);
   const [textRevealProgress, setTextRevealProgress] = useState(0);
   const orangeRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLDivElement>(null);
@@ -20,33 +20,44 @@ const SimpleOrangeBurst: React.FC = () => {
         timeoutId = setTimeout(() => {
           setAnimationPhase(2);
           
-          // Create splash particles
+          // Create splash particles that target text areas
           const particles = [];
-          for (let i = 0; i < 16; i++) {
-            const angle = (i * 22.5) * Math.PI / 180; // 16 particles in circle
-            const distance = 150 + Math.random() * 100; // Random distance
+          // Get text element dimensions for targeting
+          const textElement = textRef.current;
+          const textBounds = textElement ? textElement.getBoundingClientRect() : { width: 600, height: 200 };
+          
+          for (let i = 0; i < 20; i++) {
+            const angle = (i * 18) * Math.PI / 180; // 20 particles in circle
+            const initialDistance = 120 + Math.random() * 80;
+            
+            // Target different areas of the text
+            const targetX = (Math.random() - 0.5) * (textBounds.width * 0.8);
+            const targetY = (Math.random() - 0.5) * (textBounds.height * 0.6);
+            
             particles.push({
               id: i,
-              x: Math.cos(angle) * distance,
-              y: Math.sin(angle) * distance,
-              delay: i * 50 // Staggered timing
+              x: Math.cos(angle) * initialDistance,
+              y: Math.sin(angle) * initialDistance,
+              targetX: targetX,
+              targetY: targetY,
+              delay: i * 40 // Faster staggered timing
             });
           }
           setSplashParticles(particles);
           
-          // Start text reveal animation after short delay
+          // Start text reveal animation synchronized with particle movement
           setTimeout(() => {
             setTextVisible(true);
-            // Gradually reveal text over 2 seconds
+            // Gradually reveal text over 1.5 seconds, synchronized with particles
             let progress = 0;
             const revealInterval = setInterval(() => {
-              progress += 5;
+              progress += 8; // Faster reveal for better sync
               setTextRevealProgress(progress);
               if (progress >= 100) {
                 clearInterval(revealInterval);
               }
-            }, 50);
-          }, 500);
+            }, 40); // Smoother animation steps
+          }, 300); // Earlier start for better synchronization
           
           // Reset after 4 seconds
           timeoutId = setTimeout(() => {
@@ -107,37 +118,51 @@ const SimpleOrangeBurst: React.FC = () => {
         }}
       />
 
-      {/* Smooth Splash Particles */}
-      {animationPhase === 2 && splashParticles.map((particle) => (
-        <div
-          key={particle.id}
-          className="absolute w-6 h-6 rounded-full transition-all duration-1000 ease-out"
-          style={{
-            background: `radial-gradient(circle, #ff${Math.floor(Math.random()*3)+6}${Math.floor(Math.random()*3)+6}00, #ff${Math.floor(Math.random()*3)+8}${Math.floor(Math.random()*3)+8}00)`,
-            left: '50%',
-            top: '50%',
-            transform: `translate(-50%, -50%) translate(${particle.x}px, ${particle.y}px) scale(${0.5 + Math.random() * 0.8})`,
-            animationDelay: `${particle.delay}ms`,
-            opacity: 0.9,
-            zIndex: 15,
-            boxShadow: `0 0 20px #ff6600, 0 0 40px rgba(255, 102, 0, 0.6)`,
-            filter: 'blur(0.5px)',
-          }}
-        />
-      ))}
+      {/* Enhanced Splash Particles with Text Targeting */}
+      {animationPhase === 2 && splashParticles.map((particle, index) => {
+        const isOrangeParticle = index < 12;
+        const baseColor = isOrangeParticle ? '#ff6600' : '#22c55e';
+        const secondColor = isOrangeParticle ? '#ff8800' : '#34d399';
+        
+        return (
+          <div
+            key={particle.id}
+            className="absolute w-5 h-5 rounded-full"
+            style={{
+              backgroundImage: `radial-gradient(circle at 30% 30%, ${baseColor}, ${secondColor})`,
+              left: '50%',
+              top: '50%',
+              transform: `translate(-50%, -50%) translate(${particle.x}px, ${particle.y}px) scale(${0.6 + Math.random() * 0.7})`,
+              transition: `all ${1200 + particle.delay}ms cubic-bezier(0.34, 1.56, 0.64, 1)`,
+              animationDelay: `${particle.delay}ms`,
+              opacity: 0.85,
+              zIndex: 15,
+              boxShadow: `0 0 15px ${baseColor}, 0 0 30px ${baseColor}40`,
+              filter: 'blur(0.3px)',
+              animation: `particleMove 2s ease-out ${particle.delay}ms forwards`,
+              animationFillMode: 'forwards',
+              // CSS custom properties for particle targeting
+              ...({
+                '--target-x': `${particle.targetX}px`,
+                '--target-y': `${particle.targetY}px`,
+              } as any),
+            }}
+          />
+        );
+      })}
       
       {/* Text That Gets Colored by Splash */}
       <div ref={textRef} className="relative z-20 text-center">
         <h1 
           className="text-6xl sm:text-7xl lg:text-9xl font-black transition-all duration-2000"
           style={{
-            background: textVisible && textRevealProgress > 0
+            backgroundImage: textVisible && textRevealProgress > 0
               ? `linear-gradient(45deg, 
                   rgba(255, 102, 0, ${Math.min(textRevealProgress / 100, 1)}) 0%, 
                   rgba(255, 149, 0, ${Math.min(textRevealProgress / 100, 1)}) 25%, 
                   rgba(255, 184, 0, ${Math.min(textRevealProgress / 100, 1)}) 50%, 
                   rgba(255, 102, 0, ${Math.min(textRevealProgress / 100, 1)}) 75%)`
-              : 'transparent',
+              : 'none',
             WebkitBackgroundClip: 'text',
             backgroundClip: 'text',
             color: textVisible && textRevealProgress > 0 ? 'transparent' : 'rgba(0, 0, 0, 0.08)',
@@ -147,7 +172,6 @@ const SimpleOrangeBurst: React.FC = () => {
             WebkitTextStroke: textVisible && textRevealProgress > 0 
               ? 'none' 
               : '1px rgba(0, 0, 0, 0.05)',
-            backgroundSize: '300% 100%',
             animation: textVisible && textRevealProgress > 80 
               ? 'gradientShift 3s ease-in-out infinite' 
               : 'none',
@@ -157,13 +181,13 @@ const SimpleOrangeBurst: React.FC = () => {
           <br />
           <span 
             style={{
-              background: textVisible && textRevealProgress > 20
+              backgroundImage: textVisible && textRevealProgress > 20
                 ? `linear-gradient(45deg, 
                     rgba(22, 163, 74, ${Math.min((textRevealProgress - 20) / 80, 1)}) 0%, 
                     rgba(34, 197, 94, ${Math.min((textRevealProgress - 20) / 80, 1)}) 33%, 
                     rgba(74, 222, 128, ${Math.min((textRevealProgress - 20) / 80, 1)}) 66%, 
                     rgba(22, 163, 74, ${Math.min((textRevealProgress - 20) / 80, 1)}) 100%)`
-                : 'transparent',
+                : 'none',
               WebkitBackgroundClip: 'text',
               backgroundClip: 'text',
               color: textVisible && textRevealProgress > 20 ? 'transparent' : 'rgba(0, 0, 0, 0.08)',
@@ -173,7 +197,6 @@ const SimpleOrangeBurst: React.FC = () => {
               WebkitTextStroke: textVisible && textRevealProgress > 20 
                 ? 'none' 
                 : '1px rgba(0, 0, 0, 0.05)',
-              backgroundSize: '300% 100%',
               animation: textVisible && textRevealProgress > 80 
                 ? 'gradientShift 3s ease-in-out infinite reverse' 
                 : 'none',
