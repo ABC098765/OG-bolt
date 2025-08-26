@@ -110,38 +110,23 @@ const SimpleOrangeBurst: React.FC = () => {
         </>
       )}
       
-      {/* Hidden Text That Reveals */}
+      {/* Always Visible Text (Transparent like navbar) */}
       <div className="relative z-20 text-center">
         <h1 
-          className={`text-6xl sm:text-7xl lg:text-9xl font-black transition-all duration-2000 transform ${
-            textVisible 
-              ? 'opacity-100 scale-100 translate-y-0' 
-              : 'opacity-0 scale-75 translate-y-8'
-          }`}
+          className="text-6xl sm:text-7xl lg:text-9xl font-black"
           style={{
-            backgroundImage: textVisible 
-              ? 'linear-gradient(45deg, #ff6600, #ff9500, #ffb800, #ff6600)'
-              : 'none',
-            backgroundSize: '400% 400%',
-            backgroundClip: 'text',
-            WebkitBackgroundClip: 'text',
-            color: 'transparent',
-            animation: textVisible ? 'gradientShift 3s ease-in-out infinite' : 'none',
-            textShadow: textVisible ? '0 0 30px rgba(255, 102, 0, 0.5)' : 'none',
+            color: 'rgba(0, 0, 0, 0.08)', // Very transparent black like navbar
+            textShadow: '0 0 1px rgba(255, 255, 255, 0.1)',
+            WebkitTextStroke: '1px rgba(0, 0, 0, 0.05)',
           }}
         >
           SUPER FRUIT
           <br />
           <span 
             style={{
-              backgroundImage: textVisible 
-                ? 'linear-gradient(45deg, #16a34a, #22c55e, #4ade80, #16a34a)'
-                : 'none',
-              backgroundSize: '400% 400%',
-              backgroundClip: 'text',
-              WebkitBackgroundClip: 'text',
-              color: 'transparent',
-              animation: textVisible ? 'gradientShift 3s ease-in-out infinite reverse' : 'none',
+              color: 'rgba(0, 0, 0, 0.08)', // Same transparency
+              textShadow: '0 0 1px rgba(255, 255, 255, 0.1)',
+              WebkitTextStroke: '1px rgba(0, 0, 0, 0.05)',
             }}
           >
             CENTER
