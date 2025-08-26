@@ -59,15 +59,21 @@ const OrangeBehindTextAnimation: React.FC<OrangeBehindTextAnimationProps> = ({ c
       loader.load("/splash3.png")
     ];
 
-    const splashes: Array<{ mesh: THREE.Mesh; life: number; velocity: THREE.Vector3 }> = [];
+    const splashes: Array<{ 
+      mesh: THREE.Mesh; 
+      life: number; 
+      velocity: THREE.Vector3; 
+      frameIndex: number;
+      frameTimer: number;
+    }> = [];
     let orangeAnimationPhase = 0; // 0: moving forward, 1: bursting, 2: reset
 
-    // Create multiple splash particles
+    // Create multiple splash particles with frame animation
     const createBurstSplashes = () => {
       for (let i = 0; i < 8; i++) {
-        const texture = splashTextures[Math.floor(Math.random() * splashTextures.length)];
+        // Start with first frame
         const material = new THREE.MeshBasicMaterial({
-          map: texture,
+          map: splashTextures[0],
           transparent: true,
           opacity: 1,
           depthWrite: false,
@@ -85,7 +91,13 @@ const OrangeBehindTextAnimation: React.FC<OrangeBehindTextAnimationProps> = ({ c
         );
         
         splash.rotation.z = Math.random() * Math.PI * 2;
-        splashes.push({ mesh: splash, life: 1, velocity });
+        splashes.push({ 
+          mesh: splash, 
+          life: 1, 
+          velocity, 
+          frameIndex: 0,
+          frameTimer: 0
+        });
         scene.add(splash);
       }
       
@@ -111,7 +123,7 @@ const OrangeBehindTextAnimation: React.FC<OrangeBehindTextAnimationProps> = ({ c
         }
       }
 
-      // Animate splash particles
+      // Animate splash particles with frame animation
       for (let i = splashes.length - 1; i >= 0; i--) {
         const splash = splashes[i];
         splash.life -= 0.015;
@@ -119,6 +131,15 @@ const OrangeBehindTextAnimation: React.FC<OrangeBehindTextAnimationProps> = ({ c
         // Move splash particles outward
         splash.mesh.position.add(splash.velocity.clone().multiplyScalar(0.1));
         splash.velocity.y -= 0.1; // Add gravity
+        
+        // Animate through frames (change frame every 0.1 seconds)
+        splash.frameTimer += 0.016; // Approximately 60fps
+        if (splash.frameTimer >= 0.1) {
+          splash.frameTimer = 0;
+          splash.frameIndex = (splash.frameIndex + 1) % splashTextures.length;
+          (splash.mesh.material as THREE.MeshBasicMaterial).map = splashTextures[splash.frameIndex];
+          (splash.mesh.material as THREE.MeshBasicMaterial).needsUpdate = true;
+        }
         
         // Fade and scale
         (splash.mesh.material as THREE.MeshBasicMaterial).opacity = Math.max(splash.life, 0);
