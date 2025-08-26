@@ -58,6 +58,74 @@
   --chart-5: 340 75% 55%;
 }
 
+/* Feature badge glow effects */
+.feature-badge {
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.feature-badge::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  z-index: -1;
+  transition: opacity 0.3s ease;
+  opacity: 0;
+}
+
+.feature-badge-1::before {
+  background: radial-gradient(circle, rgba(34, 197, 94, 0.4) 0%, rgba(34, 197, 94, 0.2) 30%, transparent 70%);
+  animation: glow-green 2s ease-in-out infinite alternate;
+}
+
+.feature-badge-2::before {
+  background: radial-gradient(circle, rgba(251, 146, 60, 0.4) 0%, rgba(251, 146, 60, 0.2) 30%, transparent 70%);
+  animation: glow-orange 2.2s ease-in-out infinite alternate;
+}
+
+.feature-badge-3::before {
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.4) 0%, rgba(59, 130, 246, 0.2) 30%, transparent 70%);
+  animation: glow-blue 2.4s ease-in-out infinite alternate;
+}
+
+.feature-badge:hover::before {
+  opacity: 1;
+}
+
+@keyframes glow-green {
+  0% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+}
+
+@keyframes glow-orange {
+  0% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+}
+
+@keyframes glow-blue {
+  0% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+}
+
 /* Custom animations and styles */
 @keyframes shine {
   0% { transform: translateX(-100%); }
