@@ -78,8 +78,13 @@ const Checkout = () => {
   }
 
   // Redirect to cart if empty
+  useEffect(() => {
+    if (cartState.items.length === 0) {
+      navigate('/cart');
+    }
+  }, [cartState.items.length, navigate]);
+
   if (cartState.items.length === 0) {
-    navigate('/cart');
     return null;
   }
 
@@ -502,8 +507,8 @@ const Checkout = () => {
           </h3>
           
           <div className="space-y-4 mb-6">
-            {cartState.items.map((item) => (
-              <div key={item.id} className="flex items-center justify-between py-2">
+            {cartState.items.map((item, index) => (
+              <div key={item.productId || item.id || index} className="flex items-center justify-between py-2">
                 <div className="flex items-center space-x-3">
                   <img
                     src={item.image}
