@@ -18,6 +18,8 @@ interface AuthState {
   isAuthenticated: boolean;
   showAuthModal: boolean;
   loading: boolean;
+  showTutorial: boolean;
+  hasSeenTutorial: boolean;
 }
 
 type AuthAction =
@@ -25,12 +27,20 @@ type AuthAction =
   | { type: 'LOGOUT' }
   | { type: 'SHOW_AUTH_MODAL' }
   | { type: 'HIDE_AUTH_MODAL' }
-  | { type: 'SET_LOADING'; payload: boolean };
+  | { type: 'SET_LOADING'; payload: boolean }
+  | { type: 'SHOW_TUTORIAL' }
+  | { type: 'HIDE_TUTORIAL' }
+  | { type: 'MARK_TUTORIAL_SEEN' };
 
-const AuthContext = createContext<{
+interface AuthContextType {
   state: AuthState;
   dispatch: React.Dispatch<AuthAction>;
-} | null>(null);
+  showTutorial: () => void;
+  hideTutorial: () => void;
+  skipTutorial: () => void;
+}
+
+const AuthContext = createContext<AuthContextType | null>(null);
 
 const authReducer = (state: AuthState, action: AuthAction): AuthState => {
   switch (action.type) {
@@ -65,6 +75,22 @@ const authReducer = (state: AuthState, action: AuthAction): AuthState => {
         ...state,
         loading: action.payload
       };
+    case 'SHOW_TUTORIAL':
+      return {
+        ...state,
+        showTutorial: true
+      };
+    case 'HIDE_TUTORIAL':
+      return {
+        ...state,
+        showTutorial: false
+      };
+    case 'MARK_TUTORIAL_SEEN':
+      return {
+        ...state,
+        showTutorial: false,
+        hasSeenTutorial: true
+      };
     default:
       return state;
   }
@@ -85,7 +111,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     user: null,
     isAuthenticated: false,
     showAuthModal: false,
-    loading: true
+    loading: true,
+    showTutorial: false,
+    hasSeenTutorial: localStorage.getItem('hasSeenTutorial') === 'true'
   });
 
   // Listen for authentication state changes
@@ -101,6 +129,14 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
             const user = convertFirestoreUserToUser(userData);
             dispatch({ type: 'LOGIN', payload: user });
             
+            // Show tutorial for first-time users
+            const hasSeenTutorial = localStorage.getItem('hasSeenTutorial') === 'true';
+            if (!hasSeenTutorial) {
+              setTimeout(() => {
+                dispatch({ type: 'SHOW_TUTORIAL' });
+              }, 1000); // Show tutorial after 1 second
+            }
+            
             // FCM notifications are working via backend, skip token setup
             console.log('✅ Auth: User logged in, FCM handled by backend');
           } else {
@@ -108,6 +144,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
             const newUserData = await authService.createOrUpdateUser(firebaseUser);
             const user = convertFirestoreUserToUser(newUserData);
             dispatch({ type: 'LOGIN', payload: user });
+            
+            // Show tutorial for new users (they haven't seen it yet)
+            setTimeout(() => {
+              dispatch({ type: 'SHOW_TUTORIAL' });
+            }, 1000); // Show tutorial after 1 second
             
             // FCM notifications are working via backend, skip token setup
             console.log('✅ Auth: New user created, FCM handled by backend');
@@ -143,8 +184,28 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       console.error('Error setting up FCM message listener:', error);
     }
   }, []);
+
+  const showTutorial = () => {
+    dispatch({ type: 'SHOW_TUTORIAL' });
+  };
+
+  const hideTutorial = () => {
+    dispatch({ type: 'HIDE_TUTORIAL' });
+  };
+
+  const skipTutorial = () => {
+    localStorage.setItem('hasSeenTutorial', 'true');
+    dispatch({ type: 'MARK_TUTORIAL_SEEN' });
+  };
+
   return (
-    <AuthContext.Provider value={{ state, dispatch }}>
+    <AuthContext.Provider value={{ 
+      state, 
+      dispatch, 
+      showTutorial, 
+      hideTutorial, 
+      skipTutorial 
+    }}>
       {children}
     </AuthContext.Provider>
   );
