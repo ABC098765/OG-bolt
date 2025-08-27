@@ -500,33 +500,21 @@
 
 @keyframes shine-sweep {
   0% {
-    transform: translateX(-150%) skewX(-20deg) scaleY(1.2);
+    transform: translateX(-120%) skewX(-15deg);
     opacity: 0;
   }
-  5% {
-    opacity: 0.4;
+  20% {
+    opacity: 0.6;
   }
-  15% {
-    opacity: 0.9;
-    transform: translateX(-50%) skewX(-20deg) scaleY(1.2);
-  }
-  35% {
+  50% {
     opacity: 1;
-    transform: translateX(0%) skewX(-20deg) scaleY(1.2);
+    transform: translateX(0%) skewX(-15deg);
   }
-  65% {
-    opacity: 1;
-    transform: translateX(50%) skewX(-20deg) scaleY(1.2);
-  }
-  85% {
-    opacity: 0.9;
-    transform: translateX(100%) skewX(-20deg) scaleY(1.2);
-  }
-  95% {
-    opacity: 0.4;
+  80% {
+    opacity: 0.6;
   }
   100% {
-    transform: translateX(250%) skewX(-20deg) scaleY(1.2);
+    transform: translateX(220%) skewX(-15deg);
     opacity: 0;
   }
 }
@@ -573,10 +561,10 @@
     rgba(255, 255, 255, 0.2) 65%,
     transparent 75%
   );
-  animation: shine-sweep 4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  animation: shine-sweep 3s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
   z-index: 2;
   border-radius: inherit;
-  filter: blur(0.5px);
+  filter: blur(0.3px);
 }
 
 .feature-badge::after {
@@ -592,7 +580,7 @@
     rgba(255, 255, 255, 0.05) 40%,
     transparent 70%
   );
-  animation: glow-pulse 3s ease-in-out infinite alternate;
+  animation: glow-pulse 2.5s ease-in-out infinite alternate;
   z-index: 1;
   border-radius: inherit;
 }
