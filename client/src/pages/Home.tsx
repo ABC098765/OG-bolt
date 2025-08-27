@@ -4,7 +4,6 @@ import SimpleOrangeBurst from '../components/SimpleOrangeBurst';
 import WhyChooseUs from '../components/WhyChooseUs';
 import FeaturedProducts from '../components/FeaturedProducts';
 import AndroidApp from '../components/Testimonials';
-import Contact from '../components/Contact';
 
 const Home = () => {
   return (
@@ -14,7 +13,6 @@ const Home = () => {
       <WhyChooseUs />
       <FeaturedProducts />
       <AndroidApp />
-      <Contact />
     </>
   );
 };
