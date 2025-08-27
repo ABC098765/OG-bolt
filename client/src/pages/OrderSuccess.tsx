@@ -25,6 +25,7 @@ const OrderSuccess = () => {
         particle.style.borderRadius = '50%';
         particle.style.zIndex = '9999';
         document.body.appendChild(particle);
+        particles.push(particle);
         
         const animateParticle = () => {
           const fallSpeed = Math.random() * 3 + 2;
@@ -37,12 +38,23 @@ const OrderSuccess = () => {
           if (currentTop < window.innerHeight + 20) {
             requestAnimationFrame(animateParticle);
           } else {
-            document.body.removeChild(particle);
+            if (document.body.contains(particle)) {
+              document.body.removeChild(particle);
+            }
           }
         };
         
         setTimeout(() => requestAnimationFrame(animateParticle), i * 100);
       }
+      
+      // Remove all particles after 3 seconds
+      setTimeout(() => {
+        particles.forEach(particle => {
+          if (document.body.contains(particle)) {
+            document.body.removeChild(particle);
+          }
+        });
+      }, 3000);
     };
 
     createConfetti();
