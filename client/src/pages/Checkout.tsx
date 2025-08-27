@@ -57,12 +57,12 @@ const Checkout = () => {
   // Show loading or sign in prompt if not authenticated
   if (!authState.isAuthenticated) {
     return (
-      <div className="min-h-screen bg-gray-50 py-8">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
         <div className="max-w-4xl mx-auto px-4">
           <div className="text-center py-16">
-            <Package className="w-24 h-24 text-gray-300 mx-auto mb-6" />
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Sign in required</h2>
-            <p className="text-xl text-gray-600 mb-8">
+            <Package className="w-24 h-24 text-gray-300 dark:text-gray-600 mx-auto mb-6" />
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">Sign in required</h2>
+            <p className="text-xl text-gray-600 dark:text-gray-300 mb-8">
               Please sign in to proceed with checkout.
             </p>
             <button 
@@ -300,7 +300,7 @@ const Checkout = () => {
         <div className={`w-8 h-8 rounded-full flex items-center justify-center text-white ${getColor()}`}>
           {getIcon()}
         </div>
-        <span className={`text-xs mt-1 ${state === 'indexed' ? 'text-gray-400' : 'text-gray-700'}`}>
+        <span className={`text-xs mt-1 ${state === 'indexed' ? 'text-gray-400 dark:text-gray-500' : 'text-gray-700 dark:text-gray-300'}`}>
           {label}
         </span>
       </div>
@@ -308,36 +308,36 @@ const Checkout = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
       <div className="max-w-4xl mx-auto px-4">
         <div className="mb-8">
           <button 
             onClick={() => navigate('/cart')}
-            className="flex items-center text-green-600 hover:text-green-700 mb-4"
+            className="flex items-center text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300 mb-4"
           >
             <ArrowLeft className="w-5 h-5 mr-2" />
             Back to Cart
           </button>
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
             <span className="text-green-600">Checkout</span>
           </h1>
         </div>
 
         {/* Progress Steps */}
-        <div className="bg-white rounded-2xl shadow-lg p-6 mb-8">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 mb-8">
           <div className="flex items-center justify-between">
             <StepCircle step={0} state={getStepState(0)} label="Address" />
-            <div className="flex-1 h-0.5 bg-gray-300 mx-4"></div>
+            <div className="flex-1 h-0.5 bg-gray-300 dark:bg-gray-600 mx-4"></div>
             <StepCircle step={1} state={getStepState(1)} label="Summary" />
-            <div className="flex-1 h-0.5 bg-gray-300 mx-4"></div>
+            <div className="flex-1 h-0.5 bg-gray-300 dark:bg-gray-600 mx-4"></div>
             <StepCircle step={2} state={getStepState(2)} label="Payment" />
           </div>
         </div>
 
         {/* Address Section */}
-        <div className="bg-white rounded-2xl shadow-lg p-6 mb-8">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 mb-8">
           <div className="flex items-center justify-between mb-6">
-            <h3 className="text-xl font-bold text-gray-900 flex items-center">
+            <h3 className="text-xl font-bold text-gray-900 dark:text-white flex items-center">
               <MapPin className="w-5 h-5 mr-2" />
               Select Delivery Address
             </h3>
@@ -353,58 +353,58 @@ const Checkout = () => {
 
           {/* Address Form */}
           {showAddressForm && (
-            <div className="bg-gray-50 rounded-lg p-6 mb-6">
-              <h4 className="text-lg font-semibold mb-4">
+            <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-6 mb-6">
+              <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
                 {editingAddress ? 'Edit Address' : 'Add New Address'}
               </h4>
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Name *</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Name *</label>
                   <input
                     type="text"
                     value={addressName}
                     onChange={(e) => setAddressName(e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-600 dark:text-white rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                     placeholder="Enter name"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Phone Number *</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Phone Number *</label>
                   <input
                     type="tel"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value.replace(/\D/g, '').slice(0, 10))}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-600 dark:text-white rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                     placeholder="Enter 10-digit phone number"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Flat/House No. *</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Flat/House No. *</label>
                   <input
                     type="text"
                     value={flatNo}
                     onChange={(e) => setFlatNo(e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-600 dark:text-white rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                     placeholder="Enter flat/house number"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Building Name *</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Building Name *</label>
                   <input
                     type="text"
                     value={buildingName}
                     onChange={(e) => setBuildingName(e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-600 dark:text-white rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                     placeholder="Enter building name"
                   />
                 </div>
                 <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Landmark (Optional)</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Landmark (Optional)</label>
                   <input
                     type="text"
                     value={landmark}
                     onChange={(e) => setLandmark(e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-600 dark:text-white rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                     placeholder="Enter landmark"
                   />
                 </div>
@@ -418,7 +418,7 @@ const Checkout = () => {
                 </button>
                 <button
                   onClick={cancelAddressForm}
-                  className="flex-1 border-2 border-gray-300 text-gray-700 py-3 px-6 rounded-lg hover:bg-gray-50 transition-colors font-semibold"
+                  className="flex-1 border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 py-3 px-6 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors font-semibold"
                 >
                   Cancel
                 </button>
@@ -430,12 +430,12 @@ const Checkout = () => {
           {loading ? (
             <div className="text-center py-8">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600 mx-auto"></div>
-              <p className="text-gray-600 mt-2">Loading addresses...</p>
+              <p className="text-gray-600 dark:text-gray-400 mt-2">Loading addresses...</p>
             </div>
           ) : addresses.length === 0 ? (
             <div className="text-center py-8">
               <MapPin className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-              <p className="text-gray-600">No addresses found. Add one to continue!</p>
+              <p className="text-gray-600 dark:text-gray-400">No addresses found. Add one to continue!</p>
             </div>
           ) : (
             <div className="space-y-4 max-h-64 overflow-y-auto">
@@ -444,8 +444,8 @@ const Checkout = () => {
                   key={address.id}
                   className={`border rounded-lg p-4 cursor-pointer transition-colors ${
                     selectedAddressId === address.id
-                      ? 'border-green-500 bg-green-50'
-                      : 'border-gray-200 hover:border-gray-300'
+                      ? 'border-green-500 bg-green-50 dark:bg-green-900/20'
+                      : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'
                   }`}
                   onClick={() => setSelectedAddressId(address.id)}
                 >
@@ -458,13 +458,13 @@ const Checkout = () => {
                         className="mt-1"
                       />
                       <div>
-                        <h4 className="font-semibold text-gray-900">{address.name}</h4>
-                        <p className="text-gray-600">{address.flatNo}</p>
-                        <p className="text-gray-600">{address.buildingName}</p>
+                        <h4 className="font-semibold text-gray-900 dark:text-white">{address.name}</h4>
+                        <p className="text-gray-600 dark:text-gray-300">{address.flatNo}</p>
+                        <p className="text-gray-600 dark:text-gray-300">{address.buildingName}</p>
                         {address.landmark && (
-                          <p className="text-gray-600">Landmark: {address.landmark}</p>
+                          <p className="text-gray-600 dark:text-gray-300">Landmark: {address.landmark}</p>
                         )}
-                        <p className="text-sm text-gray-500">Phone: {address.phone}</p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">Phone: {address.phone}</p>
                       </div>
                     </div>
                     <div className="flex space-x-2">
@@ -473,7 +473,7 @@ const Checkout = () => {
                           e.stopPropagation();
                           startEditAddress(address);
                         }}
-                        className="p-2 text-blue-600 hover:bg-blue-50 rounded-full"
+                        className="p-2 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-full"
                       >
                         <Edit3 className="w-4 h-4" />
                       </button>
@@ -482,7 +482,7 @@ const Checkout = () => {
                           e.stopPropagation();
                           deleteAddress(address.id);
                         }}
-                        className="p-2 text-red-600 hover:bg-red-50 rounded-full"
+                        className="p-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-full"
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
@@ -495,8 +495,8 @@ const Checkout = () => {
         </div>
 
         {/* Order Summary */}
-        <div className="bg-white rounded-2xl shadow-lg p-6 mb-8">
-          <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 mb-8">
+          <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-6 flex items-center">
             <Package className="w-5 h-5 mr-2" />
             Order Summary
           </h3>
@@ -511,13 +511,13 @@ const Checkout = () => {
                     className="w-12 h-12 object-cover rounded-lg"
                   />
                   <div>
-                    <h4 className="font-medium text-gray-900">{item.name}</h4>
-                    <p className="text-sm text-gray-600">
+                    <h4 className="font-medium text-gray-900 dark:text-white">{item.name}</h4>
+                    <p className="text-sm text-gray-600 dark:text-gray-300">
                       {item.quantity} × {item.priceLabel || item.displayPrice || `₹${item.price}/${item.unit}`}
                     </p>
                   </div>
                 </div>
-                <span className="font-semibold text-gray-900">
+                <span className="font-semibold text-gray-900 dark:text-white">
                   ₹{(item.unitPrice || item.priceValue || 0) * item.quantity}
                 </span>
               </div>
@@ -525,22 +525,22 @@ const Checkout = () => {
           </div>
 
           <div className="border-t pt-4 space-y-2">
-            <div className="flex justify-between text-gray-600">
+            <div className="flex justify-between text-gray-600 dark:text-gray-300">
               <span>Subtotal</span>
               <span>₹{subtotal}</span>
             </div>
-            <div className="flex justify-between text-gray-600">
+            <div className="flex justify-between text-gray-600 dark:text-gray-300">
               <span>Delivery Fee</span>
               <span>{deliveryFee === 0 ? 'FREE' : `₹${deliveryFee}`}</span>
             </div>
-            <div className="flex justify-between text-xl font-bold text-gray-900 pt-2 border-t">
+            <div className="flex justify-between text-xl font-bold text-gray-900 dark:text-white pt-2 border-t dark:border-gray-600">
               <span>Total</span>
               <span className="text-green-600">₹{grandTotal}</span>
             </div>
           </div>
 
           {deliveryFee > 0 && (
-            <p className="text-sm text-orange-600 mt-4">
+            <p className="text-sm text-orange-600 dark:text-orange-400 mt-4">
               {subtotal < 500 
                 ? `Add ₹${500 - subtotal} more for ₹20 delivery!`
                 : `Add ₹${1000 - subtotal} more for free delivery!`
@@ -550,8 +550,8 @@ const Checkout = () => {
         </div>
 
         {/* Payment Method */}
-        <div className="bg-white rounded-2xl shadow-lg p-6 mb-8">
-          <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 mb-8">
+          <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-6 flex items-center">
             <CreditCard className="w-5 h-5 mr-2" />
             Select Payment Method
           </h3>
@@ -560,8 +560,8 @@ const Checkout = () => {
             <div
               className={`border rounded-lg p-4 cursor-pointer transition-colors ${
                 selectedPaymentMethod === 'cod'
-                  ? 'border-green-500 bg-green-50'
-                  : 'border-gray-200 hover:border-gray-300'
+                  ? 'border-green-500 bg-green-50 dark:bg-green-900/20'
+                  : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'
               }`}
               onClick={() => setSelectedPaymentMethod('cod')}
             >
@@ -576,7 +576,7 @@ const Checkout = () => {
                     <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
                       💰
                     </div>
-                    <span className="font-medium">Cash on Delivery</span>
+                    <span className="font-medium text-gray-900 dark:text-white">Cash on Delivery</span>
                   </div>
                 </div>
                 {selectedPaymentMethod === 'cod' && (
@@ -588,7 +588,7 @@ const Checkout = () => {
         </div>
 
         {/* Place Order Button */}
-        <div className="bg-white rounded-2xl shadow-lg p-6">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
           <button
             onClick={createOrder}
             disabled={!selectedAddressId || !selectedPaymentMethod || isProcessingPayment}
