@@ -30,12 +30,18 @@ const SimpleOrangeBurst: React.FC = () => {
       
       const createOrangeSequence = (orangeNumber: number, delay: number) => {
         setTimeout(() => {
+          // Don't create more oranges if animation should stop
+          if (stopAnimation || isTextColored) return;
+          
           // Set random direction for this orange
           setCurrentOrangeDirection(getRandomDirection());
           setAnimationPhase(orangeNumber * 2 - 1); // odd numbers: 1, 3, 5, 7 for movement
           
           // After 3 seconds of movement, trigger burst
           setTimeout(() => {
+            // Don't continue with burst if animation should stop
+            if (stopAnimation || isTextColored) return;
+            
             setAnimationPhase(orangeNumber * 2); // even numbers: 2, 4, 6, 8 for burst
             
             // Create splash particles for this orange
@@ -64,7 +70,7 @@ const SimpleOrangeBurst: React.FC = () => {
                 const targetY = (Math.random() - 0.5) * (textBounds.height * 1.0);
                 
                 newParticles.push({
-                  id: uniqueId + i,
+                  id: `${uniqueId}_${i}_${Math.random().toString(36).substr(2, 9)}`, // Completely unique string ID
                   x: Math.cos(randomAngle) * randomDistance,
                   y: Math.sin(randomAngle) * randomDistance,
                   targetX: targetX,
@@ -80,6 +86,7 @@ const SimpleOrangeBurst: React.FC = () => {
               if (orangeNumber >= 3 && !isTextColored) { // After 3rd orange
                 setIsTextColored(true);
                 setTextVisible(true);
+                setStopAnimation(true); // Stop animation immediately when text coloring starts
                 
                 // Start text reveal animation
                 let progress = 0;
@@ -89,11 +96,10 @@ const SimpleOrangeBurst: React.FC = () => {
                   if (progress >= 100) {
                     clearInterval(revealInterval);
                     
-                    // After text is fully revealed, clear everything and stop
+                    // After text is fully revealed, clear everything
                     setTimeout(() => {
                       setSplashParticles([]); // Clear all splashes immediately
-                      setStopAnimation(true);
-                    }, 1500);
+                    }, 1000);
                   }
                 }, 60);
               }
