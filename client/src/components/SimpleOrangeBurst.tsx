@@ -175,17 +175,24 @@ const SimpleOrangeBurst: React.FC = () => {
       return updatedParticles;
     });
 
-    animationFrameRef.current = requestAnimationFrame(animateSplashes);
+    if (!animationStopped) {
+      animationFrameRef.current = requestAnimationFrame(animateSplashes);
+    }
   }, [animationStopped]);
 
   // Start splash animation
   useEffect(() => {
     if (splashParticles.length > 0 && !animationStopped) {
+      // Clear any existing animation frame before starting new one
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
       animationFrameRef.current = requestAnimationFrame(animateSplashes);
     }
     return () => {
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
+        animationFrameRef.current = undefined;
       }
     };
   }, [splashParticles, animateSplashes, animationStopped]);

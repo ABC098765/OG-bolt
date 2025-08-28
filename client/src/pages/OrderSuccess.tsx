@@ -8,10 +8,13 @@ const OrderSuccess = () => {
 
   // Add confetti effect on component mount
   useEffect(() => {
+    let animationIds: number[] = [];
+    let cleanupTimeout: NodeJS.Timeout;
+    
     // Simple confetti effect simulation with browser APIs
     const createConfetti = () => {
       const colors = ['#22c55e', '#fbbf24', '#f87171', '#60a5fa', '#a78bfa'];
-      const particles = [];
+      const particles: HTMLElement[] = [];
       
       for (let i = 0; i < 50; i++) {
         const particle = document.createElement('div');
@@ -28,6 +31,8 @@ const OrderSuccess = () => {
         particles.push(particle);
         
         const animateParticle = () => {
+          if (!document.body.contains(particle)) return; // Safety check
+          
           const fallSpeed = Math.random() * 3 + 2;
           const drift = Math.sin(Date.now() * 0.01) * 2;
           const currentTop = parseFloat(particle.style.top) || -10;
@@ -36,7 +41,8 @@ const OrderSuccess = () => {
           particle.style.left = parseFloat(particle.style.left) + drift + 'px';
           
           if (currentTop < window.innerHeight + 20) {
-            requestAnimationFrame(animateParticle);
+            const animationId = requestAnimationFrame(animateParticle);
+            animationIds.push(animationId);
           } else {
             if (document.body.contains(particle)) {
               document.body.removeChild(particle);
@@ -44,11 +50,14 @@ const OrderSuccess = () => {
           }
         };
         
-        setTimeout(() => requestAnimationFrame(animateParticle), i * 100);
+        setTimeout(() => {
+          const animationId = requestAnimationFrame(animateParticle);
+          animationIds.push(animationId);
+        }, i * 100);
       }
       
       // Remove all particles after 3 seconds
-      setTimeout(() => {
+      cleanupTimeout = setTimeout(() => {
         particles.forEach(particle => {
           if (document.body.contains(particle)) {
             document.body.removeChild(particle);
@@ -58,6 +67,21 @@ const OrderSuccess = () => {
     };
 
     createConfetti();
+
+    // Cleanup function
+    return () => {
+      // Cancel all animation frames
+      animationIds.forEach(id => cancelAnimationFrame(id));
+      // Clear timeout
+      if (cleanupTimeout) clearTimeout(cleanupTimeout);
+      // Remove any remaining particles
+      const remainingParticles = document.querySelectorAll('div[style*="position: fixed"][style*="z-index: 9999"]');
+      remainingParticles.forEach(particle => {
+        if (document.body.contains(particle)) {
+          document.body.removeChild(particle);
+        }
+      });
+    };
   }, []);
 
   return (
