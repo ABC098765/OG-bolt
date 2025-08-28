@@ -40,11 +40,20 @@ const SimpleOrangeBurst: React.FC = () => {
             
             // Create splash particles for this orange
             setSplashParticles(prevParticles => {
-              const newParticles = [...prevParticles]; // Keep existing splashes
+              // Limit total particles to prevent memory issues
+              const maxParticles = 60;
+              let newParticles = [...prevParticles];
+              
+              // Remove oldest particles if we're at the limit
+              if (newParticles.length >= maxParticles) {
+                newParticles = newParticles.slice(-30); // Keep only the 30 most recent
+              }
+              
               const textElement = textRef.current;
               const textBounds = textElement ? textElement.getBoundingClientRect() : { width: 600, height: 200 };
               
-              const startId = orangeNumber * 15 + Date.now() % 1000; // More unique IDs
+              // Generate truly unique IDs using timestamp and orange number
+              const uniqueId = Date.now() * 1000 + orangeNumber * 100;
               for (let i = 0; i < 15; i++) {
                 // Completely random direction and distance for natural splashing
                 const randomAngle = Math.random() * 2 * Math.PI; // Random angle 0-360 degrees
@@ -55,7 +64,7 @@ const SimpleOrangeBurst: React.FC = () => {
                 const targetY = (Math.random() - 0.5) * (textBounds.height * 1.0);
                 
                 newParticles.push({
-                  id: startId + i,
+                  id: uniqueId + i,
                   x: Math.cos(randomAngle) * randomDistance,
                   y: Math.sin(randomAngle) * randomDistance,
                   targetX: targetX,
@@ -66,32 +75,29 @@ const SimpleOrangeBurst: React.FC = () => {
               return newParticles;
             });
             
-            // Check if we have enough splashes to start text coloring
-            setSplashParticles(prevParticles => {
-              if (prevParticles.length >= 45 && !isTextColored) { // After 3 oranges worth of splashes
-                setTimeout(() => {
-                  setIsTextColored(true);
-                  setTextVisible(true);
-                  
-                  // Start text reveal animation
-                  let progress = 0;
-                  const revealInterval = setInterval(() => {
-                    progress += 4; // Slower reveal
-                    setTextRevealProgress(progress);
-                    if (progress >= 100) {
-                      clearInterval(revealInterval);
-                      
-                      // After text is fully revealed, clear everything
-                      setTimeout(() => {
-                        setSplashParticles([]);
-                        setStopAnimation(true);
-                      }, 2000);
-                    }
-                  }, 80);
-                }, 1000);
+            // Check if we have enough splashes to start text coloring after a delay
+            setTimeout(() => {
+              if (orangeNumber >= 3 && !isTextColored) { // After 3rd orange
+                setIsTextColored(true);
+                setTextVisible(true);
+                
+                // Start text reveal animation
+                let progress = 0;
+                const revealInterval = setInterval(() => {
+                  progress += 8; // Faster reveal
+                  setTextRevealProgress(progress);
+                  if (progress >= 100) {
+                    clearInterval(revealInterval);
+                    
+                    // After text is fully revealed, clear everything and stop
+                    setTimeout(() => {
+                      setSplashParticles([]); // Clear all splashes immediately
+                      setStopAnimation(true);
+                    }, 1500);
+                  }
+                }, 60);
               }
-              return prevParticles;
-            });
+            }, 500);
             
             // Reset this orange after 2.5 seconds, but keep splashes
             setTimeout(() => {
