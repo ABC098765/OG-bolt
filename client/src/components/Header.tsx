@@ -63,7 +63,7 @@ const Header = () => {
           <div className="flex items-center">
             <div className="flex items-center text-2xl font-bold text-green-600 dark:text-green-400">
               <img 
-                src="/logo-placeholder.png" 
+                src="attached_assets/icon.png" 
                 alt="Super Fruit Center Logo" 
                 className="w-12 h-12 pt-[3px] pb-[3px] mt-[0px] mb-[0px] ml-[6px] mr-[6px] pl-[0px] pr-[0px] bg-transparent object-contain"
                 style={{ backgroundColor: 'transparent' }}
