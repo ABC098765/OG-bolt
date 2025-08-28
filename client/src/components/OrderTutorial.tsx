@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, ArrowRight, ShoppingCart, MapPin, CreditCard, CheckCircle, Package } from 'lucide-react';
+import { ArrowRight, ShoppingCart, MapPin, CreditCard, CheckCircle, Package } from 'lucide-react';
 
 interface OrderTutorialProps {
   isOpen: boolean;
@@ -56,9 +56,6 @@ const OrderTutorial: React.FC<OrderTutorialProps> = ({ isOpen, onClose, onSkip }
     }
   };
 
-  const skipTutorial = () => {
-    onSkip();
-  };
 
   useEffect(() => {
     if (isOpen) {
@@ -77,26 +74,13 @@ const OrderTutorial: React.FC<OrderTutorialProps> = ({ isOpen, onClose, onSkip }
         {/* Background Animation */}
         <div className="absolute inset-0 bg-gradient-to-br from-green-50 to-orange-50 dark:from-gray-700 dark:to-gray-600 opacity-20"></div>
         
-        {/* Close Button */}
-        <button
-          onClick={skipTutorial}
-          className="absolute top-4 right-4 p-2 text-gray-400 hover:text-gray-600 dark:text-gray-300 dark:hover:text-gray-100 transition-colors"
-        >
-          <X className="w-6 h-6" />
-        </button>
 
         {/* Progress Bar */}
         <div className="mb-6">
-          <div className="flex justify-between items-center mb-2">
+          <div className="flex justify-center items-center mb-2">
             <span className="text-sm text-gray-600 dark:text-gray-400">
               {currentStep + 1} of {tutorialSteps.length}
             </span>
-            <button
-              onClick={skipTutorial}
-              className="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors"
-            >
-              Skip Tutorial
-            </button>
           </div>
           <div className="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2">
             <div
