@@ -42,21 +42,23 @@ const SimpleOrangeBurst: React.FC = () => {
               const textElement = textRef.current;
               const textBounds = textElement ? textElement.getBoundingClientRect() : { width: 600, height: 200 };
               
-              const startId = orangeNumber * 12; // Unique IDs for each orange's particles
-              for (let i = 0; i < 12; i++) {
-                const angle = (i * 30) * Math.PI / 180; // 12 particles in circle
-                const initialDistance = 100 + Math.random() * 80;
+              const startId = orangeNumber * 15 + Date.now() % 1000; // More unique IDs
+              for (let i = 0; i < 15; i++) {
+                // Completely random direction and distance for natural splashing
+                const randomAngle = Math.random() * 2 * Math.PI; // Random angle 0-360 degrees
+                const randomDistance = 80 + Math.random() * 150; // Random distance 80-230px
                 
-                const targetX = (Math.random() - 0.5) * (textBounds.width * 0.9);
-                const targetY = (Math.random() - 0.5) * (textBounds.height * 0.7);
+                // Random target positions across the text area
+                const targetX = (Math.random() - 0.5) * (textBounds.width * 1.2);
+                const targetY = (Math.random() - 0.5) * (textBounds.height * 1.0);
                 
                 newParticles.push({
                   id: startId + i,
-                  x: Math.cos(angle) * initialDistance,
-                  y: Math.sin(angle) * initialDistance,
+                  x: Math.cos(randomAngle) * randomDistance,
+                  y: Math.sin(randomAngle) * randomDistance,
                   targetX: targetX,
                   targetY: targetY,
-                  delay: i * 40
+                  delay: Math.random() * 200 // Random delay 0-200ms
                 });
               }
               return newParticles;
