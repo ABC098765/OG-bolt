@@ -2,7 +2,8 @@ import React, { useRef, useEffect, useState } from 'react';
 
 const SimpleOrangeBurst: React.FC = () => {
   const [textVisible, setTextVisible] = useState(false);
-  const [animationPhase, setAnimationPhase] = useState(0); // 0: waiting, 1: first orange moving, 2: first burst, 3: second orange moving, 4: second burst, 5: reset
+  const [animationPhase, setAnimationPhase] = useState(0); // 0: waiting, 1-8: oranges moving/bursting in sequence
+  const [currentOrangeDirection, setCurrentOrangeDirection] = useState({ startX: '50%', startY: '50%', direction: 'center' });
   const [splashParticles, setSplashParticles] = useState<Array<{id: number, x: number, y: number, delay: number, targetX: number, targetY: number}>>([]);
   const [textRevealProgress, setTextRevealProgress] = useState(0);
   const orangeRef = useRef<HTMLDivElement>(null);
@@ -12,81 +13,75 @@ const SimpleOrangeBurst: React.FC = () => {
     let timeoutId: NodeJS.Timeout;
     
     const startAnimation = () => {
-      // Wait 1 second, then start first orange movement
-      timeoutId = setTimeout(() => {
-        setAnimationPhase(1);
-        
-        // After 4 seconds of smooth forward movement, trigger first burst
-        timeoutId = setTimeout(() => {
-          setAnimationPhase(2);
+      // Function to get random starting position
+      const getRandomDirection = () => {
+        const directions = [
+          { startX: '50%', startY: '50%', direction: 'center' }, // from behind (original)
+          { startX: '-10%', startY: '50%', direction: 'left' }, // from left side
+          { startX: '110%', startY: '50%', direction: 'right' }, // from right side
+          { startX: '50%', startY: '-10%', direction: 'top' }, // from top
+          { startX: '20%', startY: '-10%', direction: 'top-left' }, // from top-left
+          { startX: '80%', startY: '-10%', direction: 'top-right' }, // from top-right
+        ];
+        return directions[Math.floor(Math.random() * directions.length)];
+      };
+      
+      const createOrangeSequence = (orangeNumber: number, delay: number) => {
+        setTimeout(() => {
+          // Set random direction for this orange
+          setCurrentOrangeDirection(getRandomDirection());
+          setAnimationPhase(orangeNumber * 2 - 1); // odd numbers: 1, 3, 5, 7 for movement
           
-          // Create first splash particles
-          const particles: Array<{id: number, x: number, y: number, delay: number, targetX: number, targetY: number}> = [];
-          const textElement = textRef.current;
-          const textBounds = textElement ? textElement.getBoundingClientRect() : { width: 600, height: 200 };
-          
-          for (let i = 0; i < 15; i++) {
-            const angle = (i * 24) * Math.PI / 180; // 15 particles in circle
-            const initialDistance = 120 + Math.random() * 80;
+          // After 3 seconds of movement, trigger burst
+          setTimeout(() => {
+            setAnimationPhase(orangeNumber * 2); // even numbers: 2, 4, 6, 8 for burst
             
-            const targetX = (Math.random() - 0.5) * (textBounds.width * 0.8);
-            const targetY = (Math.random() - 0.5) * (textBounds.height * 0.6);
-            
-            particles.push({
-              id: i,
-              x: Math.cos(angle) * initialDistance,
-              y: Math.sin(angle) * initialDistance,
-              targetX: targetX,
-              targetY: targetY,
-              delay: i * 50
-            });
-          }
-          setSplashParticles(particles);
-          
-          // After 3 seconds, start second orange
-          timeoutId = setTimeout(() => {
-            setAnimationPhase(3);
-            
-            // After 4 seconds, trigger second burst
-            timeoutId = setTimeout(() => {
-              setAnimationPhase(4);
+            // Create splash particles for this orange
+            setSplashParticles(prevParticles => {
+              const newParticles = [...prevParticles]; // Keep existing splashes
+              const textElement = textRef.current;
+              const textBounds = textElement ? textElement.getBoundingClientRect() : { width: 600, height: 200 };
               
-              // Create second batch of splash particles (keep first ones visible)
-              const secondParticles: Array<{id: number, x: number, y: number, delay: number, targetX: number, targetY: number}> = [...particles]; // Keep existing particles
-              
-              for (let i = 15; i < 30; i++) {
-                const angle = (i * 24) * Math.PI / 180;
-                const initialDistance = 100 + Math.random() * 90;
+              const startId = orangeNumber * 12; // Unique IDs for each orange's particles
+              for (let i = 0; i < 12; i++) {
+                const angle = (i * 30) * Math.PI / 180; // 12 particles in circle
+                const initialDistance = 100 + Math.random() * 80;
                 
                 const targetX = (Math.random() - 0.5) * (textBounds.width * 0.9);
                 const targetY = (Math.random() - 0.5) * (textBounds.height * 0.7);
                 
-                secondParticles.push({
-                  id: i,
+                newParticles.push({
+                  id: startId + i,
                   x: Math.cos(angle) * initialDistance,
                   y: Math.sin(angle) * initialDistance,
                   targetX: targetX,
                   targetY: targetY,
-                  delay: (i - 15) * 45
+                  delay: i * 40
                 });
               }
-              setSplashParticles(secondParticles);
-              
-              // Reset animation phase after 4 seconds, but keep splashes
-              timeoutId = setTimeout(() => {
-                setAnimationPhase(0);
-                // Don't clear splashes - they should accumulate!
-              }, 4000);
-            }, 4000);
+              return newParticles;
+            });
+            
+            // Reset this orange after 2.5 seconds, but keep splashes
+            setTimeout(() => {
+              setAnimationPhase(0);
+            }, 2500);
           }, 3000);
-        }, 4000);
-      }, 1000);
+        }, delay);
+      };
+      
+      // Create sequence of 5 oranges with random delays
+      createOrangeSequence(1, 1000); // First orange after 1s
+      createOrangeSequence(2, 5000); // Second orange after 5s
+      createOrangeSequence(3, 9000); // Third orange after 9s
+      createOrangeSequence(4, 13000); // Fourth orange after 13s
+      createOrangeSequence(5, 17000); // Fifth orange after 17s
     };
 
     startAnimation();
     
-    // Repeat the cycle every 16 seconds (longer cycle for two oranges)
-    const intervalId = setInterval(startAnimation, 16000);
+    // Repeat the cycle every 25 seconds (longer cycle for multiple oranges)
+    const intervalId = setInterval(startAnimation, 25000);
 
     return () => {
       clearTimeout(timeoutId);
@@ -109,28 +104,26 @@ const SimpleOrangeBurst: React.FC = () => {
           boxShadow: animationPhase === 0 ? '0 0 10px rgba(255, 102, 0, 0.3)' :
                      animationPhase === 1 ? '0 0 80px #ff6600, 0 0 120px rgba(255, 102, 0, 0.4), inset -15px -15px 30px rgba(0,0,0,0.3)' :
                      '0 0 200px #ff6600',
-          // Handle both oranges
-          width: (animationPhase === 0 || animationPhase === 3) ? '15px' :
-                 (animationPhase === 1 || animationPhase === 4) ? '180px' :
-                 '0px',
-          height: (animationPhase === 0 || animationPhase === 3) ? '15px' :
-                  (animationPhase === 1 || animationPhase === 4) ? '180px' :
-                  '0px',
-          transform: (animationPhase === 0 || animationPhase === 3) ? 'translate(-50%, -50%) scale(0.05) perspective(1000px) rotateX(0deg) rotateY(0deg) rotateZ(0deg)' :
-                     (animationPhase === 1 || animationPhase === 4) ? 'translate(-50%, -50%) scale(1.0) perspective(1000px) rotateX(360deg) rotateY(720deg) rotateZ(180deg)' :
+          // Handle multiple oranges from random directions
+          width: (animationPhase % 2 === 1) ? '180px' :
+                 (animationPhase === 0) ? '15px' : '0px',
+          height: (animationPhase % 2 === 1) ? '180px' :
+                  (animationPhase === 0) ? '15px' : '0px',
+          transform: (animationPhase === 0) ? 'translate(-50%, -50%) scale(0.05) perspective(1000px) rotateX(0deg) rotateY(0deg) rotateZ(0deg)' :
+                     (animationPhase % 2 === 1) ? 'translate(-50%, -50%) scale(1.0) perspective(1000px) rotateX(360deg) rotateY(720deg) rotateZ(180deg)' :
                      'translate(-50%, -50%) scale(0) perspective(1000px)',
-          left: '50%',
-          top: '50%',
+          left: (animationPhase === 0) ? currentOrangeDirection.startX : '50%',
+          top: (animationPhase === 0) ? currentOrangeDirection.startY : '50%',
           zIndex: 5,
-          filter: (animationPhase === 0 || animationPhase === 3) ? 'blur(3px) brightness(0.5) saturate(0.7)' :
-                  (animationPhase === 1 || animationPhase === 4) ? 'blur(0px) brightness(1.3) saturate(1.2)' :
+          filter: (animationPhase === 0) ? 'blur(3px) brightness(0.5) saturate(0.7)' :
+                  (animationPhase % 2 === 1) ? 'blur(0px) brightness(1.3) saturate(1.2)' :
                   'blur(0px) brightness(2) saturate(1.5)',
-          opacity: (animationPhase === 2 || animationPhase === 4) ? 0 : 1,
+          opacity: (animationPhase % 2 === 0 && animationPhase > 0) ? 0 : 1,
         }}
       />
 
       {/* Paint Splash Effects */}
-      {(animationPhase === 2 || animationPhase === 4) && splashParticles.map((particle, index) => {
+      {splashParticles.map((particle, index) => {
         // All particles are orange colored now
         const baseColor = '#ff6600';
         const secondColor = '#ff8800';
