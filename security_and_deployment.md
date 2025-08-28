@@ -52,6 +52,180 @@ These security measures were identified but not implemented. Consider adding the
 
 ---
 
+## Authentication Security Fixes (Latest Updates)
+
+### Critical Firebase Authentication Fixes ✅
+
+#### **Google OAuth Sign-In Security Configuration**
+**Problem:** Google sign-in failing with "auth/internal-error" due to restrictive Content Security Policy
+**Files Modified:**
+- `server/index.ts` (CSP configuration)
+- `server/config/security.ts` (CORS origins)
+- `client/src/components/AuthModal.tsx` (error handling)
+
+**Root Cause Analysis:**
+- Content Security Policy blocked essential Google OAuth domains
+- Missing domain authorization for Replit development environment  
+- Insufficient error handling for internal Firebase errors
+
+**Security Changes Made:**
+
+**1. Enhanced Content Security Policy for Google OAuth:**
+```javascript
+// Added critical Google OAuth domains to CSP
+connectSrc: [
+  "https://accounts.google.com",     // Google OAuth endpoints
+  "https://apis.google.com",         // Google API services
+  "https://oauth2.googleapis.com",   // OAuth token exchange
+  "https://content.googleapis.com",  // Google OAuth content
+  "https://ssl.gstatic.com",        // Google static resources  
+  "*.googleapis.com"                 // All Google API services
+]
+
+// Enhanced script sources for OAuth
+scriptSrc: [
+  "https://apis.google.com",         // Google OAuth scripts
+  "https://accounts.google.com"      // Account management scripts
+]
+
+// Frame sources for OAuth popups
+frameSrc: [
+  "https://accounts.google.com",     // OAuth authorization frames
+  "https://apis.google.com"          // Google API frames
+]
+```
+
+**2. Replit Domain Authorization:**
+```javascript
+// Added Replit development domains to CORS
+cors: {
+  origins: [
+    'https://*.replit.dev',          // All Replit subdomains
+    'https://*.kirk.replit.dev'      // Replit workspace domains
+  ]
+}
+```
+
+#### **Phone Authentication Security Hardening**
+**Files Modified:**
+- `server/index.ts` (reCAPTCHA CSP)
+- `client/src/components/AuthModal.tsx` (validation)
+
+**Security Enhancements:**
+
+**1. reCAPTCHA Security Policy:**
+```javascript
+// Comprehensive reCAPTCHA domain allowlist
+connectSrc: [
+  "https://www.google.com",          // reCAPTCHA verification
+  "https://recaptcha.google.com",    // reCAPTCHA API
+  "https://www.gstatic.com"          // reCAPTCHA resources
+]
+
+frameSrc: [
+  "https://www.google.com",          // reCAPTCHA frames
+  "https://recaptcha.google.com"     // reCAPTCHA challenge frames
+]
+```
+
+**2. Enhanced Phone Number Validation:**
+```javascript
+// Strict Indian mobile number validation
+validatePhone: (phone) => {
+  const cleanPhone = phone.replace(/\D/g, '');
+  
+  // Must be exactly 10 digits
+  if (cleanPhone.length !== 10) {
+    throw new Error('Phone number must be exactly 10 digits');
+  }
+  
+  // Must start with valid Indian mobile prefixes
+  if (!cleanPhone.match(/^[6-9]/)) {
+    throw new Error('Indian mobile numbers should start with 6, 7, 8, or 9');
+  }
+  
+  return `+91${cleanPhone}`;
+}
+```
+
+**3. Improved Error Handling:**
+```javascript
+// Specific error messages for authentication failures
+handleAuthError: (error) => {
+  switch(error.code) {
+    case 'auth/internal-error':
+      return 'Authentication service temporarily unavailable. Please refresh and try again.';
+    case 'auth/captcha-check-failed':
+      return 'reCAPTCHA verification failed. Please refresh the page.';
+    case 'auth/quota-exceeded':
+      return 'SMS quota exceeded. Please try again later.';
+    case 'auth/invalid-phone-number':
+      return 'Invalid phone number format. Please check your number.';
+  }
+}
+```
+
+### Security Configuration System Updates ✅
+
+#### **Environment-Aware Authentication Security**
+**Files Modified:**
+- `server/config/security.ts` (enhanced configurations)
+
+**Implementation:**
+```javascript
+// Development: Relaxed CSP for Replit environment
+developmentConfig: {
+  cors: {
+    origins: [..., 'https://*.replit.dev'], // Replit support
+    credentials: true
+  },
+  csp: {
+    enableNonce: false // Disabled for Vite HMR
+  }
+}
+
+// Production: Strict authentication security
+productionConfig: {
+  cors: {
+    origins: ['https://your-domain.com'], // Specific domains only
+    credentials: true
+  },
+  csp: {
+    enableNonce: true // Enhanced script security
+  }
+}
+```
+
+#### **Critical Deployment Requirements for Authentication**
+
+**Firebase Console Configuration (Required):**
+1. **Authorized Domains:** Must add your deployment domain
+   - Development: `*.replit.dev`, `*.kirk.replit.dev`
+   - Production: Your actual domain (e.g., `your-app.netlify.app`)
+
+2. **OAuth Configuration:**
+   - Enable Google Sign-in method in Firebase Console
+   - Configure OAuth consent screen in Google Cloud Console
+   - Add authorized JavaScript origins and redirect URIs
+
+3. **reCAPTCHA Configuration:**
+   - Verify reCAPTCHA v2 is enabled for phone authentication
+   - Add authorized domains in reCAPTCHA settings
+
+**Environment Variables Required:**
+```env
+# Firebase Authentication
+VITE_FIREBASE_API_KEY=your_api_key
+VITE_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
+VITE_FIREBASE_PROJECT_ID=your_project_id
+
+# Domain Authorization
+FRONTEND_URL=https://your-domain.com
+REPLIT_DOMAINS=*.replit.dev,*.kirk.replit.dev  # For development
+```
+
+---
+
 ## Security Changes Implemented
 
 ### High Risk Security Measures ✅

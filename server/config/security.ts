@@ -24,7 +24,8 @@ export interface SecurityConfig {
 
 const developmentConfig: SecurityConfig = {
   cors: {
-    origins: ['http://localhost:5000', 'http://localhost:3000', 'http://127.0.0.1:5000'],
+    origins: ['http://localhost:5000', 'http://localhost:3000', 'http://127.0.0.1:5000', 
+              'https://*.replit.dev', 'https://*.kirk.replit.dev'],
     credentials: true
   },
   rateLimit: {

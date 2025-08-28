@@ -34,15 +34,15 @@ app.use(helmet({
       fontSrc: ["'self'", "https://fonts.gstatic.com", "https://cdn.jsdelivr.net"],
       imgSrc: ["'self'", "data:", "https:", "blob:", "https://firebasestorage.googleapis.com"],
       scriptSrc: process.env.NODE_ENV === 'development' 
-        ? ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://www.google.com", "https://www.gstatic.com"] // Development mode with reCAPTCHA
-        : ["'self'", "'strict-dynamic'", "https://www.google.com", "https://www.gstatic.com"], // Production mode with reCAPTCHA
+        ? ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://www.google.com", "https://www.gstatic.com", "https://apis.google.com"] // Development mode with reCAPTCHA and Google OAuth
+        : ["'self'", "'strict-dynamic'", "https://www.google.com", "https://www.gstatic.com", "https://apis.google.com"], // Production mode with reCAPTCHA and Google OAuth
       connectSrc: [
         "'self'", 
         "https:", 
         "wss:", 
         "ws:",
         "https://identitytoolkit.googleapis.com", // Firebase Auth
-        "https://securetoken.googleapis.com", // Firebase Auth
+        "https://securetoken.googleapis.com", // Firebase Auth  
         "https://firestore.googleapis.com", // Firestore
         "https://fcm.googleapis.com", // Firebase Cloud Messaging
         "https://www.google.com", // reCAPTCHA
@@ -50,7 +50,10 @@ app.use(helmet({
         "https://www.gstatic.com", // reCAPTCHA resources
         "https://accounts.google.com", // Google OAuth
         "https://apis.google.com", // Google APIs
-        "https://oauth2.googleapis.com" // Google OAuth token exchange
+        "https://oauth2.googleapis.com", // Google OAuth token exchange
+        "https://content.googleapis.com", // Google OAuth content
+        "https://ssl.gstatic.com", // Google static resources
+        "*.googleapis.com" // All Google API services
       ],
       frameSrc: [
         "https://accounts.google.com", 
