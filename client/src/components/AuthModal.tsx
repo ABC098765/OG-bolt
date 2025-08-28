@@ -272,6 +272,8 @@ const AuthModal = () => {
         setError('Google sign-in is not enabled. Please contact support.');
       } else if (error.code === 'auth/invalid-api-key') {
         setError('Invalid API key. Please check Firebase configuration.');
+      } else if (error.code === 'auth/internal-error') {
+        setError('Google sign-in is temporarily unavailable. Please try refreshing the page or try again in a few moments.');
       } else {
         setError(`Google sign-in failed: ${error.message || 'Unknown error'}. Please try again.`);
       }

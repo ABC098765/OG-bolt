@@ -47,13 +47,17 @@ app.use(helmet({
         "https://fcm.googleapis.com", // Firebase Cloud Messaging
         "https://www.google.com", // reCAPTCHA
         "https://recaptcha.google.com", // reCAPTCHA API
-        "https://www.gstatic.com" // reCAPTCHA resources
+        "https://www.gstatic.com", // reCAPTCHA resources
+        "https://accounts.google.com", // Google OAuth
+        "https://apis.google.com", // Google APIs
+        "https://oauth2.googleapis.com" // Google OAuth token exchange
       ],
       frameSrc: [
         "https://accounts.google.com", 
         "https://content.googleapis.com", // Firebase auth frames
         "https://www.google.com", // reCAPTCHA frames
-        "https://recaptcha.google.com" // reCAPTCHA frames
+        "https://recaptcha.google.com", // reCAPTCHA frames
+        "https://apis.google.com" // Google APIs frames
       ],
       objectSrc: ["'none'"],
       baseUri: ["'self'"],
