@@ -5,72 +5,107 @@ import rateLimit from "express-rate-limit";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import { sanitizeInput, requestTimeout } from "./middleware/validation";
+import { requestTracker, securityLogger, detectSuspiciousActivity } from "./middleware/monitoring";
+import { getSecurityConfig, getSecurityHeaders } from "./config/security";
 
 const app = express();
 
 // Trust proxy for rate limiting behind Netlify/CDN
 app.set('trust proxy', 1);
 
-// 🔒 SECURITY HEADERS - Protects against XSS, clickjacking, etc.
+// Load security configuration
+const securityConfig = getSecurityConfig();
+
+// Add custom security headers
+app.use((req, res, next) => {
+  const headers = getSecurityHeaders();
+  Object.entries(headers).forEach(([key, value]) => {
+    res.setHeader(key, value);
+  });
+  next();
+});
+
+// 🔒 ENHANCED SECURITY HEADERS - Fine-tuned Content Security Policy
 app.use(helmet({
   contentSecurityPolicy: {
     directives: {
       defaultSrc: ["'self'"],
-      styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
-      fontSrc: ["'self'", "https://fonts.gstatic.com"],
-      imgSrc: ["'self'", "data:", "https:", "blob:"],
-      scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"], // Required for Vite dev
-      connectSrc: ["'self'", "https:", "wss:", "ws:"], // Firebase & Vite HMR
-      frameSrc: ["https:"], // Firebase auth
+      styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://cdn.jsdelivr.net"],
+      fontSrc: ["'self'", "https://fonts.gstatic.com", "https://cdn.jsdelivr.net"],
+      imgSrc: ["'self'", "data:", "https:", "blob:", "https://firebasestorage.googleapis.com"],
+      scriptSrc: process.env.NODE_ENV === 'development' 
+        ? ["'self'", "'unsafe-inline'", "'unsafe-eval'"] // Development mode
+        : ["'self'", "'strict-dynamic'"], // Production mode with strict-dynamic
+      connectSrc: [
+        "'self'", 
+        "https:", 
+        "wss:", 
+        "ws:",
+        "https://identitytoolkit.googleapis.com", // Firebase Auth
+        "https://securetoken.googleapis.com", // Firebase Auth
+        "https://firestore.googleapis.com", // Firestore
+        "https://fcm.googleapis.com" // Firebase Cloud Messaging
+      ],
+      frameSrc: ["https://accounts.google.com", "https://content.googleapis.com"], // Firebase auth frames
+      objectSrc: ["'none'"],
+      baseUri: ["'self'"],
+      formAction: ["'self'"],
+      frameAncestors: ["'none'"], // Prevent embedding
+      upgradeInsecureRequests: [],
     },
   },
-  crossOriginEmbedderPolicy: false, // Required for dev mode
+  crossOriginEmbedderPolicy: false, // Required for Firebase
+  hsts: {
+    maxAge: 31536000, // 1 year
+    includeSubDomains: true,
+    preload: true
+  },
+  noSniff: true,
+  xssFilter: false, // Disabled in favor of CSP
+  referrerPolicy: {
+    policy: ["strict-origin-when-cross-origin"]
+  }
 }));
 
-// 🌐 CORS CONFIGURATION - Controls API access
+// 🌐 CORS CONFIGURATION - Environment-aware origins
 const corsOptions = {
-  origin: process.env.NODE_ENV === 'production' 
-    ? [
-        'https://your-netlify-domain.netlify.app', // Replace with your actual Netlify domain
-        'https://superfruitcenter.com' // Replace with your custom domain if any
-      ]
-    : ['http://localhost:5000', 'http://localhost:3000', 'http://127.0.0.1:5000'],
-  credentials: true,
+  origin: securityConfig.cors.origins,
+  credentials: securityConfig.cors.credentials,
   optionsSuccessStatus: 200,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'X-API-Key'],
 };
 app.use(cors(corsOptions));
 
-// ⚡ RATE LIMITING - Prevents API abuse
+// ⚡ RATE LIMITING - Environment-aware limits
 const generalLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // Limit each IP to 100 requests per windowMs
+  windowMs: securityConfig.rateLimit.windowMs,
+  max: securityConfig.rateLimit.max,
   message: {
     error: 'Too many requests from this IP, please try again later.',
-    retryAfter: '15 minutes'
+    retryAfter: `${securityConfig.rateLimit.windowMs / 60000} minutes`
   },
   standardHeaders: true,
   legacyHeaders: false,
 });
 
 const apiLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes  
-  max: 50, // Stricter limit for API routes
+  windowMs: securityConfig.rateLimit.windowMs,
+  max: securityConfig.rateLimit.apiMax,
   message: {
     error: 'Too many API requests from this IP, please try again later.',
-    retryAfter: '15 minutes'
+    retryAfter: `${securityConfig.rateLimit.windowMs / 60000} minutes`
   },
   standardHeaders: true,
   legacyHeaders: false,
 });
 
 const authLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 5, // Very strict limit for auth endpoints
+  windowMs: securityConfig.rateLimit.windowMs,
+  max: securityConfig.rateLimit.authMax,
   message: {
     error: 'Too many authentication attempts, please try again later.',
-    retryAfter: '15 minutes'
+    retryAfter: `${securityConfig.rateLimit.windowMs / 60000} minutes`
   },
   standardHeaders: true,
   legacyHeaders: false,
@@ -90,6 +125,11 @@ app.use(sanitizeInput);
 
 // ⏰ REQUEST TIMEOUT - Prevents hanging requests
 app.use(requestTimeout(30000)); // 30 seconds timeout
+
+// 📊 REQUEST TRACKING AND MONITORING
+app.use(requestTracker);
+app.use(securityLogger);
+app.use(detectSuspiciousActivity);
 
 app.use((req, res, next) => {
   const start = Date.now();
