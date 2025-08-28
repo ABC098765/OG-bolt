@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Smartphone, Download, Star, Play, X } from 'lucide-react';
+import { Smartphone, Download, MessageCircle, CreditCard, Play, X } from 'lucide-react';
 
 import og_replit_sfc from "@assets/og replit sfc.png";
 
@@ -102,21 +102,21 @@ const AndroidApp = () => {
 
               <div className="flex items-start space-x-4">
                 <div className="w-12 h-12 bg-orange-100 dark:bg-orange-900 rounded-full flex items-center justify-center flex-shrink-0">
-                  <Star className="w-6 h-6 text-orange-600" />
+                  <MessageCircle className="w-6 h-6 text-orange-600" />
                 </div>
                 <div>
-                  <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Real-time Tracking</h4>
-                  <p className="text-gray-600 dark:text-gray-300">Track your order from store to doorstep with live delivery updates.</p>
+                  <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">AI Chat Bot Fruit Suggestor</h4>
+                  <p className="text-gray-600 dark:text-gray-300">Get personalized fruit recommendations from our intelligent AI assistant.</p>
                 </div>
               </div>
 
               <div className="flex items-start space-x-4">
                 <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center flex-shrink-0">
-                  <Download className="w-6 h-6 text-blue-600" />
+                  <CreditCard className="w-6 h-6 text-blue-600" />
                 </div>
                 <div>
-                  <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Exclusive App Offers</h4>
-                  <p className="text-gray-600 dark:text-gray-300">Get special discounts and early access to new fruits only on mobile.</p>
+                  <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Online Payment Support</h4>
+                  <p className="text-gray-600 dark:text-gray-300">Secure and convenient payment options including cards, UPI, and digital wallets.</p>
                 </div>
               </div>
             </div>
