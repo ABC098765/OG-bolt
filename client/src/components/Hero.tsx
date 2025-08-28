@@ -1,9 +1,8 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { Link } from 'wouter';
 import { ShoppingCart, Truck, Star, Heart, Award, Clock } from 'lucide-react';
-import heroImage from '@assets/generated_images/Fresh_fruit_hero_display_7afffe66.png';
 
-const Hero = () => {
+const Hero = memo(() => {
   return (
     <section id="home" className="relative overflow-hidden bg-gradient-to-br from-green-50 via-emerald-50 to-orange-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-20">
 
@@ -78,9 +77,10 @@ const Hero = () => {
           <div className="relative">
             <div className="relative z-10 group">
               <img
-                src={heroImage}
+                src="/attached_assets/generated_images/Fresh_fruit_hero_display_7afffe66.png"
                 alt="Fresh fruits display"
                 className="rounded-2xl shadow-2xl w-full transform group-hover:scale-105 transition-transform duration-500"
+                loading="lazy"
               />
               {/* Overlay badges */}
               <div className="absolute bottom-4 right-4 bg-green-600/90 backdrop-blur-sm text-white px-3 py-2 rounded-full shadow-lg">
@@ -99,6 +99,6 @@ const Hero = () => {
       </div>
     </section>
   );
-};
+});
 
 export default Hero;

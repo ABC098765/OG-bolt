@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useReducer, ReactNode } from 'react';
+import React, { createContext, useContext, useReducer, ReactNode, useMemo, useCallback } from 'react';
 import { useAuth } from './AuthContext';
 import { firestoreService } from '../services/firestoreService';
 
@@ -306,8 +306,24 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   };
 
+  // Memoize callback functions to prevent unnecessary re-renders
+  const memoizedAddToCart = useCallback(addToCart, [authState.user]);
+  const memoizedUpdateQuantity = useCallback(updateQuantity, [authState.user]);
+  const memoizedRemoveItem = useCallback(removeItem, [authState.user]);
+  const memoizedClearCart = useCallback(clearCart, [authState.user]);
+
+  // Memoize context value to prevent unnecessary re-renders
+  const contextValue = useMemo(() => ({
+    state, 
+    dispatch, 
+    addToCart: memoizedAddToCart, 
+    updateQuantity: memoizedUpdateQuantity, 
+    removeItem: memoizedRemoveItem, 
+    clearCart: memoizedClearCart
+  }), [state, dispatch, memoizedAddToCart, memoizedUpdateQuantity, memoizedRemoveItem, memoizedClearCart]);
+
   return (
-    <CartContext.Provider value={{ state, dispatch, addToCart, updateQuantity, removeItem, clearCart }}>
+    <CartContext.Provider value={contextValue}>
       {children}
     </CartContext.Provider>
   );

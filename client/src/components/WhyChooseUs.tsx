@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { Truck, Clock, Award } from 'lucide-react';
 
-const WhyChooseUs = () => {
+const WhyChooseUs = memo(() => {
   const features = [
     {
       icon: Truck,
@@ -64,6 +64,6 @@ const WhyChooseUs = () => {
       </div>
     </section>
   );
-};
+});
 
 export default WhyChooseUs;

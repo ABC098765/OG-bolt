@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState, useCallback } from 'react';
+import React, { useRef, useEffect, useState, useCallback, useMemo } from 'react';
 
 interface SplashParticle {
   id: string;
@@ -114,15 +114,26 @@ const SimpleOrangeBurst: React.FC = () => {
     return newParticles;
   }, [characterStates]);
 
-  // Physics animation loop
+  // Optimized physics animation loop with throttling
+  const lastUpdateRef = useRef<number>(0);
   const animateSplashes = useCallback(() => {
     if (animationStopped) return;
 
+    // Throttle animation to every 2nd frame for performance
+    const now = Date.now();
+    if (now - lastUpdateRef.current < 32) { // ~30fps instead of 60fps
+      animationFrameRef.current = requestAnimationFrame(animateSplashes);
+      return;
+    }
+    lastUpdateRef.current = now;
+
     setSplashParticles(prevParticles => {
+      if (prevParticles.length === 0) return prevParticles;
+      
       const updatedParticles = prevParticles.map(particle => {
         // Apply gravity and physics
-        const gravity = 0.3;
-        const airResistance = 0.98;
+        const gravity = 0.2; // Reduced gravity for performance
+        const airResistance = 0.99; // Simplified resistance
         
         const newVelocityY = particle.velocityY + gravity;
         const newVelocityX = particle.velocityX * airResistance;

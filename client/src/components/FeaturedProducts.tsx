@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { Star, Heart, ShoppingCart } from 'lucide-react';
 import { useCart } from '../contexts/CartContext';
 
-const FeaturedProducts = () => {
+const FeaturedProducts = memo(() => {
   const { addToCart } = useCart();
 
   const products = [];
@@ -140,6 +140,6 @@ const FeaturedProducts = () => {
       </div>
     </section>
   );
-};
+});
 
 export default FeaturedProducts;
