@@ -134,6 +134,7 @@ const OrderDetails = () => {
       case 'packed':
         return <Package className="w-6 h-6 text-purple-500" />;
       case 'ordered':
+      case 'pending': // Map pending to ordered for display
         return <Clock className="w-6 h-6 text-orange-500" />;
       default:
         return <Package className="w-6 h-6 text-gray-500" />;
@@ -152,6 +153,7 @@ const OrderDetails = () => {
       case 'packed':
         return 'bg-purple-100 text-purple-800';
       case 'ordered':
+      case 'pending': // Map pending to ordered for display
         return 'bg-orange-100 text-orange-800';
       default:
         return 'bg-gray-100 text-gray-800';
@@ -213,7 +215,7 @@ const OrderDetails = () => {
               
               <div className="flex items-center space-x-4">
                 <span className={`px-4 py-2 rounded-full text-sm font-semibold capitalize ${getStatusColor(order.order_status)}`}>
-                  {order.order_status}
+                  {order.order_status === 'pending' ? 'ordered' : order.order_status}
                 </span>
                 <span className="text-3xl font-bold text-green-600">
                   ₹{order.total_amount}
