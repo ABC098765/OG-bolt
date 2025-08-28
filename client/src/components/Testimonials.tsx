@@ -41,7 +41,6 @@ const AndroidApp = () => {
           </div>
         </div>
       )}
-
       <section className="py-20 bg-gradient-to-br from-green-50 to-emerald-50 dark:from-gray-900 dark:to-gray-800 relative overflow-hidden">
       {/* Background decorations */}
       <div className="absolute top-20 right-20 w-32 h-32 bg-gradient-to-r from-green-300 to-emerald-300 rounded-full opacity-20 animate-float"></div>
@@ -105,7 +104,7 @@ const AndroidApp = () => {
                   <MessageCircle className="w-6 h-6 text-orange-600" />
                 </div>
                 <div>
-                  <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">AI Chat Bot Fruit Suggestor</h4>
+                  <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Fruits Suggestor</h4>
                   <p className="text-gray-600 dark:text-gray-300">Get personalized fruit recommendations from our intelligent AI assistant.</p>
                 </div>
               </div>
