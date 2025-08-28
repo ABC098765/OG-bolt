@@ -167,7 +167,7 @@ const Products = () => {
             </div>
           </div>
         ) : (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
             {filteredProducts.map((product) => {
               // Since prices are stored as strings with ₹ already included, use displayPrice directly
               const productImages = product.imageUrls || product.image_urls || [];
@@ -184,7 +184,7 @@ const Products = () => {
                     <img
                       src={primaryImage}
                       alt={product.name}
-                      className="w-full h-48 object-cover transition-transform duration-300 hover:scale-110"
+                      className="w-full h-32 object-cover transition-transform duration-300 hover:scale-110"
                     />
                     {!isInStock && (
                       <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
@@ -195,7 +195,7 @@ const Products = () => {
                     )}
                   </div>
                   
-                  <div className="p-6">
+                  <div className="p-4">
                     <div className="flex items-center justify-between mb-2">
                       <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{product.name}</h3>
                     </div>

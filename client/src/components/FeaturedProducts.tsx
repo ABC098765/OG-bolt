@@ -35,7 +35,7 @@ const FeaturedProducts = () => {
         </div>
 
         {/* Sample Products Display */}
-        <div className="grid md:grid-cols-3 gap-8 mb-12">
+        <div className="grid md:grid-cols-4 gap-4 mb-12">
           {[
             {
               id: "featured-mango-1",
@@ -88,13 +88,13 @@ const FeaturedProducts = () => {
                 <img
                   src={product.image}
                   alt={product.name}
-                  className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"
+                  className="w-full h-32 object-cover group-hover:scale-110 transition-transform duration-500"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
               </div>
 
               {/* Product Info */}
-              <div className="p-6">
+              <div className="p-4">
                 <div className="flex items-center mb-2">
                   <div className="flex items-center">
                     {[...Array(5)].map((_, i) => (
@@ -104,13 +104,13 @@ const FeaturedProducts = () => {
                   <span className="text-sm text-gray-600 dark:text-gray-300 ml-2">({product.rating})</span>
                 </div>
 
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3 group-hover:text-green-600 transition-colors">
+                <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-green-600 transition-colors">
                   {product.name}
                 </h3>
 
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2">
-                    <span className="text-xl font-bold text-gray-900 dark:text-white">{product.price}</span>
+                    <span className="text-lg font-bold text-gray-900 dark:text-white">{product.price}</span>
                     <span className="text-sm text-gray-500 dark:text-gray-400 line-through">{product.originalPrice}</span>
                   </div>
                   <button 
