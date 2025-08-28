@@ -47,8 +47,8 @@ const developmentConfig: SecurityConfig = {
 const productionConfig: SecurityConfig = {
   cors: {
     origins: [
-      process.env.FRONTEND_URL || 'https://your-app.netlify.app',
-      process.env.CUSTOM_DOMAIN || 'https://superfruitcenter.com'
+      process.env.FRONTEND_URL || 'https://your-netlify-site-name.netlify.app', // 👈 REPLACE with your actual Netlify URL
+      process.env.CUSTOM_DOMAIN || 'https://your-custom-domain.com' // 👈 REPLACE with your custom domain if any
     ].filter(Boolean),
     credentials: true
   },
