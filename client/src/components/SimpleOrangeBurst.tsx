@@ -45,25 +45,12 @@ const SimpleOrangeBurst: React.FC = () => {
           }
           setSplashParticles(particles);
           
-          // Start text reveal animation synchronized with particle movement
-          setTimeout(() => {
-            setTextVisible(true);
-            // Gradually reveal text over 1.5 seconds, synchronized with particles
-            let progress = 0;
-            const revealInterval = setInterval(() => {
-              progress += 8; // Faster reveal for better sync
-              setTextRevealProgress(progress);
-              if (progress >= 100) {
-                clearInterval(revealInterval);
-              }
-            }, 40); // Smoother animation steps
-          }, 300); // Earlier start for better synchronization
+          // Particles will fall on text but won't color it yet
+          // Text coloring will happen when multiple fruits have burst
           
           // Reset after 4 seconds
           timeoutId = setTimeout(() => {
             setAnimationPhase(0);
-            setTextVisible(false);
-            setTextRevealProgress(0);
             setSplashParticles([]);
           }, 4000);
         }, 4000);
@@ -156,50 +143,26 @@ const SimpleOrangeBurst: React.FC = () => {
         <h1 
           className="text-6xl sm:text-7xl lg:text-9xl font-black transition-all duration-2000"
           style={{
-            backgroundImage: textVisible && textRevealProgress > 0
-              ? `linear-gradient(45deg, 
-                  rgba(255, 102, 0, ${Math.min(textRevealProgress / 100, 1)}) 0%, 
-                  rgba(255, 149, 0, ${Math.min(textRevealProgress / 100, 1)}) 25%, 
-                  rgba(255, 184, 0, ${Math.min(textRevealProgress / 100, 1)}) 50%, 
-                  rgba(255, 102, 0, ${Math.min(textRevealProgress / 100, 1)}) 75%)`
-              : 'none',
+            backgroundImage: 'none',
             WebkitBackgroundClip: 'text',
             backgroundClip: 'text',
-            color: textVisible && textRevealProgress > 0 ? 'transparent' : 'transparent',
-            textShadow: textVisible && textRevealProgress > 50 
-              ? `0 0 30px rgba(255, 102, 0, ${textRevealProgress / 200})` 
-              : 'none',
-            WebkitTextStroke: textVisible && textRevealProgress > 0 
-              ? 'none' 
-              : 'none',
-            animation: textVisible && textRevealProgress > 80 
-              ? 'gradientShift 3s ease-in-out infinite' 
-              : 'none',
+            color: 'transparent',
+            textShadow: 'none',
+            WebkitTextStroke: 'none',
+            animation: 'none',
           }}
         >
           SUPER FRUIT
           <br />
           <span 
             style={{
-              backgroundImage: textVisible && textRevealProgress > 20
-                ? `linear-gradient(45deg, 
-                    rgba(22, 163, 74, ${Math.min((textRevealProgress - 20) / 80, 1)}) 0%, 
-                    rgba(34, 197, 94, ${Math.min((textRevealProgress - 20) / 80, 1)}) 33%, 
-                    rgba(74, 222, 128, ${Math.min((textRevealProgress - 20) / 80, 1)}) 66%, 
-                    rgba(22, 163, 74, ${Math.min((textRevealProgress - 20) / 80, 1)}) 100%)`
-                : 'none',
+              backgroundImage: 'none',
               WebkitBackgroundClip: 'text',
               backgroundClip: 'text',
-              color: textVisible && textRevealProgress > 20 ? 'transparent' : 'transparent',
-              textShadow: textVisible && textRevealProgress > 70 
-                ? `0 0 30px rgba(34, 197, 94, ${(textRevealProgress - 20) / 160})` 
-                : 'none',
-              WebkitTextStroke: textVisible && textRevealProgress > 20 
-                ? 'none' 
-                : 'none',
-              animation: textVisible && textRevealProgress > 80 
-                ? 'gradientShift 3s ease-in-out infinite reverse' 
-                : 'none',
+              color: 'transparent',
+              textShadow: 'none',
+              WebkitTextStroke: 'none',
+              animation: 'none',
             }}
           >
             CENTER
