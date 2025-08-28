@@ -77,7 +77,7 @@ const Hero = memo(() => {
           <div className="relative">
             <div className="relative z-10 group">
               <img
-                src="/attached_assets/generated_images/Fresh_fruit_hero_display_11baa93f.png"
+                src="/Fresh_fruit_hero_display_11baa93f.png"
                 alt="Fresh fruits display"
                 className="rounded-2xl shadow-2xl w-full transform group-hover:scale-105 transition-transform duration-500"
                 loading="lazy"
