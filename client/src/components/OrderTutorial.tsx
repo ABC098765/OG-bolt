@@ -21,7 +21,7 @@ const OrderTutorial: React.FC<OrderTutorialProps> = ({ isOpen, onClose, onSkip }
     {
       icon: <ShoppingCart className="w-12 h-12 text-orange-500" />,
       title: "Step 1: Browse & Add to Cart",
-      description: "Browse our fresh fruits collection and add your favorites to cart. You can adjust quantities anytime!",
+      description: "Browse our fresh fruits collection and add your favorites to cart. You can adjust quantities from cart",
       animation: "slide-up"
     },
     {
