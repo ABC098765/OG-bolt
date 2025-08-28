@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useState } from 'react';
 
 const SimpleOrangeBurst: React.FC = () => {
   const [textVisible, setTextVisible] = useState(false);
-  const [animationPhase, setAnimationPhase] = useState(0); // 0: waiting, 1: orange moving, 2: burst, 3: reset
+  const [animationPhase, setAnimationPhase] = useState(0); // 0: waiting, 1: first orange moving, 2: first burst, 3: second orange moving, 4: second burst, 5: reset
   const [splashParticles, setSplashParticles] = useState<Array<{id: number, x: number, y: number, delay: number, targetX: number, targetY: number}>>([]);
   const [textRevealProgress, setTextRevealProgress] = useState(0);
   const orangeRef = useRef<HTMLDivElement>(null);
@@ -12,25 +12,23 @@ const SimpleOrangeBurst: React.FC = () => {
     let timeoutId: NodeJS.Timeout;
     
     const startAnimation = () => {
-      // Wait 1 second, then start orange movement from back
+      // Wait 1 second, then start first orange movement
       timeoutId = setTimeout(() => {
         setAnimationPhase(1);
         
-        // After 4 seconds of smooth forward movement, trigger burst
+        // After 4 seconds of smooth forward movement, trigger first burst
         timeoutId = setTimeout(() => {
           setAnimationPhase(2);
           
-          // Create splash particles that target text areas
-          const particles = [];
-          // Get text element dimensions for targeting
+          // Create first splash particles
+          const particles: Array<{id: number, x: number, y: number, delay: number, targetX: number, targetY: number}> = [];
           const textElement = textRef.current;
           const textBounds = textElement ? textElement.getBoundingClientRect() : { width: 600, height: 200 };
           
-          for (let i = 0; i < 20; i++) {
-            const angle = (i * 18) * Math.PI / 180; // 20 particles in circle
+          for (let i = 0; i < 15; i++) {
+            const angle = (i * 24) * Math.PI / 180; // 15 particles in circle
             const initialDistance = 120 + Math.random() * 80;
             
-            // Target different areas of the text
             const targetX = (Math.random() - 0.5) * (textBounds.width * 0.8);
             const targetY = (Math.random() - 0.5) * (textBounds.height * 0.6);
             
@@ -40,27 +38,55 @@ const SimpleOrangeBurst: React.FC = () => {
               y: Math.sin(angle) * initialDistance,
               targetX: targetX,
               targetY: targetY,
-              delay: i * 40 // Faster staggered timing
+              delay: i * 50
             });
           }
           setSplashParticles(particles);
           
-          // Particles will fall on text but won't color it yet
-          // Text coloring will happen when multiple fruits have burst
-          
-          // Reset after 4 seconds
+          // After 3 seconds, start second orange
           timeoutId = setTimeout(() => {
-            setAnimationPhase(0);
-            setSplashParticles([]);
-          }, 4000);
+            setAnimationPhase(3);
+            
+            // After 4 seconds, trigger second burst
+            timeoutId = setTimeout(() => {
+              setAnimationPhase(4);
+              
+              // Create second batch of splash particles (keep first ones visible)
+              const secondParticles: Array<{id: number, x: number, y: number, delay: number, targetX: number, targetY: number}> = [...particles]; // Keep existing particles
+              
+              for (let i = 15; i < 30; i++) {
+                const angle = (i * 24) * Math.PI / 180;
+                const initialDistance = 100 + Math.random() * 90;
+                
+                const targetX = (Math.random() - 0.5) * (textBounds.width * 0.9);
+                const targetY = (Math.random() - 0.5) * (textBounds.height * 0.7);
+                
+                secondParticles.push({
+                  id: i,
+                  x: Math.cos(angle) * initialDistance,
+                  y: Math.sin(angle) * initialDistance,
+                  targetX: targetX,
+                  targetY: targetY,
+                  delay: (i - 15) * 45
+                });
+              }
+              setSplashParticles(secondParticles);
+              
+              // Reset after 4 seconds
+              timeoutId = setTimeout(() => {
+                setAnimationPhase(0);
+                setSplashParticles([]);
+              }, 4000);
+            }, 4000);
+          }, 3000);
         }, 4000);
       }, 1000);
     };
 
     startAnimation();
     
-    // Repeat the cycle every 10 seconds
-    const intervalId = setInterval(startAnimation, 10000);
+    // Repeat the cycle every 16 seconds (longer cycle for two oranges)
+    const intervalId = setInterval(startAnimation, 16000);
 
     return () => {
       clearTimeout(timeoutId);
@@ -83,33 +109,31 @@ const SimpleOrangeBurst: React.FC = () => {
           boxShadow: animationPhase === 0 ? '0 0 10px rgba(255, 102, 0, 0.3)' :
                      animationPhase === 1 ? '0 0 80px #ff6600, 0 0 120px rgba(255, 102, 0, 0.4), inset -15px -15px 30px rgba(0,0,0,0.3)' :
                      '0 0 200px #ff6600',
-          // Smooth size transition from tiny to large
-          width: animationPhase === 0 ? '15px' :
-                 animationPhase === 1 ? '180px' :
+          // Handle both oranges
+          width: (animationPhase === 0 || animationPhase === 3) ? '15px' :
+                 (animationPhase === 1 || animationPhase === 4) ? '180px' :
                  '0px',
-          height: animationPhase === 0 ? '15px' :
-                  animationPhase === 1 ? '180px' :
+          height: (animationPhase === 0 || animationPhase === 3) ? '15px' :
+                  (animationPhase === 1 || animationPhase === 4) ? '180px' :
                   '0px',
-          // Smooth movement from back to front
-          transform: animationPhase === 0 ? 'translate(-50%, -50%) scale(0.05) perspective(1000px) rotateX(0deg) rotateY(0deg) rotateZ(0deg)' :
-                     animationPhase === 1 ? 'translate(-50%, -50%) scale(1.0) perspective(1000px) rotateX(360deg) rotateY(720deg) rotateZ(180deg)' :
+          transform: (animationPhase === 0 || animationPhase === 3) ? 'translate(-50%, -50%) scale(0.05) perspective(1000px) rotateX(0deg) rotateY(0deg) rotateZ(0deg)' :
+                     (animationPhase === 1 || animationPhase === 4) ? 'translate(-50%, -50%) scale(1.0) perspective(1000px) rotateX(360deg) rotateY(720deg) rotateZ(180deg)' :
                      'translate(-50%, -50%) scale(0) perspective(1000px)',
           left: '50%',
           top: '50%',
           zIndex: 5,
-          // Smooth depth and clarity transition
-          filter: animationPhase === 0 ? 'blur(3px) brightness(0.5) saturate(0.7)' :
-                  animationPhase === 1 ? 'blur(0px) brightness(1.3) saturate(1.2)' :
+          filter: (animationPhase === 0 || animationPhase === 3) ? 'blur(3px) brightness(0.5) saturate(0.7)' :
+                  (animationPhase === 1 || animationPhase === 4) ? 'blur(0px) brightness(1.3) saturate(1.2)' :
                   'blur(0px) brightness(2) saturate(1.5)',
-          opacity: animationPhase === 2 ? 0 : 1,
+          opacity: (animationPhase === 2 || animationPhase === 4) ? 0 : 1,
         }}
       />
 
       {/* Paint Splash Effects */}
-      {animationPhase === 2 && splashParticles.map((particle, index) => {
-        const isOrangeParticle = index < 12;
-        const baseColor = isOrangeParticle ? '#ff6600' : '#22c55e';
-        const secondColor = isOrangeParticle ? '#ff8800' : '#34d399';
+      {(animationPhase === 2 || animationPhase === 4) && splashParticles.map((particle, index) => {
+        // All particles are orange colored now
+        const baseColor = '#ff6600';
+        const secondColor = '#ff8800';
         
         // Create irregular paint splatter shapes
         const splatSize = 25 + Math.random() * 45; // Random size between 25-70px
