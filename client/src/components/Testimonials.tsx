@@ -48,9 +48,9 @@ const AndroidApp = () => {
       <div className="absolute bottom-20 left-20 w-24 h-24 bg-gradient-to-r from-orange-300 to-yellow-300 rounded-full opacity-20 animate-float" style={{ animationDelay: '1s' }}></div>
       <div className="max-w-7xl mx-auto px-4 relative z-10">
         <div className="text-center mb-16">
-          <div className="inline-flex items-center px-4 py-2 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-full text-sm font-medium mb-6">
-            <Smartphone className="w-4 h-4 mr-2" />
-            Download Now
+          <div className="inline-flex items-center px-5 py-2.5 bg-gradient-to-r from-green-500/10 to-emerald-500/10 border border-green-200 dark:border-green-700 text-green-700 dark:text-green-300 rounded-2xl text-sm font-medium mb-6 shadow-sm hover:shadow-md transition-all duration-300 backdrop-blur-sm">
+            <Smartphone className="w-4 h-4 mr-2 animate-pulse" />
+            <span className="bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent font-semibold">Download Now</span>
           </div>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-6">
             Our <span className="text-green-600 underline-gradient">
