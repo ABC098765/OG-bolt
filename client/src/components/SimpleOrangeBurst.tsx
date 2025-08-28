@@ -6,6 +6,8 @@ const SimpleOrangeBurst: React.FC = () => {
   const [currentOrangeDirection, setCurrentOrangeDirection] = useState({ startX: '50%', startY: '50%', direction: 'center' });
   const [splashParticles, setSplashParticles] = useState<Array<{id: number, x: number, y: number, delay: number, targetX: number, targetY: number}>>([]);
   const [textRevealProgress, setTextRevealProgress] = useState(0);
+  const [isTextColored, setIsTextColored] = useState(false);
+  const [stopAnimation, setStopAnimation] = useState(false);
   const orangeRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLDivElement>(null);
 
@@ -64,6 +66,33 @@ const SimpleOrangeBurst: React.FC = () => {
               return newParticles;
             });
             
+            // Check if we have enough splashes to start text coloring
+            setSplashParticles(prevParticles => {
+              if (prevParticles.length >= 45 && !isTextColored) { // After 3 oranges worth of splashes
+                setTimeout(() => {
+                  setIsTextColored(true);
+                  setTextVisible(true);
+                  
+                  // Start text reveal animation
+                  let progress = 0;
+                  const revealInterval = setInterval(() => {
+                    progress += 4; // Slower reveal
+                    setTextRevealProgress(progress);
+                    if (progress >= 100) {
+                      clearInterval(revealInterval);
+                      
+                      // After text is fully revealed, clear everything
+                      setTimeout(() => {
+                        setSplashParticles([]);
+                        setStopAnimation(true);
+                      }, 2000);
+                    }
+                  }, 80);
+                }, 1000);
+              }
+              return prevParticles;
+            });
+            
             // Reset this orange after 2.5 seconds, but keep splashes
             setTimeout(() => {
               setAnimationPhase(0);
@@ -80,16 +109,22 @@ const SimpleOrangeBurst: React.FC = () => {
       createOrangeSequence(5, 17000); // Fifth orange after 17s
     };
 
-    startAnimation();
-    
-    // Repeat the cycle every 25 seconds (longer cycle for multiple oranges)
-    const intervalId = setInterval(startAnimation, 25000);
-
-    return () => {
-      clearTimeout(timeoutId);
-      clearInterval(intervalId);
-    };
-  }, []);
+    if (!stopAnimation) {
+      startAnimation();
+      
+      // Repeat the cycle every 25 seconds (longer cycle for multiple oranges)
+      const intervalId = setInterval(() => {
+        if (!stopAnimation) {
+          startAnimation();
+        }
+      }, 25000);
+      
+      return () => {
+        clearTimeout(timeoutId);
+        clearInterval(intervalId);
+      };
+    }
+  }, [stopAnimation, isTextColored]);
 
   return (
     <section className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 overflow-hidden">
@@ -199,26 +234,46 @@ const SimpleOrangeBurst: React.FC = () => {
         <h1 
           className="text-6xl sm:text-7xl lg:text-9xl font-black transition-all duration-2000"
           style={{
-            backgroundImage: 'none',
+            backgroundImage: textVisible && textRevealProgress > 0
+              ? `linear-gradient(45deg, 
+                  rgba(255, 102, 0, ${Math.min(textRevealProgress / 100, 1)}) 0%, 
+                  rgba(255, 149, 0, ${Math.min(textRevealProgress / 100, 1)}) 25%, 
+                  rgba(255, 184, 0, ${Math.min(textRevealProgress / 100, 1)}) 50%, 
+                  rgba(255, 102, 0, ${Math.min(textRevealProgress / 100, 1)}) 75%)`
+              : 'none',
             WebkitBackgroundClip: 'text',
             backgroundClip: 'text',
-            color: 'transparent',
-            textShadow: 'none',
+            color: textVisible && textRevealProgress > 0 ? 'transparent' : 'transparent',
+            textShadow: textVisible && textRevealProgress > 50 
+              ? `0 0 30px rgba(255, 102, 0, ${textRevealProgress / 200})` 
+              : 'none',
             WebkitTextStroke: 'none',
-            animation: 'none',
+            animation: textVisible && textRevealProgress > 80 
+              ? 'gradientShift 3s ease-in-out infinite' 
+              : 'none',
           }}
         >
           SUPER FRUIT
           <br />
           <span 
             style={{
-              backgroundImage: 'none',
+              backgroundImage: textVisible && textRevealProgress > 20
+                ? `linear-gradient(45deg, 
+                    rgba(255, 102, 0, ${Math.min((textRevealProgress - 20) / 80, 1)}) 0%, 
+                    rgba(255, 149, 0, ${Math.min((textRevealProgress - 20) / 80, 1)}) 33%, 
+                    rgba(255, 184, 0, ${Math.min((textRevealProgress - 20) / 80, 1)}) 66%, 
+                    rgba(255, 102, 0, ${Math.min((textRevealProgress - 20) / 80, 1)}) 100%)`
+                : 'none',
               WebkitBackgroundClip: 'text',
               backgroundClip: 'text',
-              color: 'transparent',
-              textShadow: 'none',
+              color: textVisible && textRevealProgress > 20 ? 'transparent' : 'transparent',
+              textShadow: textVisible && textRevealProgress > 70 
+                ? `0 0 30px rgba(255, 102, 0, ${(textRevealProgress - 20) / 160})` 
+                : 'none',
               WebkitTextStroke: 'none',
-              animation: 'none',
+              animation: textVisible && textRevealProgress > 80 
+                ? 'gradientShift 3s ease-in-out infinite' 
+                : 'none',
             }}
           >
             CENTER
