@@ -18,7 +18,7 @@ const Hero = () => {
 
             <div className="space-y-6">
               <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold text-gray-900 dark:text-white leading-tight">
-                Fresh <span className="text-green-600 underline-animated">
+                Super Fruit Center - Fresh <span className="text-green-600 underline-animated">
                   Fruits
                 </span><br />
                 Delivered <span className="text-orange-500 underline-gradient">
@@ -27,7 +27,7 @@ const Hero = () => {
               </h1>
               <p className="text-xl text-gray-600 dark:text-gray-300 leading-relaxed max-w-xl">
                 Experience the finest selection of farm-fresh fruits at Super Fruit Center. 
-                From exotic imports to local favorites, we bring nature's sweetness directly to your doorstep.
+                From exotic imports to local favorites, we bring nature's sweetness directly to your doorstep with premium quality and same-day delivery.
               </p>
             </div>
 

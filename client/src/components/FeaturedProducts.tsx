@@ -3,21 +3,16 @@ import { Star, Heart, ShoppingCart } from 'lucide-react';
 import { useCart } from '../contexts/CartContext';
 
 const FeaturedProducts = () => {
-  const { dispatch } = useCart();
+  const { addToCart } = useCart();
 
   const products = [];
 
-  const addToCart = (product: any) => {
-    dispatch({
-      type: 'ADD_ITEM',
-      payload: {
-        id: product.id,
-        name: product.name,
-        price: product.price,
-        image: product.image,
-        unit: product.unit || 'piece'
-      }
-    });
+  const handleAddToCart = async (product: any) => {
+    try {
+      await addToCart(product);
+    } catch (error) {
+      console.error('Error adding to cart:', error);
+    }
   };
 
   return (
@@ -121,7 +116,7 @@ const FeaturedProducts = () => {
                   <button 
                     onClick={(e) => {
                       e.preventDefault();
-                      addToCart(product);
+                      handleAddToCart(product);
                     }}
                     className="bg-green-600 hover:bg-green-700 text-white p-2 rounded-full transition-colors"
                   >

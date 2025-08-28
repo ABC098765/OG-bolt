@@ -1,0 +1,17 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://superfruitcenter.netlify.app/sitemap.xml
+
+# Important pages for SEO
+Allow: /products
+Allow: /cart
+Allow: /orders
+
+# Block admin or sensitive areas (if any)
+Disallow: /admin/
+Disallow: /_*
+
+# Crawl delay (optional, helps with server load)
+Crawl-delay: 1
