@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Smartphone, Download, MessageCircle, CreditCard, Play, X } from 'lucide-react';
+import { Smartphone, Download, Bot, CreditCard, Play, X } from 'lucide-react';
 
 import og_replit_sfc from "@assets/og replit sfc.png";
 
@@ -101,7 +101,7 @@ const AndroidApp = () => {
 
               <div className="flex items-start space-x-4">
                 <div className="w-12 h-12 bg-orange-100 dark:bg-orange-900 rounded-full flex items-center justify-center flex-shrink-0">
-                  <MessageCircle className="w-6 h-6 text-orange-600" />
+                  <Bot className="w-6 h-6 text-orange-600" />
                 </div>
                 <div>
                   <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Fruits Suggestor</h4>
