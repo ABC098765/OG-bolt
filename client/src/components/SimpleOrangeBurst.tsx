@@ -105,28 +105,35 @@ const SimpleOrangeBurst: React.FC = () => {
         }}
       />
 
-      {/* Enhanced Splash Particles with Text Targeting */}
+      {/* Paint Splash Effects */}
       {animationPhase === 2 && splashParticles.map((particle, index) => {
         const isOrangeParticle = index < 12;
         const baseColor = isOrangeParticle ? '#ff6600' : '#22c55e';
         const secondColor = isOrangeParticle ? '#ff8800' : '#34d399';
         
+        // Create irregular paint splatter shapes
+        const splatSize = 25 + Math.random() * 45; // Random size between 25-70px
+        const borderRadius = `${Math.random() * 60 + 20}% ${Math.random() * 60 + 20}% ${Math.random() * 60 + 20}% ${Math.random() * 60 + 20}% / ${Math.random() * 60 + 20}% ${Math.random() * 60 + 20}% ${Math.random() * 60 + 20}% ${Math.random() * 60 + 20}%`;
+        
         return (
           <div
             key={particle.id}
-            className="absolute w-5 h-5 rounded-full"
+            className="absolute"
             style={{
-              backgroundImage: `radial-gradient(circle at 30% 30%, ${baseColor}, ${secondColor})`,
+              width: `${splatSize}px`,
+              height: `${splatSize * (0.6 + Math.random() * 0.8)}px`, // Irregular height
+              background: `radial-gradient(ellipse at ${20 + Math.random() * 60}% ${20 + Math.random() * 60}%, ${baseColor}ee, ${secondColor}cc, ${baseColor}77)`,
+              borderRadius: borderRadius,
               left: '50%',
               top: '50%',
-              transform: `translate(-50%, -50%) translate(${particle.x}px, ${particle.y}px) scale(${0.6 + Math.random() * 0.7})`,
+              transform: `translate(-50%, -50%) translate(${particle.x}px, ${particle.y}px) rotate(${Math.random() * 360}deg)`,
               transition: `all ${1200 + particle.delay}ms cubic-bezier(0.34, 1.56, 0.64, 1)`,
               animationDelay: `${particle.delay}ms`,
-              opacity: 0.85,
+              opacity: 0.75 + Math.random() * 0.25,
               zIndex: 15,
-              boxShadow: `0 0 15px ${baseColor}, 0 0 30px ${baseColor}40`,
-              filter: 'blur(0.3px)',
-              animation: `particleMove 2s ease-out ${particle.delay}ms forwards`,
+              boxShadow: `0 2px 8px ${baseColor}60, inset -3px -3px 6px rgba(0,0,0,0.2)`,
+              filter: 'blur(0.8px) saturate(1.3)',
+              animation: `paintSplatter 2.5s ease-out ${particle.delay}ms forwards`,
               animationFillMode: 'forwards',
               // CSS custom properties for particle targeting
               ...({
@@ -134,7 +141,37 @@ const SimpleOrangeBurst: React.FC = () => {
                 '--target-y': `${particle.targetY}px`,
               } as any),
             }}
-          />
+          >
+            {/* Add paint drips for realism */}
+            <div 
+              className="absolute"
+              style={{
+                width: `${Math.random() * 6 + 3}px`,
+                height: `${Math.random() * 20 + 8}px`,
+                background: `linear-gradient(to bottom, ${baseColor}aa, ${secondColor}dd)`,
+                borderRadius: '50% 50% 50% 50% / 60% 60% 40% 40%',
+                bottom: `-${Math.random() * 10 + 8}px`,
+                left: `${Math.random() * 60 + 20}%`,
+                opacity: 0.8,
+                transform: `rotate(${Math.random() * 30 - 15}deg)`,
+              }}
+            />
+            {/* Additional smaller drip */}
+            {Math.random() > 0.5 && (
+              <div 
+                className="absolute"
+                style={{
+                  width: `${Math.random() * 4 + 2}px`,
+                  height: `${Math.random() * 12 + 5}px`,
+                  background: secondColor,
+                  borderRadius: '50% 50% 50% 50% / 70% 70% 30% 30%',
+                  bottom: `-${Math.random() * 6 + 4}px`,
+                  right: `${Math.random() * 40 + 30}%`,
+                  opacity: 0.6,
+                }}
+              />
+            )}
+          </div>
         );
       })}
       
