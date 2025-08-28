@@ -165,13 +165,13 @@ const SimpleOrangeBurst: React.FC = () => {
               : 'none',
             WebkitBackgroundClip: 'text',
             backgroundClip: 'text',
-            color: textVisible && textRevealProgress > 0 ? 'transparent' : 'rgba(0, 0, 0, 0.08)',
+            color: textVisible && textRevealProgress > 0 ? 'transparent' : 'transparent',
             textShadow: textVisible && textRevealProgress > 50 
               ? `0 0 30px rgba(255, 102, 0, ${textRevealProgress / 200})` 
-              : '0 0 1px rgba(255, 255, 255, 0.1)',
+              : 'none',
             WebkitTextStroke: textVisible && textRevealProgress > 0 
               ? 'none' 
-              : '1px rgba(0, 0, 0, 0.05)',
+              : 'none',
             animation: textVisible && textRevealProgress > 80 
               ? 'gradientShift 3s ease-in-out infinite' 
               : 'none',
@@ -190,13 +190,13 @@ const SimpleOrangeBurst: React.FC = () => {
                 : 'none',
               WebkitBackgroundClip: 'text',
               backgroundClip: 'text',
-              color: textVisible && textRevealProgress > 20 ? 'transparent' : 'rgba(0, 0, 0, 0.08)',
+              color: textVisible && textRevealProgress > 20 ? 'transparent' : 'transparent',
               textShadow: textVisible && textRevealProgress > 70 
                 ? `0 0 30px rgba(34, 197, 94, ${(textRevealProgress - 20) / 160})` 
-                : '0 0 1px rgba(255, 255, 255, 0.1)',
+                : 'none',
               WebkitTextStroke: textVisible && textRevealProgress > 20 
                 ? 'none' 
-                : '1px rgba(0, 0, 0, 0.05)',
+                : 'none',
               animation: textVisible && textRevealProgress > 80 
                 ? 'gradientShift 3s ease-in-out infinite reverse' 
                 : 'none',
