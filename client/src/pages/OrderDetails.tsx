@@ -229,11 +229,16 @@ const OrderDetails = () => {
             <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-6">Order Tracking</h3>
             <div className="relative">
               {(() => {
-                const currentStatus = order.order_status?.toLowerCase()?.trim();
+                let currentStatus = order.order_status?.toLowerCase()?.trim();
+                // Map pending to ordered for tracking display
+                if (currentStatus === 'pending') {
+                  currentStatus = 'ordered';
+                }
+                
                 const steps = [
                   { 
                     id: 'ordered', 
-                    name: 'Order Placed', 
+                    name: 'Ordered', 
                     icon: <Clock className="w-5 h-5" />,
                     color: 'orange'
                   },
