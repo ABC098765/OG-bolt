@@ -34,8 +34,8 @@ app.use(helmet({
       fontSrc: ["'self'", "https://fonts.gstatic.com", "https://cdn.jsdelivr.net"],
       imgSrc: ["'self'", "data:", "https:", "blob:", "https://firebasestorage.googleapis.com"],
       scriptSrc: process.env.NODE_ENV === 'development' 
-        ? ["'self'", "'unsafe-inline'", "'unsafe-eval'"] // Development mode
-        : ["'self'", "'strict-dynamic'"], // Production mode with strict-dynamic
+        ? ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://www.google.com", "https://www.gstatic.com"] // Development mode with reCAPTCHA
+        : ["'self'", "'strict-dynamic'", "https://www.google.com", "https://www.gstatic.com"], // Production mode with reCAPTCHA
       connectSrc: [
         "'self'", 
         "https:", 
@@ -44,9 +44,17 @@ app.use(helmet({
         "https://identitytoolkit.googleapis.com", // Firebase Auth
         "https://securetoken.googleapis.com", // Firebase Auth
         "https://firestore.googleapis.com", // Firestore
-        "https://fcm.googleapis.com" // Firebase Cloud Messaging
+        "https://fcm.googleapis.com", // Firebase Cloud Messaging
+        "https://www.google.com", // reCAPTCHA
+        "https://recaptcha.google.com", // reCAPTCHA API
+        "https://www.gstatic.com" // reCAPTCHA resources
       ],
-      frameSrc: ["https://accounts.google.com", "https://content.googleapis.com"], // Firebase auth frames
+      frameSrc: [
+        "https://accounts.google.com", 
+        "https://content.googleapis.com", // Firebase auth frames
+        "https://www.google.com", // reCAPTCHA frames
+        "https://recaptcha.google.com" // reCAPTCHA frames
+      ],
       objectSrc: ["'none'"],
       baseUri: ["'self'"],
       formAction: ["'self'"],
