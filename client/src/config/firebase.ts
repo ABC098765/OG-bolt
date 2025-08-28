@@ -5,13 +5,13 @@ import { getAnalytics } from 'firebase/analytics';
 
 // Your Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyBcenzLE1BSgtC6zs1Iat0DUb-OKgvu_w4",
-  authDomain: "superfruitcenter1979.firebaseapp.com",
-  projectId: "superfruitcenter1979",
-  storageBucket: "superfruitcenter1979.firebasestorage.app",
-  messagingSenderId: "352081158916",
-  appId: "1:352081158916:web:36e178fa7ec061f092a651",
-  measurementId: "G-E7HZZNNB21"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "AIzaSyBcenzLE1BSgtC6zs1Iat0DUb-OKgvu_w4",
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "superfruitcenter1979.firebaseapp.com",
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "superfruitcenter1979",
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "superfruitcenter1979.firebasestorage.app",
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "352081158916",
+  appId: import.meta.env.VITE_FIREBASE_APP_ID || "1:352081158916:web:36e178fa7ec061f092a651",
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID || "G-E7HZZNNB21"
 };
 
 // Initialize Firebase
