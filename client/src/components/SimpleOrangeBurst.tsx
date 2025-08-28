@@ -72,10 +72,10 @@ const SimpleOrangeBurst: React.FC = () => {
               }
               setSplashParticles(secondParticles);
               
-              // Reset after 4 seconds
+              // Reset animation phase after 4 seconds, but keep splashes
               timeoutId = setTimeout(() => {
                 setAnimationPhase(0);
-                setSplashParticles([]);
+                // Don't clear splashes - they should accumulate!
               }, 4000);
             }, 4000);
           }, 3000);
