@@ -29,10 +29,6 @@ const FeaturedProducts = () => {
       
       <div className="max-w-7xl mx-auto px-4 relative z-10">
         <div className="text-center mb-16">
-          <div className="inline-flex items-center px-4 py-2 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-full text-sm font-medium mb-6">
-            <Star className="w-4 h-4 mr-2" />
-            Bestsellers This Week
-          </div>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-6">
             Featured <span className="text-green-600 underline-animated">
               Fresh Fruits
