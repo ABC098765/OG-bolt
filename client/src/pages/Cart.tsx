@@ -87,8 +87,60 @@ const Cart = () => {
           {/* Cart Items */}
           <div className="lg:col-span-2 space-y-4">
             {state.items.map((item) => (
-              <div key={item.productId} className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
-                <div className="flex items-center space-x-4">
+              <div key={item.productId} className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-4 sm:p-6">
+                {/* Mobile Layout */}
+                <div className="sm:hidden">
+                  <div className="flex items-start space-x-3 mb-3">
+                    <img
+                      src={item.imageUrls?.[0] || item.image || 'https://images.pexels.com/photos/1128678/pexels-photo-1128678.jpeg?auto=compress&cs=tinysrgb&w=400'}
+                      alt={item.name}
+                      className="w-16 h-16 object-cover rounded-lg flex-shrink-0"
+                    />
+                    
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-base font-semibold text-gray-900 dark:text-white truncate">{item.name}</h3>
+                      <p className="text-sm text-gray-600 dark:text-gray-300">
+                        {item.displayPrice || (item.priceLabel && !item.priceLabel.includes('NaN') ? item.priceLabel : `₹${(item.priceValue || item.unitPrice || item.price || 0)}`)}
+                      </p>
+                    </div>
+
+                    <button
+                      onClick={() => removeItem(item.productId)}
+                      className="text-red-500 hover:text-red-700 transition-colors p-1"
+                    >
+                      <Trash2 className="w-5 h-5" />
+                    </button>
+                  </div>
+                  
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-2">
+                      <button
+                        onClick={() => updateQuantity(item.productId, item.quantity - 1)}
+                        className="p-1.5 bg-gray-100 dark:bg-gray-700 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                      >
+                        <Minus className="w-3 h-3" />
+                      </button>
+                      
+                      <span className="text-base font-semibold w-8 text-center dark:text-white">
+                        {item.quantity}
+                      </span>
+                      
+                      <button
+                        onClick={() => updateQuantity(item.productId, item.quantity + 1)}
+                        className="p-1.5 bg-gray-100 dark:bg-gray-700 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                      >
+                        <Plus className="w-3 h-3" />
+                      </button>
+                    </div>
+
+                    <p className="text-lg font-bold text-green-600">
+                      ₹{((item.priceValue || item.unitPrice || item.price || 0) * item.quantity) || 0}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Desktop Layout */}
+                <div className="hidden sm:flex items-center space-x-4">
                   <img
                     src={item.imageUrls?.[0] || item.image || 'https://images.pexels.com/photos/1128678/pexels-photo-1128678.jpeg?auto=compress&cs=tinysrgb&w=400'}
                     alt={item.name}
