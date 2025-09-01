@@ -92,7 +92,7 @@ const Cart = () => {
                 <div className="sm:hidden">
                   <div className="flex items-start space-x-3 mb-3">
                     <img
-                      src={item.imageUrls?.[0] || item.image_urls?.[0] || item.image || 'https://images.pexels.com/photos/1128678/pexels-photo-1128678.jpeg?auto=compress&cs=tinysrgb&w=400'}
+                      src={item.imageUrls?.[0] || (item as any)['image_urls']?.[0] || (item as any).image || 'https://images.pexels.com/photos/1128678/pexels-photo-1128678.jpeg?auto=compress&cs=tinysrgb&w=400'}
                       alt={item.name}
                       className="w-16 h-16 object-cover rounded-lg flex-shrink-0"
                     />
@@ -142,7 +142,7 @@ const Cart = () => {
                 {/* Desktop Layout */}
                 <div className="hidden sm:flex items-center space-x-4">
                   <img
-                    src={item.imageUrls?.[0] || item.image_urls?.[0] || item.image || 'https://images.pexels.com/photos/1128678/pexels-photo-1128678.jpeg?auto=compress&cs=tinysrgb&w=400'}
+                    src={item.imageUrls?.[0] || (item as any)['image_urls']?.[0] || (item as any).image || 'https://images.pexels.com/photos/1128678/pexels-photo-1128678.jpeg?auto=compress&cs=tinysrgb&w=400'}
                     alt={item.name}
                     className="w-20 h-20 object-cover rounded-lg"
                   />
