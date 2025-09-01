@@ -511,7 +511,7 @@ const Checkout = () => {
               <div key={item.productId || item.id || index} className="flex items-center justify-between py-2">
                 <div className="flex items-center space-x-3">
                   <img
-                    src={item.image}
+                    src={item.imageUrls?.[0] || (item as any)['image_urls']?.[0] || (item as any).image || 'https://images.pexels.com/photos/1128678/pexels-photo-1128678.jpeg?auto=compress&cs=tinysrgb&w=400'}
                     alt={item.name}
                     className="w-12 h-12 object-cover rounded-lg"
                   />
