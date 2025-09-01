@@ -48,6 +48,14 @@ const Cart = () => {
   console.log('Cart state:', state);
   console.log('Cart items:', state.items);
   console.log('Subtotal from state.total:', subtotal);
+  
+  // Debug individual cart items for image URLs
+  state.items.forEach((item, index) => {
+    console.log(`Cart item ${index}:`, item);
+    console.log(`  - imageUrls:`, item.imageUrls);
+    console.log(`  - image:`, (item as any).image);
+    console.log(`  - image_urls:`, (item as any).image_urls);
+  });
 
   if (state.items.length === 0) {
     return (

@@ -72,6 +72,12 @@ const Products = () => {
     }
 
     try {
+      // Debug product data to see what's available
+      console.log('Adding product to cart:', product);
+      console.log('Product imageUrls:', product.imageUrls);
+      console.log('Product image_urls:', product.image_urls);
+      console.log('Product image:', product.image);
+      
       // Extract numeric price for cart calculations
       const productPrice = (() => {
         if (product.displayPrice && typeof product.displayPrice === 'string') {
@@ -81,15 +87,20 @@ const Products = () => {
         return product.price || 0;
       })();
       
-      const productImage = product.imageUrls?.[0] || product.image || 'https://images.pexels.com/photos/1128678/pexels-photo-1128678.jpeg?auto=compress&cs=tinysrgb&w=400';
+      // Get product images in the same way as displayed on products page
+      const productImages = product.imageUrls || product.image_urls || [];
+      const primaryImage = productImages[0] || product.image || 'https://images.pexels.com/photos/1128678/pexels-photo-1128678.jpeg?auto=compress&cs=tinysrgb&w=400';
+      
+      console.log('Extracted product images:', productImages);
+      console.log('Primary image for cart:', primaryImage);
 
       await addToCart({
         id: product.id,
         name: product.name,
         price: productPrice,
         displayPrice: product.displayPrice || product.price,
-        image: productImage,
-        imageUrls: product.imageUrls, // Pass original imageUrls array
+        image: primaryImage,
+        imageUrls: productImages, // Pass extracted imageUrls array
         unit: product.unit || 'piece'
       }).catch((err) => {
         console.error('Add to cart error:', err);
