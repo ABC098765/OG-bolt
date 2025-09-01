@@ -89,6 +89,7 @@ const Products = () => {
         price: productPrice,
         displayPrice: product.displayPrice || product.price,
         image: productImage,
+        imageUrls: product.imageUrls, // Pass original imageUrls array
         unit: product.unit || 'piece'
       }).catch((err) => {
         console.error('Add to cart error:', err);

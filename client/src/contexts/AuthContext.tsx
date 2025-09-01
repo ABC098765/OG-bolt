@@ -129,13 +129,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
             const user = convertFirestoreUserToUser(userData);
             dispatch({ type: 'LOGIN', payload: user });
             
-            // Show tutorial for first-time users
-            const hasSeenTutorial = localStorage.getItem('hasSeenTutorial') === 'true';
-            if (!hasSeenTutorial) {
-              setTimeout(() => {
-                dispatch({ type: 'SHOW_TUTORIAL' });
-              }, 1000); // Show tutorial after 1 second
-            }
+            // Don't show tutorial for existing users who are just signing in
+            // Tutorial will only be shown for new users during account creation
             
             // FCM notifications are working via backend, skip token setup
             console.log('✅ Auth: User logged in, FCM handled by backend');

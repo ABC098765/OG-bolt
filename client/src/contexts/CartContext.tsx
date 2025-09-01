@@ -233,13 +233,20 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         return numericValue ? Number(numericValue) : 0;
       })();
 
-      const productImages =
-        product.imageUrls ||
-        product.image_urls ||
-        (product.image ? [product.image] : []) ||
-        [
-          'https://images.pexels.com/photos/1128678/pexels-photo-1128678.jpeg?auto=compress&cs=tinysrgb&w=400'
-        ];
+      // Prioritize the image parameter passed from Products page, then fallback to imageUrls
+      const productImages = (() => {
+        // If a specific image was extracted and passed, use it first
+        if (product.image && !product.image.includes('placeholder')) {
+          return [product.image];
+        }
+        // Otherwise use the original imageUrls array
+        return product.imageUrls ||
+               product.image_urls ||
+               (product.image ? [product.image] : []) ||
+               [
+                 'https://images.pexels.com/photos/1128678/pexels-photo-1128678.jpeg?auto=compress&cs=tinysrgb&w=400'
+               ];
+      })();
 
 
       // Extract unit from price string like Android app does
