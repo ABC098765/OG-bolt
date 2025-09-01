@@ -17,6 +17,8 @@ const ProductDetails = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [translateX, setTranslateX] = useState(0);
 
   // Load product from Firestore
   useEffect(() => {
@@ -39,44 +41,76 @@ const ProductDetails = () => {
 
   // Swipe functionality
   const minSwipeDistance = 50;
+  const maxSwipeDistance = 200;
 
   const onTouchStart = (e: React.TouchEvent) => {
+    if (isTransitioning) return;
     setTouchEnd(null);
     setTouchStart(e.targetTouches[0].clientX);
+    setTranslateX(0);
   };
 
-  const onTouchMove = (e: React.TouchEvent) => setTouchEnd(e.targetTouches[0].clientX);
+  const onTouchMove = (e: React.TouchEvent) => {
+    if (!touchStart || isTransitioning) return;
+    
+    const currentTouch = e.targetTouches[0].clientX;
+    const diff = currentTouch - touchStart;
+    
+    // Limit the swipe distance for better UX
+    const limitedDiff = Math.max(-maxSwipeDistance, Math.min(maxSwipeDistance, diff));
+    setTranslateX(limitedDiff);
+    setTouchEnd(currentTouch);
+  };
 
   const onTouchEnd = () => {
-    if (!touchStart || !touchEnd) return;
+    if (!touchStart || !touchEnd || isTransitioning) return;
+    
     const distance = touchStart - touchEnd;
     const isLeftSwipe = distance > minSwipeDistance;
     const isRightSwipe = distance < -minSwipeDistance;
 
+    // Reset translateX
+    setTranslateX(0);
+    
     if (isLeftSwipe) {
       nextImage();
-    }
-    if (isRightSwipe) {
+    } else if (isRightSwipe) {
       previousImage();
     }
+    
+    // Reset touch states
+    setTouchStart(null);
+    setTouchEnd(null);
   };
 
   const nextImage = () => {
-    if (!product || !productImages.length) return;
-    setCurrentImageIndex((prevIndex) => 
-      prevIndex === productImages.length - 1 ? 0 : prevIndex + 1
-    );
+    if (!product || !productImages.length || isTransitioning) return;
+    
+    setIsTransitioning(true);
+    setCurrentImageIndex((prevIndex) => {
+      const newIndex = prevIndex === productImages.length - 1 ? 0 : prevIndex + 1;
+      setTimeout(() => setIsTransitioning(false), 300);
+      return newIndex;
+    });
   };
 
   const previousImage = () => {
-    if (!product || !productImages.length) return;
-    setCurrentImageIndex((prevIndex) => 
-      prevIndex === 0 ? productImages.length - 1 : prevIndex - 1
-    );
+    if (!product || !productImages.length || isTransitioning) return;
+    
+    setIsTransitioning(true);
+    setCurrentImageIndex((prevIndex) => {
+      const newIndex = prevIndex === 0 ? productImages.length - 1 : prevIndex - 1;
+      setTimeout(() => setIsTransitioning(false), 300);
+      return newIndex;
+    });
   };
 
   const goToImage = (index: number) => {
+    if (isTransitioning || index === currentImageIndex) return;
+    
+    setIsTransitioning(true);
     setCurrentImageIndex(index);
+    setTimeout(() => setIsTransitioning(false), 300);
   };
 
   // Show loading state
@@ -175,18 +209,45 @@ const ProductDetails = () => {
           <div className="grid lg:grid-cols-2 gap-8">
             {/* Product Image */}
             <div className="relative p-4">
-              {/* Main Image */}
+              {/* Main Image Carousel */}
               <div 
-                className="mb-4 relative touch-pan-y select-none"
+                className="mb-4 relative touch-pan-y select-none overflow-hidden rounded-lg"
                 onTouchStart={onTouchStart}
                 onTouchMove={onTouchMove}
                 onTouchEnd={onTouchEnd}
               >
-                <img
-                  className="main-product-image w-full h-80 lg:h-96 object-cover rounded-lg"
-                  src={currentImage}
-                  alt={product.name}
-                />
+                <div 
+                  className="flex transition-transform duration-300 ease-out"
+                  style={{
+                    transform: `translateX(calc(-${currentImageIndex * 100}% + ${translateX}px))`,
+                    width: `${productImages.length * 100}%`
+                  }}
+                >
+                  {productImages.map((imageUrl: string, index: number) => (
+                    <div 
+                      key={index}
+                      className="w-full flex-shrink-0"
+                      style={{ width: `${100 / productImages.length}%` }}
+                    >
+                      <img
+                        className="w-full h-80 lg:h-96 object-cover"
+                        src={imageUrl}
+                        alt={`${product.name} ${index + 1}`}
+                        loading={index === currentImageIndex ? 'eager' : 'lazy'}
+                      />
+                    </div>
+                  ))}
+                </div>
+
+                {/* Swipe hint overlay */}
+                {productImages.length > 1 && Math.abs(translateX) > 10 && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/20 pointer-events-none">
+                    <div className="bg-white/90 px-3 py-1 rounded-full text-sm font-medium text-gray-800">
+                      {translateX > 0 ? '← Previous' : 'Next →'}
+                    </div>
+                  </div>
+                )}
+
                 {/* Image indicators */}
                 {productImages.length > 1 && (
                   <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
@@ -194,32 +255,67 @@ const ProductDetails = () => {
                       <button
                         key={index}
                         onClick={() => goToImage(index)}
-                        className={`w-2 h-2 rounded-full transition-colors ${
+                        className={`w-2 h-2 rounded-full transition-all duration-200 ${
                           index === currentImageIndex 
-                            ? 'bg-white shadow-lg' 
-                            : 'bg-white/50'
+                            ? 'bg-white shadow-lg scale-125' 
+                            : 'bg-white/50 hover:bg-white/75'
                         }`}
                       />
                     ))}
                   </div>
                 )}
+
+                {/* Navigation arrows for desktop */}
+                {productImages.length > 1 && (
+                  <>
+                    <button
+                      onClick={previousImage}
+                      className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-all duration-200 opacity-0 hover:opacity-100 focus:opacity-100"
+                      disabled={isTransitioning}
+                    >
+                      <ArrowLeft className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={nextImage}
+                      className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-all duration-200 opacity-0 hover:opacity-100 focus:opacity-100"
+                      disabled={isTransitioning}
+                    >
+                      <ArrowLeft className="w-4 h-4 rotate-180" />
+                    </button>
+                  </>
+                )}
               </div>
               
               {/* Image Gallery */}
               {productImages.length > 1 && (
-                <div className="flex space-x-2 overflow-x-auto">
+                <div className="flex space-x-2 overflow-x-auto pb-2">
                   {productImages.map((imageUrl: string, index: number) => (
-                    <img
+                    <button
                       key={index}
-                      src={imageUrl}
-                      alt={`${product.name} ${index + 1}`}
-                      className={`w-16 h-16 object-cover rounded-lg cursor-pointer hover:opacity-75 transition-all flex-shrink-0 ${
-                        index === currentImageIndex 
-                          ? 'ring-2 ring-green-500 opacity-100' 
-                          : 'opacity-60'
-                      }`}
                       onClick={() => goToImage(index)}
-                    />
+                      disabled={isTransitioning}
+                      className={`relative flex-shrink-0 rounded-lg overflow-hidden transition-all duration-300 ${
+                        index === currentImageIndex 
+                          ? 'ring-2 ring-green-500 scale-105 shadow-lg' 
+                          : 'hover:scale-102 hover:shadow-md'
+                      } ${isTransitioning ? 'pointer-events-none' : ''}`}
+                    >
+                      <img
+                        src={imageUrl}
+                        alt={`${product.name} ${index + 1}`}
+                        className={`w-16 h-16 object-cover transition-all duration-300 ${
+                          index === currentImageIndex 
+                            ? 'opacity-100' 
+                            : 'opacity-60 hover:opacity-80'
+                        }`}
+                      />
+                      {/* Active indicator */}
+                      {index === currentImageIndex && (
+                        <div className="absolute inset-0 bg-green-500/20 flex items-center justify-center">
+                          <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                        </div>
+                      )}
+                    </button>
                   ))}
                 </div>
               )}
