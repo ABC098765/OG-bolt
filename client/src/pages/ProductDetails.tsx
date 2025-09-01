@@ -14,6 +14,9 @@ const ProductDetails = () => {
   const { state: authState, dispatch: authDispatch } = useAuth();
   const [product, setProduct] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
 
   // Load product from Firestore
   useEffect(() => {
@@ -33,6 +36,48 @@ const ProductDetails = () => {
 
     loadProduct();
   }, [productId]);
+
+  // Swipe functionality
+  const minSwipeDistance = 50;
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => setTouchEnd(e.targetTouches[0].clientX);
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+
+    if (isLeftSwipe) {
+      nextImage();
+    }
+    if (isRightSwipe) {
+      previousImage();
+    }
+  };
+
+  const nextImage = () => {
+    if (!product || !productImages.length) return;
+    setCurrentImageIndex((prevIndex) => 
+      prevIndex === productImages.length - 1 ? 0 : prevIndex + 1
+    );
+  };
+
+  const previousImage = () => {
+    if (!product || !productImages.length) return;
+    setCurrentImageIndex((prevIndex) => 
+      prevIndex === 0 ? productImages.length - 1 : prevIndex - 1
+    );
+  };
+
+  const goToImage = (index: number) => {
+    setCurrentImageIndex(index);
+  };
 
   // Show loading state
   if (loading) {
@@ -110,7 +155,7 @@ const ProductDetails = () => {
 
   const productPrice = product.displayPrice ? parseFloat(product.displayPrice.replace('₹', '')) : product.price;
   const productImages = product.imageUrls || product.image_urls || (product.image ? [product.image] : []);
-  const primaryImage = productImages[0] || 'https://images.pexels.com/photos/1128678/pexels-photo-1128678.jpeg?auto=compress&cs=tinysrgb&w=400';
+  const currentImage = productImages[currentImageIndex] || productImages[0] || 'https://images.pexels.com/photos/1128678/pexels-photo-1128678.jpeg?auto=compress&cs=tinysrgb&w=400';
   const isInStock = product.inStock !== false && (product.stock === undefined || product.stock > 0);
 
   return (
@@ -131,12 +176,33 @@ const ProductDetails = () => {
             {/* Product Image */}
             <div className="relative p-4">
               {/* Main Image */}
-              <div className="mb-4">
+              <div 
+                className="mb-4 relative touch-pan-y select-none"
+                onTouchStart={onTouchStart}
+                onTouchMove={onTouchMove}
+                onTouchEnd={onTouchEnd}
+              >
                 <img
                   className="main-product-image w-full h-80 lg:h-96 object-cover rounded-lg"
-                  src={primaryImage}
+                  src={currentImage}
                   alt={product.name}
                 />
+                {/* Image indicators */}
+                {productImages.length > 1 && (
+                  <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
+                    {productImages.map((_: string, index: number) => (
+                      <button
+                        key={index}
+                        onClick={() => goToImage(index)}
+                        className={`w-2 h-2 rounded-full transition-colors ${
+                          index === currentImageIndex 
+                            ? 'bg-white shadow-lg' 
+                            : 'bg-white/50'
+                        }`}
+                      />
+                    ))}
+                  </div>
+                )}
               </div>
               
               {/* Image Gallery */}
@@ -147,12 +213,12 @@ const ProductDetails = () => {
                       key={index}
                       src={imageUrl}
                       alt={`${product.name} ${index + 1}`}
-                      className="w-16 h-16 object-cover rounded-lg cursor-pointer hover:opacity-75 transition-opacity flex-shrink-0"
-                      onClick={() => {
-                        // Update main image when thumbnail is clicked
-                        const mainImg = document.querySelector('.main-product-image') as HTMLImageElement;
-                        if (mainImg) mainImg.src = imageUrl;
-                      }}
+                      className={`w-16 h-16 object-cover rounded-lg cursor-pointer hover:opacity-75 transition-all flex-shrink-0 ${
+                        index === currentImageIndex 
+                          ? 'ring-2 ring-green-500 opacity-100' 
+                          : 'opacity-60'
+                      }`}
+                      onClick={() => goToImage(index)}
                     />
                   ))}
                 </div>
