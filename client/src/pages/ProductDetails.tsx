@@ -244,16 +244,12 @@ const ProductDetails = () => {
                       style={{ width: `${100 / productImages.length}%`, minWidth: `${100 / productImages.length}%` }}
                     >
                       <img
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-contain"
                         src={imageUrl || 'https://images.pexels.com/photos/1128678/pexels-photo-1128678.jpeg?auto=compress&cs=tinysrgb&w=400'}
                         alt={`${product.name} ${index + 1}`}
                         loading={index === currentImageIndex ? 'eager' : 'lazy'}
                         onError={(e) => {
-                          console.log('Image failed to load:', imageUrl);
                           e.currentTarget.src = 'https://images.pexels.com/photos/1128678/pexels-photo-1128678.jpeg?auto=compress&cs=tinysrgb&w=400';
-                        }}
-                        onLoad={() => {
-                          console.log('Image loaded and displayed:', imageUrl);
                         }}
                       />
                     </div>
@@ -261,7 +257,7 @@ const ProductDetails = () => {
                     // Fallback for when no images are available
                     <div className="flex-shrink-0 h-full w-full">
                       <img
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-contain"
                         src="https://images.pexels.com/photos/1128678/pexels-photo-1128678.jpeg?auto=compress&cs=tinysrgb&w=400"
                         alt={product?.name || 'Product Image'}
                       />
