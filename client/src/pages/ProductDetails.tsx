@@ -20,6 +20,9 @@ const ProductDetails = () => {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [translateX, setTranslateX] = useState(0);
 
+  // Get product images
+  const productImages = product?.imageUrls || product?.image_urls || (product?.image ? [product.image] : []);
+
   // Load product from Firestore
   useEffect(() => {
     const loadProduct = async () => {
@@ -44,14 +47,14 @@ const ProductDetails = () => {
   const maxSwipeDistance = 200;
 
   const onTouchStart = (e: React.TouchEvent) => {
-    if (isTransitioning) return;
+    if (isTransitioning || productImages.length <= 1) return;
     setTouchEnd(null);
     setTouchStart(e.targetTouches[0].clientX);
     setTranslateX(0);
   };
 
   const onTouchMove = (e: React.TouchEvent) => {
-    if (!touchStart || isTransitioning) return;
+    if (!touchStart || isTransitioning || productImages.length <= 1) return;
     
     const currentTouch = e.targetTouches[0].clientX;
     const diff = currentTouch - touchStart;
@@ -63,19 +66,29 @@ const ProductDetails = () => {
   };
 
   const onTouchEnd = () => {
-    if (!touchStart || !touchEnd || isTransitioning) return;
+    if (!touchStart || isTransitioning || productImages.length <= 1) return;
     
-    const distance = touchStart - touchEnd;
+    const distance = touchStart - (touchEnd || touchStart);
     const isLeftSwipe = distance > minSwipeDistance;
     const isRightSwipe = distance < -minSwipeDistance;
 
     // Reset translateX
     setTranslateX(0);
     
-    if (isLeftSwipe) {
+    if (isLeftSwipe && currentImageIndex < productImages.length - 1) {
       nextImage();
-    } else if (isRightSwipe) {
+    } else if (isRightSwipe && currentImageIndex > 0) {
       previousImage();
+    } else if (isLeftSwipe && currentImageIndex === productImages.length - 1) {
+      // Loop to first image
+      setIsTransitioning(true);
+      setCurrentImageIndex(0);
+      setTimeout(() => setIsTransitioning(false), 300);
+    } else if (isRightSwipe && currentImageIndex === 0) {
+      // Loop to last image
+      setIsTransitioning(true);
+      setCurrentImageIndex(productImages.length - 1);
+      setTimeout(() => setIsTransitioning(false), 300);
     }
     
     // Reset touch states
@@ -188,7 +201,6 @@ const ProductDetails = () => {
   };
 
   const productPrice = product.displayPrice ? parseFloat(product.displayPrice.replace('₹', '')) : product.price;
-  const productImages = product.imageUrls || product.image_urls || (product.image ? [product.image] : []);
   const currentImage = productImages[currentImageIndex] || productImages[0] || 'https://images.pexels.com/photos/1128678/pexels-photo-1128678.jpeg?auto=compress&cs=tinysrgb&w=400';
   const isInStock = product.inStock !== false && (product.stock === undefined || product.stock > 0);
 
@@ -211,13 +223,13 @@ const ProductDetails = () => {
             <div className="relative p-4">
               {/* Main Image Carousel */}
               <div 
-                className="mb-4 relative touch-pan-y select-none overflow-hidden rounded-lg"
+                className="mb-4 relative touch-pan-y select-none overflow-hidden rounded-lg cursor-grab active:cursor-grabbing"
                 onTouchStart={onTouchStart}
                 onTouchMove={onTouchMove}
                 onTouchEnd={onTouchEnd}
               >
                 <div 
-                  className="flex transition-transform duration-300 ease-out"
+                  className={`flex ${isTransitioning ? 'transition-transform duration-300 ease-out' : ''}`}
                   style={{
                     transform: `translateX(calc(-${currentImageIndex * 100}% + ${translateX}px))`,
                     width: `${productImages.length * 100}%`
@@ -240,11 +252,18 @@ const ProductDetails = () => {
                 </div>
 
                 {/* Swipe hint overlay */}
-                {productImages.length > 1 && Math.abs(translateX) > 10 && (
-                  <div className="absolute inset-0 flex items-center justify-center bg-black/20 pointer-events-none">
-                    <div className="bg-white/90 px-3 py-1 rounded-full text-sm font-medium text-gray-800">
-                      {translateX > 0 ? '← Previous' : 'Next →'}
+                {productImages.length > 1 && Math.abs(translateX) > 20 && !isTransitioning && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/20 pointer-events-none transition-opacity duration-200">
+                    <div className="bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-medium text-gray-800 shadow-lg">
+                      {translateX > 0 ? '← Swipe for Previous' : 'Swipe for Next →'}
                     </div>
+                  </div>
+                )}
+
+                {/* Loading state for images */}
+                {productImages.length > 1 && isTransitioning && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/10 pointer-events-none">
+                    <div className="w-8 h-8 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                   </div>
                 )}
 
