@@ -124,7 +124,7 @@ const OptimizedProductCard = memo<OptimizedProductCardProps>(({ product, onAddTo
               onAddToCart(product);
             }}
             disabled={!isInStock}
-            className={`px-6 py-3 rounded-xl font-semibold transition-all duration-200 flex items-center justify-center text-sm shadow-lg transform hover:scale-105 active:scale-95 ${
+            className={`px-3 py-2 rounded-xl font-semibold transition-all duration-200 flex items-center justify-center text-xs min-w-fit whitespace-nowrap shadow-lg transform hover:scale-105 active:scale-95 ${
               isInStock 
                 ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white hover:from-orange-600 hover:to-orange-700 hover:shadow-xl' 
                 : 'bg-gray-300 text-gray-500 cursor-not-allowed shadow-sm'
