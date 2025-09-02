@@ -20,8 +20,16 @@ const ProductDetails = () => {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [translateX, setTranslateX] = useState(0);
 
+  // Debug component loading
+  console.log('ProductDetails component loaded, productId:', productId);
+
   // Get product images
   const productImages = product?.imageUrls || product?.image_urls || (product?.image ? [product.image] : []);
+  
+  // Debug image data
+  console.log('Product data:', product);
+  console.log('ProductImages:', productImages);
+  console.log('ProductImages length:', productImages.length);
   
 
   // Load product from Firestore
