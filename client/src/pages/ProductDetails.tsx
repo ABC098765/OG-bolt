@@ -26,9 +26,10 @@ const ProductDetails = () => {
   
   // Generate single default amount option based on product unit or price
   const generateDefaultAmountOption = (product: any) => {
-    // Try to extract unit from displayPrice first
-    if (product.displayPrice) {
-      const priceString = product.displayPrice.toLowerCase();
+    // Try to extract unit from displayPrice first, then price field
+    const priceToCheck = product.displayPrice || product.price || '';
+    if (priceToCheck) {
+      const priceString = priceToCheck.toLowerCase();
       if (priceString.includes('/kg') || priceString.includes('kg')) {
         return '1kg';
       } else if (priceString.includes('/piece') || priceString.includes('/pc') || priceString.includes('piece')) {
@@ -49,8 +50,8 @@ const ProductDetails = () => {
       return '1 box';
     }
     
-    // Final fallback - try to determine from price string pattern
-    return '1pc';
+    // Final fallback
+    return '1kg';
   };
   
   // Get amount options for current product
