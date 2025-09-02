@@ -147,17 +147,30 @@ const Orders = () => {
     }
   };
 
+  // Helper function to normalize status for filtering - maps pending to ordered
+  const normalizeStatusForFilter = (status: string) => {
+    const normalizedStatus = status?.toLowerCase()?.trim();
+    return normalizedStatus === 'pending' ? 'ordered' : normalizedStatus;
+  };
+
+  // Helper function to check if order matches filter
+  const orderMatchesFilter = (order: FirestoreOrder, filterStatus: string) => {
+    if (filterStatus === 'all') return true;
+    const normalizedOrderStatus = normalizeStatusForFilter(order.order_status);
+    return normalizedOrderStatus === filterStatus;
+  };
+
   const filteredOrders = selectedTab === 'all' 
     ? orders 
-    : orders.filter(order => order.order_status === selectedTab);
+    : orders.filter(order => orderMatchesFilter(order, selectedTab));
 
   const tabs = [
     { id: 'all', name: 'All Orders', count: orders.length },
-    { id: 'ordered', name: 'Ordered', count: orders.filter(o => o.order_status === 'ordered').length },
-    { id: 'packed', name: 'Packed', count: orders.filter(o => o.order_status === 'packed').length },
-    { id: 'out for delivery', name: 'Out for Delivery', count: orders.filter(o => o.order_status === 'out for delivery').length },
-    { id: 'delivered', name: 'Delivered', count: orders.filter(o => o.order_status === 'delivered').length },
-    { id: 'failed', name: 'Failed', count: orders.filter(o => o.order_status === 'failed').length }
+    { id: 'ordered', name: 'Ordered', count: orders.filter(o => orderMatchesFilter(o, 'ordered')).length },
+    { id: 'packed', name: 'Packed', count: orders.filter(o => orderMatchesFilter(o, 'packed')).length },
+    { id: 'out for delivery', name: 'Out for Delivery', count: orders.filter(o => orderMatchesFilter(o, 'out for delivery')).length },
+    { id: 'delivered', name: 'Delivered', count: orders.filter(o => orderMatchesFilter(o, 'delivered')).length },
+    { id: 'failed', name: 'Failed', count: orders.filter(o => orderMatchesFilter(o, 'failed')).length }
   ];
 
   return (
