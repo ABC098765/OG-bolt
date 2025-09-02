@@ -20,16 +20,8 @@ const ProductDetails = () => {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [translateX, setTranslateX] = useState(0);
 
-  // Debug component loading
-  console.log('ProductDetails component loaded, productId:', productId);
-
   // Get product images
   const productImages = product?.imageUrls || product?.image_urls || (product?.image ? [product.image] : []);
-  
-  // Debug image data
-  console.log('Product data:', product);
-  console.log('ProductImages:', productImages);
-  console.log('ProductImages length:', productImages.length);
   
 
   // Load product from Firestore
@@ -233,12 +225,13 @@ const ProductDetails = () => {
               {/* Main Image Carousel */}
               <div 
                 className="mb-4 relative touch-pan-y select-none overflow-hidden rounded-lg cursor-grab active:cursor-grabbing"
+                style={{ height: '320px' }}
                 onTouchStart={onTouchStart}
                 onTouchMove={onTouchMove}
                 onTouchEnd={onTouchEnd}
               >
                 <div 
-                  className={`flex ${isTransitioning ? 'transition-transform duration-300 ease-out' : ''}`}
+                  className={`flex h-full ${isTransitioning ? 'transition-transform duration-300 ease-out' : ''}`}
                   style={{
                     transform: `translateX(calc(-${currentImageIndex * 100}% + ${translateX}px))`,
                     width: `${Math.max(productImages.length, 1) * 100}%`
@@ -247,11 +240,11 @@ const ProductDetails = () => {
                   {productImages.length > 0 ? productImages.map((imageUrl: string, index: number) => (
                     <div 
                       key={index}
-                      className="w-full flex-shrink-0"
+                      className="flex-shrink-0 h-full"
                       style={{ width: `${100 / productImages.length}%` }}
                     >
                       <img
-                        className="w-full h-80 lg:h-96 object-cover"
+                        className="w-full h-full object-cover"
                         src={imageUrl || 'https://images.pexels.com/photos/1128678/pexels-photo-1128678.jpeg?auto=compress&cs=tinysrgb&w=400'}
                         alt={`${product.name} ${index + 1}`}
                         loading={index === currentImageIndex ? 'eager' : 'lazy'}
@@ -262,9 +255,9 @@ const ProductDetails = () => {
                     </div>
                   )) : (
                     // Fallback for when no images are available
-                    <div className="w-full flex-shrink-0">
+                    <div className="flex-shrink-0 h-full w-full">
                       <img
-                        className="w-full h-80 lg:h-96 object-cover"
+                        className="w-full h-full object-cover"
                         src="https://images.pexels.com/photos/1128678/pexels-photo-1128678.jpeg?auto=compress&cs=tinysrgb&w=400"
                         alt={product?.name || 'Product Image'}
                       />
