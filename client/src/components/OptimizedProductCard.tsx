@@ -108,9 +108,9 @@ const OptimizedProductCard = memo<OptimizedProductCardProps>(({ product, onAddTo
           </p>
         )}
 
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col space-y-3 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
           <div className="flex items-center space-x-2">
-            <span className="text-xl font-bold text-green-600">
+            <span className="text-lg sm:text-xl font-bold text-green-600">
               {product.displayPrice || product.price || 'Price not available'}
             </span>
             {product.originalPrice && (
@@ -124,7 +124,7 @@ const OptimizedProductCard = memo<OptimizedProductCardProps>(({ product, onAddTo
               onAddToCart(product);
             }}
             disabled={!isInStock}
-            className={`px-3 py-2 rounded-xl font-semibold transition-all duration-200 flex items-center justify-center text-xs min-w-fit whitespace-nowrap shadow-lg transform hover:scale-105 active:scale-95 ${
+            className={`w-full sm:w-auto px-3 py-2 rounded-xl font-semibold transition-all duration-200 flex items-center justify-center text-xs min-w-fit whitespace-nowrap shadow-lg transform hover:scale-105 active:scale-95 ${
               isInStock 
                 ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white hover:from-orange-600 hover:to-orange-700 hover:shadow-xl' 
                 : 'bg-gray-300 text-gray-500 cursor-not-allowed shadow-sm'
@@ -132,8 +132,8 @@ const OptimizedProductCard = memo<OptimizedProductCardProps>(({ product, onAddTo
           >
             {isInStock ? (
               <>
-                <ShoppingCart className="w-5 h-5 mr-2" />
-                <span className="font-bold">
+                <ShoppingCart className="w-4 h-4 sm:w-5 sm:h-5 mr-1 sm:mr-2" />
+                <span className="font-bold text-xs sm:text-sm">
                   {isAuthenticated ? 'Add to Cart' : 'Sign In'}
                 </span>
               </>
