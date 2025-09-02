@@ -152,14 +152,7 @@ const FeaturedProducts = memo(() => {
 
               {/* Product Info */}
               <div className="p-4">
-                <div className="flex items-center mb-2">
-                  <div className="flex items-center">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} className={`w-4 h-4 ${i < 4 ? 'text-yellow-400 fill-current' : 'text-gray-300'}`} />
-                    ))}
-                  </div>
-                  <span className="text-sm text-gray-600 dark:text-gray-300 ml-2">(4.8)</span>
-                </div>
+                
 
                 <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-green-600 transition-colors">
                   {product.name || 'Fresh Fruit'}
