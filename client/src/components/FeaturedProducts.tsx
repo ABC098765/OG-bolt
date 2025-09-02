@@ -170,9 +170,6 @@ const FeaturedProducts = memo(() => {
                     <span className="text-lg font-bold text-gray-900 dark:text-white">
                       {product.unitPriceDisplay || product.price || '₹0'}
                     </span>
-                    <span className="text-xs text-gray-500 dark:text-gray-400">
-                      /{product.unit || 'kg'}
-                    </span>
                   </div>
                   <button 
                     onClick={(e) => {
