@@ -24,26 +24,44 @@ const ProductDetails = () => {
   // Get product images
   const productImages = product?.imageUrls || product?.image_urls || (product?.image ? [product.image] : []);
   
-  // Generate default amount options based on product unit
-  const generateDefaultAmountOptions = (product: any) => {
-    const unit = product.unit || 'kg';
-    if (unit.toLowerCase().includes('kg')) {
-      return ['0.5kg', '1kg', '2kg', '5kg'];
-    } else if (unit.toLowerCase().includes('piece') || unit.toLowerCase().includes('pc')) {
-      return ['1pc', '3pc', '6pc', '12pc'];
-    } else if (unit.toLowerCase().includes('box')) {
-      return ['1 box', '2 box', '5 box', '10 box'];
+  // Generate single default amount option based on product unit or price
+  const generateDefaultAmountOption = (product: any) => {
+    // Try to extract unit from displayPrice first
+    if (product.displayPrice) {
+      const priceString = product.displayPrice.toLowerCase();
+      if (priceString.includes('/kg') || priceString.includes('kg')) {
+        return '1kg';
+      } else if (priceString.includes('/piece') || priceString.includes('/pc') || priceString.includes('piece')) {
+        return '1pc';
+      } else if (priceString.includes('/box') || priceString.includes('box')) {
+        return '1 box';
+      }
     }
-    // Default fallback
-    return ['0.5kg', '1kg', '2kg', '5kg'];
+    
+    // Fallback to product.unit
+    const unit = product.unit || '';
+    const unitLower = unit.toLowerCase();
+    if (unitLower.includes('kg')) {
+      return '1kg';
+    } else if (unitLower.includes('piece') || unitLower.includes('pc')) {
+      return '1pc';
+    } else if (unitLower.includes('box')) {
+      return '1 box';
+    }
+    
+    // Final fallback - try to determine from price string pattern
+    return '1pc';
   };
   
   // Get amount options for current product
   const getAmountOptions = () => {
-    if (product?.amountOptions && product.amountOptions.length > 0) {
+    // First priority: Use amountOptions from admin app if they exist and are not empty
+    if (product?.amountOptions && Array.isArray(product.amountOptions) && product.amountOptions.length > 0) {
       return product.amountOptions;
     }
-    return generateDefaultAmountOptions(product || {});
+    
+    // Second priority: Generate single default option based on unit
+    return [generateDefaultAmountOption(product || {})];
   };
   
 
@@ -56,12 +74,12 @@ const ProductDetails = () => {
           const productData = await firestoreService.getProduct(productId);
           setProduct(productData);
           
-          // Initialize selectedAmount with first available option or create default options
+          // Initialize selectedAmount with first available option
           if (productData) {
-            const amountOptions = productData.amountOptions && productData.amountOptions.length > 0 
+            const amountOptions = productData.amountOptions && Array.isArray(productData.amountOptions) && productData.amountOptions.length > 0 
               ? productData.amountOptions 
-              : generateDefaultAmountOptions(productData);
-            setSelectedAmount(amountOptions[0] || '1kg');
+              : [generateDefaultAmountOption(productData)];
+            setSelectedAmount(amountOptions[0]);
           }
         } catch (error) {
           console.error('Error loading product:', error);
