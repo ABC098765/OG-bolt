@@ -19,9 +19,32 @@ const ProductDetails = () => {
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [translateX, setTranslateX] = useState(0);
+  const [selectedAmount, setSelectedAmount] = useState<string>('');
 
   // Get product images
   const productImages = product?.imageUrls || product?.image_urls || (product?.image ? [product.image] : []);
+  
+  // Generate default amount options based on product unit
+  const generateDefaultAmountOptions = (product: any) => {
+    const unit = product.unit || 'kg';
+    if (unit.toLowerCase().includes('kg')) {
+      return ['0.5kg', '1kg', '2kg', '5kg'];
+    } else if (unit.toLowerCase().includes('piece') || unit.toLowerCase().includes('pc')) {
+      return ['1pc', '3pc', '6pc', '12pc'];
+    } else if (unit.toLowerCase().includes('box')) {
+      return ['1 box', '2 box', '5 box', '10 box'];
+    }
+    // Default fallback
+    return ['0.5kg', '1kg', '2kg', '5kg'];
+  };
+  
+  // Get amount options for current product
+  const getAmountOptions = () => {
+    if (product?.amountOptions && product.amountOptions.length > 0) {
+      return product.amountOptions;
+    }
+    return generateDefaultAmountOptions(product || {});
+  };
   
 
   // Load product from Firestore
@@ -32,6 +55,14 @@ const ProductDetails = () => {
           setLoading(true);
           const productData = await firestoreService.getProduct(productId);
           setProduct(productData);
+          
+          // Initialize selectedAmount with first available option or create default options
+          if (productData) {
+            const amountOptions = productData.amountOptions && productData.amountOptions.length > 0 
+              ? productData.amountOptions 
+              : generateDefaultAmountOptions(productData);
+            setSelectedAmount(amountOptions[0] || '1kg');
+          }
         } catch (error) {
           console.error('Error loading product:', error);
         } finally {
@@ -387,6 +418,31 @@ const ProductDetails = () => {
                     <span className="font-semibold">Available units:</span> {product.stock || 50}
                   </span>
                 </div>
+              </div>
+
+              {/* Amount Selection Chips */}
+              <div className="mb-8">
+                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Select Amount</h3>
+                <div className="flex flex-wrap gap-3">
+                  {getAmountOptions().map((amount: string, index: number) => (
+                    <button
+                      key={index}
+                      onClick={() => setSelectedAmount(amount)}
+                      className={`px-4 py-2 rounded-full border-2 font-medium transition-all duration-200 ${
+                        selectedAmount === amount
+                          ? 'border-green-500 bg-green-500 text-white shadow-lg transform scale-105'
+                          : 'border-gray-300 bg-white text-gray-700 hover:border-green-400 hover:shadow-md dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:border-green-400'
+                      }`}
+                    >
+                      {amount}
+                    </button>
+                  ))}
+                </div>
+                {selectedAmount && (
+                  <p className="mt-3 text-sm text-gray-600 dark:text-gray-400">
+                    Selected: <span className="font-semibold text-green-600">{selectedAmount}</span>
+                  </p>
+                )}
               </div>
 
               {/* Description */}
