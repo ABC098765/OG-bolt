@@ -224,7 +224,7 @@ const ProductDetails = () => {
             <div className="relative p-4">
               {/* Main Image Carousel */}
               <div 
-                className="mb-4 relative touch-pan-y select-none overflow-hidden rounded-lg cursor-grab active:cursor-grabbing"
+                className="mb-4 relative touch-pan-y select-none overflow-hidden rounded-lg cursor-grab active:cursor-grabbing bg-gray-100 dark:bg-gray-700"
                 style={{ height: '320px' }}
                 onTouchStart={onTouchStart}
                 onTouchMove={onTouchMove}
@@ -233,15 +233,15 @@ const ProductDetails = () => {
                 <div 
                   className={`flex h-full ${isTransitioning ? 'transition-transform duration-300 ease-out' : ''}`}
                   style={{
-                    transform: `translateX(calc(-${currentImageIndex * 100}% + ${translateX}px))`,
-                    width: `${Math.max(productImages.length, 1) * 100}%`
+                    transform: `translateX(-${currentImageIndex * (100 / productImages.length)}%)`,
+                    width: `${productImages.length * 100}%`
                   }}
                 >
                   {productImages.length > 0 ? productImages.map((imageUrl: string, index: number) => (
                     <div 
                       key={index}
                       className="flex-shrink-0 h-full"
-                      style={{ width: `${100 / productImages.length}%` }}
+                      style={{ width: `${100 / productImages.length}%`, minWidth: `${100 / productImages.length}%` }}
                     >
                       <img
                         className="w-full h-full object-cover"
@@ -249,7 +249,11 @@ const ProductDetails = () => {
                         alt={`${product.name} ${index + 1}`}
                         loading={index === currentImageIndex ? 'eager' : 'lazy'}
                         onError={(e) => {
+                          console.log('Image failed to load:', imageUrl);
                           e.currentTarget.src = 'https://images.pexels.com/photos/1128678/pexels-photo-1128678.jpeg?auto=compress&cs=tinysrgb&w=400';
+                        }}
+                        onLoad={() => {
+                          console.log('Image loaded and displayed:', imageUrl);
                         }}
                       />
                     </div>
