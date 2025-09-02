@@ -245,7 +245,6 @@ const Orders = () => {
                           className="w-16 h-16 object-cover rounded-lg mx-auto mb-2"
                         />
                         <p className="text-sm font-medium text-gray-900 dark:text-white truncate">{item.name}</p>
-                        <p className="text-xs text-gray-600 dark:text-gray-300">Qty: {item.quantity}</p>
                       </div>
                     ))}
                   </div>
