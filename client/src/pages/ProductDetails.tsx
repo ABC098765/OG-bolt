@@ -22,6 +22,7 @@ const ProductDetails = () => {
 
   // Get product images
   const productImages = product?.imageUrls || product?.image_urls || (product?.image ? [product.image] : []);
+  
 
   // Load product from Firestore
   useEffect(() => {
@@ -232,10 +233,10 @@ const ProductDetails = () => {
                   className={`flex ${isTransitioning ? 'transition-transform duration-300 ease-out' : ''}`}
                   style={{
                     transform: `translateX(calc(-${currentImageIndex * 100}% + ${translateX}px))`,
-                    width: `${productImages.length * 100}%`
+                    width: `${Math.max(productImages.length, 1) * 100}%`
                   }}
                 >
-                  {productImages.map((imageUrl: string, index: number) => (
+                  {productImages.length > 0 ? productImages.map((imageUrl: string, index: number) => (
                     <div 
                       key={index}
                       className="w-full flex-shrink-0"
@@ -243,12 +244,24 @@ const ProductDetails = () => {
                     >
                       <img
                         className="w-full h-80 lg:h-96 object-cover"
-                        src={imageUrl}
+                        src={imageUrl || 'https://images.pexels.com/photos/1128678/pexels-photo-1128678.jpeg?auto=compress&cs=tinysrgb&w=400'}
                         alt={`${product.name} ${index + 1}`}
                         loading={index === currentImageIndex ? 'eager' : 'lazy'}
+                        onError={(e) => {
+                          e.currentTarget.src = 'https://images.pexels.com/photos/1128678/pexels-photo-1128678.jpeg?auto=compress&cs=tinysrgb&w=400';
+                        }}
                       />
                     </div>
-                  ))}
+                  )) : (
+                    // Fallback for when no images are available
+                    <div className="w-full flex-shrink-0">
+                      <img
+                        className="w-full h-80 lg:h-96 object-cover"
+                        src="https://images.pexels.com/photos/1128678/pexels-photo-1128678.jpeg?auto=compress&cs=tinysrgb&w=400"
+                        alt={product?.name || 'Product Image'}
+                      />
+                    </div>
+                  )}
                 </div>
 
                 {/* Swipe hint overlay */}
