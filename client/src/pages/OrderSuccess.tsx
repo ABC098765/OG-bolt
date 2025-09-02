@@ -170,7 +170,7 @@ const OrderSuccess = () => {
           <div className="mt-8 text-center">
             <p className="text-gray-600 dark:text-gray-400 text-sm">
               Need help? Contact us at{' '}
-              <span className="text-green-600 dark:text-green-400 font-semibold">support@superfruitcenter.com</span>
+              <span className="text-green-600 dark:text-green-400 font-semibold">superfruitcenter@gmail.com</span>
             </p>
           </div>
         </div>
