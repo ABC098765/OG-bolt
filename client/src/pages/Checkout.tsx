@@ -253,18 +253,43 @@ const Checkout = () => {
         }),
       };
 
-      // Create order
-      await firestoreService.createOrder(orderData);
+      console.log('📦 Starting order creation process...');
+      
+      // Step 1: Create order (most critical step)
+      console.log('📦 Creating order in database...');
+      const createdOrder = await firestoreService.createOrder(orderData);
+      console.log('✅ Order created successfully:', createdOrder.id);
 
-      // Clear cart
-      await clearCart();
+      // Step 2: Clear cart (safe to retry if it fails)
+      console.log('🛒 Clearing cart...');
+      try {
+        await clearCart();
+        console.log('✅ Cart cleared successfully');
+      } catch (cartError) {
+        console.warn('⚠️ Cart clearing failed, but order was created:', cartError);
+        // Don't throw error - order was created successfully
+        // Cart will be cleared when user refreshes or logs in again
+      }
 
-      // Navigate to success page
+      // Step 3: Navigate to success page (safe operation)
+      console.log('🎉 Navigating to success page...');
       navigate('/order-success');
       
     } catch (error) {
-      console.error('Error creating order:', error);
-      alert('Error creating order. Please try again.');
+      console.error('❌ Error creating order:', error);
+      
+      // Provide more specific error messages
+      if (error instanceof Error) {
+        if (error.message.includes('network') || error.message.includes('timeout')) {
+          alert('Network error occurred. Please check your connection and try again. If the problem persists, check your orders page to see if the order was created.');
+        } else if (error.message.includes('permission') || error.message.includes('auth')) {
+          alert('Authentication error. Please sign in again and try placing the order.');
+        } else {
+          alert(`Error creating order: ${error.message}. Please try again.`);
+        }
+      } else {
+        alert('An unexpected error occurred while creating your order. Please try again or contact support if the problem persists.');
+      }
     } finally {
       setIsProcessingPayment(false);
     }
