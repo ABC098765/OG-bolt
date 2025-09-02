@@ -220,6 +220,9 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   }, [authState.user?.id, authState.loading]);
 
   const addToCart = async (product: any) => {
+    console.log('🔍 CartContext: product received:', product);
+    console.log('🔍 CartContext: selectedAmount:', product.selectedAmount);
+    
     if (!authState.user) return;
 
     try {
@@ -274,6 +277,13 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       // Parse selectedAmount to get quantity and unit
       const selectedAmount = product.selectedAmount || extractedAmount;
       const { quantity: selectedQuantity, unit: selectedUnit } = parseSelectedAmount(selectedAmount, extractedUnit);
+      
+      console.log('🔍 CartContext: Final values:');
+      console.log('- selectedAmount:', selectedAmount);
+      console.log('- selectedQuantity:', selectedQuantity);
+      console.log('- selectedUnit:', selectedUnit);
+      console.log('- productPrice:', productPrice);
+      console.log('- totalPrice:', productPrice * selectedQuantity);
 
       const cartItem = {
         productId: product.id.toString(),

@@ -1,0 +1,1 @@
+console.log('🔍 Debug: Selected amount being passed:', product.selectedAmount);
