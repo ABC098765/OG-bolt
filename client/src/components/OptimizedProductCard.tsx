@@ -11,6 +11,7 @@ interface Product {
   originalPrice?: string;
   image: string;
   imageUrls?: string[];
+  image_urls?: string[];
   rating?: number;
   badge?: string;
   unit?: string;
@@ -30,7 +31,7 @@ const OptimizedProductCard = memo<OptimizedProductCardProps>(({ product, onAddTo
   const [, setLocation] = useLocation();
   const navigate = (path: string) => setLocation(path);
   
-  const productImages = product.imageUrls || (product.image ? [product.image] : []);
+  const productImages = product.imageUrls || product.image_urls || (product.image ? [product.image] : []);
   const primaryImage = productImages[0] || 'https://images.pexels.com/photos/1128678/pexels-photo-1128678.jpeg?auto=compress&cs=tinysrgb&w=400';
   const isInStock = product.inStock !== false && (product.stock === undefined || product.stock > 0);
   return (
