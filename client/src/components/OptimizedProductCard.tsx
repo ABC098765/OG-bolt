@@ -124,19 +124,21 @@ const OptimizedProductCard = memo<OptimizedProductCardProps>(({ product, onAddTo
               onAddToCart(product);
             }}
             disabled={!isInStock}
-            className={`px-4 py-2 rounded-full font-medium transition-colors flex items-center text-sm ${
+            className={`px-6 py-3 rounded-xl font-semibold transition-all duration-200 flex items-center justify-center text-sm shadow-lg transform hover:scale-105 active:scale-95 ${
               isInStock 
-                ? 'bg-orange-500 text-white hover:bg-orange-600' 
-                : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white hover:from-orange-600 hover:to-orange-700 hover:shadow-xl' 
+                : 'bg-gray-300 text-gray-500 cursor-not-allowed shadow-sm'
             }`}
           >
             {isInStock ? (
               <>
-                <ShoppingCart className="w-4 h-4 mr-1" />
-                {isAuthenticated ? 'Add to Cart' : 'Sign In'}
+                <ShoppingCart className="w-5 h-5 mr-2" />
+                <span className="font-bold">
+                  {isAuthenticated ? 'Add to Cart' : 'Sign In'}
+                </span>
               </>
             ) : (
-              'Out of Stock'
+              <span className="font-medium">Out of Stock</span>
             )}
           </button>
         </div>
