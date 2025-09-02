@@ -1,10 +1,13 @@
 import React, { memo, useState, useEffect } from 'react';
-import { Star, Heart, ShoppingCart, Loader2 } from 'lucide-react';
 import { useCart } from '../contexts/CartContext';
+import { useAuth } from '../contexts/AuthContext';
 import { firestoreService } from '../services/firestoreService';
+import OptimizedProductCard from './OptimizedProductCard';
+import ProductCardSkeleton from './ProductCardSkeleton';
 
 const FeaturedProducts = memo(() => {
   const { addToCart } = useCart();
+  const { state: authState, dispatch: authDispatch } = useAuth();
   const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string>('');
@@ -42,24 +45,36 @@ const FeaturedProducts = memo(() => {
   }, []);
 
   const handleAddToCart = async (product: any) => {
+    if (!authState.isAuthenticated) {
+      authDispatch({ type: 'SHOW_AUTH_MODAL' });
+      return;
+    }
+
     try {
-      // Convert Firestore product to cart format
-      const cartItem = {
-        productId: product.id,
-        name: product.name || 'Unknown Product',
-        price: product.unitPriceDisplay || product.price || '₹0',
-        unitPrice: product.unitPrice || 0,
-        unitPriceDisplay: product.unitPriceDisplay || product.price || '₹0',
-        amount: `1${product.unit || 'kg'}`,
-        unit: product.unit || 'kg',
-        quantity: 1,
-        totalPrice: product.unitPrice || 0,
-        imageUrls: product.imageUrls || []
-      };
+      // Extract numeric price for cart calculations
+      const productPrice = (() => {
+        if (product.displayPrice && typeof product.displayPrice === 'string') {
+          const numericPart = product.displayPrice.replace(/[^\d.]/g, '');
+          return parseFloat(numericPart) || 0;
+        }
+        return product.price || 0;
+      })();
       
-      await addToCart(cartItem);
+      // Get product images in the same way as displayed on products page
+      const productImages = product.imageUrls || product.image_urls || [];
+      const primaryImage = productImages[0] || product.image || 'https://images.pexels.com/photos/1128678/pexels-photo-1128678.jpeg?auto=compress&cs=tinysrgb&w=400';
+
+      await addToCart({
+        id: product.id,
+        name: product.name,
+        price: productPrice,
+        displayPrice: product.displayPrice || product.price,
+        image: primaryImage,
+        imageUrls: productImages, // Pass extracted imageUrls array
+        unit: product.unit || 'piece'
+      });
     } catch (error) {
-      console.error('Error adding to cart:', error);
+      console.error('Error adding product to cart:', error);
     }
   };
 
@@ -83,27 +98,20 @@ const FeaturedProducts = memo(() => {
         </div>
 
         {/* Real Products Display */}
-        <div className="grid md:grid-cols-4 gap-4 mb-12">
+        <div className="product-grid-container mb-12">
           {loading ? (
-            // Loading state
             Array.from({ length: 4 }).map((_, index) => (
-              <div key={`loading-${index}`} className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden">
-                <div className="animate-pulse">
-                  <div className="bg-gray-200 dark:bg-gray-700 h-32 w-full"></div>
-                  <div className="p-4 space-y-3">
-                    <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4"></div>
-                    <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/2"></div>
-                    <div className="flex justify-between items-center">
-                      <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded w-20"></div>
-                      <div className="h-8 w-8 bg-gray-200 dark:bg-gray-700 rounded-full"></div>
-                    </div>
-                  </div>
-                </div>
+              <div 
+                key={index}
+                className="animate-fade-in"
+                style={{ animationDelay: `${index * 0.05}s` }}
+              >
+                <ProductCardSkeleton />
               </div>
             ))
           ) : error ? (
             // Error state
-            <div className="col-span-4 text-center py-12">
+            <div className="col-span-full text-center py-12">
               <div className="text-red-500 mb-4">❌ {error}</div>
               <button 
                 onClick={() => window.location.reload()}
@@ -114,67 +122,23 @@ const FeaturedProducts = memo(() => {
             </div>
           ) : products.length === 0 ? (
             // No products state
-            <div className="col-span-4 text-center py-12">
+            <div className="col-span-full text-center py-12">
               <div className="text-gray-500 dark:text-gray-400 mb-4">No products available yet</div>
               <div className="text-sm text-gray-400">Products will appear here once added from the admin panel</div>
             </div>
           ) : (
             // Real products
             products.map((product, index) => (
-              <div key={product.id} className="group relative bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-4 overflow-hidden">
-              {/* Fresh Badge */}
-              <div className="absolute top-4 left-4 z-10">
-                <span className="bg-green-600 text-white px-3 py-1 rounded-full text-sm font-medium">
-                  Fresh
-                </span>
-              </div>
-
-              {/* Heart Icon */}
-              <div className="absolute top-4 right-4 z-10">
-                <button className="w-10 h-10 bg-white/80 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white transition-colors">
-                  <Heart className="w-5 h-5 text-gray-600 hover:text-red-500" />
-                </button>
-              </div>
-
-              {/* Product Image */}
-              <div className="relative overflow-hidden">
-                <img
-                  src={product.imageUrls?.[0] || '/placeholder-fruit.jpg'}
-                  alt={product.name || 'Fresh Fruit'}
-                  className="w-full h-32 object-cover group-hover:scale-110 transition-transform duration-500"
-                  onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    target.src = '/placeholder-fruit.jpg';
-                  }}
+              <div 
+                key={product.id}
+                className="animate-fade-in"
+                style={{ animationDelay: `${index * 0.1}s` }}
+              >
+                <OptimizedProductCard
+                  product={product}
+                  onAddToCart={handleAddToCart}
+                  isAuthenticated={authState.isAuthenticated}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-              </div>
-
-              {/* Product Info */}
-              <div className="p-4">
-                
-
-                <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-green-600 transition-colors">
-                  {product.name || 'Fresh Fruit'}
-                </h3>
-
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2">
-                    <span className="text-lg font-bold text-gray-900 dark:text-white">
-                      {product.unitPriceDisplay || product.price || '₹0'}
-                    </span>
-                  </div>
-                  <button 
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleAddToCart(product);
-                    }}
-                    className="bg-green-600 hover:bg-green-700 text-white p-2 rounded-full transition-colors"
-                  >
-                    <ShoppingCart className="w-5 h-5" />
-                  </button>
-                </div>
-              </div>
               </div>
             ))
           )}
