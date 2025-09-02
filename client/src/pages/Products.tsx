@@ -5,6 +5,8 @@ import { Filter, Search, ShoppingCart, RefreshCw, AlertCircle } from 'lucide-rea
 import { useCart } from '../contexts/CartContext';
 import { useAuth } from '../contexts/AuthContext';
 import { firestoreService } from '../services/firestoreService';
+import OptimizedProductCard from '../components/OptimizedProductCard';
+import ProductCardSkeleton from '../components/ProductCardSkeleton';
 
 
 const Products = () => {
@@ -106,13 +108,24 @@ const Products = () => {
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
       <div className="max-w-7xl mx-auto px-4">
         {/* Header */}
-        <div className="text-center mb-12">
+        <div className="text-center mb-12 animate-fade-in">
           <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
-            Our <span className="text-green-600">Fresh Products</span>
+            Our <span className="text-green-600 underline-animated">Fresh Products</span>
           </h1>
-          <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+          <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto animate-slide-up">
             Discover our complete selection of premium fresh fruits, sourced daily from the finest farms.
           </p>
+          <div className="mt-6 flex justify-center items-center space-x-4 animate-slide-up" style={{animationDelay: '0.3s'}}>
+            <div className="flex items-center text-green-600">
+              <div className="w-2 h-2 bg-green-600 rounded-full mr-2 animate-pulse"></div>
+              <span className="text-sm font-medium">{products.length} Products Available</span>
+            </div>
+            <div className="w-px h-4 bg-gray-300 dark:bg-gray-600"></div>
+            <div className="flex items-center text-orange-500">
+              <div className="w-2 h-2 bg-orange-500 rounded-full mr-2 animate-pulse"></div>
+              <span className="text-sm font-medium">Fresh Daily</span>
+            </div>
+          </div>
         </div>
 
         {/* Filters */}
@@ -150,9 +163,22 @@ const Products = () => {
 
         {/* Products Grid */}
         {loading ? (
-          <div className="text-center py-16">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto mb-4"></div>
-            <p className="text-xl text-gray-600 dark:text-gray-300">Loading products...</p>
+          <div>
+            <div className="text-center mb-8">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600 mx-auto mb-2"></div>
+              <p className="text-lg text-gray-600 dark:text-gray-300">Loading fresh products...</p>
+            </div>
+            <div className="product-grid-container">
+              {[...Array(10)].map((_, index) => (
+                <div 
+                  key={index}
+                  className="animate-fade-in"
+                  style={{ animationDelay: `${index * 0.05}s` }}
+                >
+                  <ProductCardSkeleton />
+                </div>
+              ))}
+            </div>
           </div>
         ) : error ? (
           <div className="text-center py-16">
@@ -170,84 +196,41 @@ const Products = () => {
             </div>
           </div>
         ) : (
-          <div className="grid md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-            {filteredProducts.map((product) => {
-              // Since prices are stored as strings with ₹ already included, use displayPrice directly
-              const productImages = product.imageUrls || product.image_urls || [];
-              const primaryImage = productImages[0] || product.image || 'https://images.pexels.com/photos/1128678/pexels-photo-1128678.jpeg?auto=compress&cs=tinysrgb&w=400';
-              const isInStock = product.inStock !== false && (product.stock === undefined || product.stock > 0);
-              
-              return (
-                <div
-                  key={product.id}
-                  className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100 dark:border-gray-700 cursor-pointer"
-                  onClick={() => navigate(`/product/${product.id}`)}
-                >
-                  <div className="relative overflow-hidden rounded-t-2xl">
-                    <img
-                      src={primaryImage}
-                      alt={product.name}
-                      className="w-full h-32 object-cover transition-transform duration-300 hover:scale-110"
-                    />
-                    {!isInStock && (
-                      <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-                        <span className="bg-red-500 text-white px-4 py-2 rounded-full font-semibold">
-                          Out of Stock
-                        </span>
-                      </div>
-                    )}
-                  </div>
-                  
-                  <div className="p-4">
-                    <div className="flex items-center justify-between mb-2">
-                      <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{product.name}</h3>
-                    </div>
-                    
-                    <p className="text-gray-600 dark:text-gray-300 mb-4 text-sm">
-                      {product.description 
-                        ? product.description.length > 80 
-                          ? `${product.description.substring(0, 80)}...`
-                          : product.description
-                        : 'Fresh and delicious fruit'
-                      }
-                    </p>
-                    
-                    <div className="flex items-center justify-between">
-                      <span className="text-xl font-bold text-green-600">
-                        {product.displayPrice || product.price || 'Price not available'}
-                      </span>
-                      <button 
-                        onClick={async (e) => {
-                          e.stopPropagation();
-                          await handleAddToCart(product);
-                        }}
-                        className={`px-4 py-2 rounded-full font-medium transition-colors ${
-                          isInStock 
-                            ? 'bg-orange-500 text-white hover:bg-orange-600' 
-                            : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                        } flex items-center`}
-                        disabled={!isInStock}
-                      >
-                        {isInStock ? (
-                          <>
-                            <ShoppingCart className="w-4 h-4 mr-1" />
-                            {authState.isAuthenticated ? 'Add to Cart' : 'Sign In to Add'}
-                          </>
-                        ) : (
-                          'Out of Stock'
-                        )}
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
+          <div className="product-grid-container">
+            {filteredProducts.map((product, index) => (
+              <div 
+                key={product.id}
+                className="animate-fade-in"
+                style={{ animationDelay: `${index * 0.1}s` }}
+              >
+                <OptimizedProductCard
+                  product={product}
+                  onAddToCart={handleAddToCart}
+                  isAuthenticated={authState.isAuthenticated}
+                />
+              </div>
+            ))}
           </div>
         )}
 
         {filteredProducts.length === 0 && !loading && !error && (
-          <div className="text-center py-12">
-            <p className="text-xl text-gray-600 dark:text-gray-300">No products found matching your criteria.</p>
+          <div className="text-center py-16">
+            <div className="max-w-md mx-auto">
+              <div className="w-16 h-16 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Search className="w-8 h-8 text-gray-400" />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">No products found</h3>
+              <p className="text-gray-600 dark:text-gray-300">Try adjusting your search criteria or browse all products.</p>
+              <button
+                onClick={() => {
+                  setSearchTerm('');
+                  setSelectedCategory('all');
+                }}
+                className="mt-4 bg-green-600 text-white px-6 py-2 rounded-full font-semibold hover:bg-green-700 transition-colors"
+              >
+                Clear Filters
+              </button>
+            </div>
           </div>
         )}
       </div>
