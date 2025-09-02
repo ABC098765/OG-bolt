@@ -306,22 +306,20 @@ export class FirestoreService {
     
       
       if (existingDoc.exists()) {
-        // Update existing item - sum amounts like Android app
+        // Replace existing item with new amount (web app behavior)
+        // Instead of adding amounts together, replace with the newly selected amount
         const existingData = existingDoc.data();
-        const existingAmount = this.parseAmount(existingData.amount, existingData.unit);
-        const newAmount = this.parseAmount(cartItem.amount, cartItem.unit);
-        const totalAmount = existingAmount + newAmount;
         
         await updateDoc(cartItemRef, {
-          amount: this.amountToString(totalAmount, existingData.unit),
-          quantity: 1, // Always 1 as per Android logic
-          totalPrice: finalPriceValue * totalAmount,
+          amount: cartItem.amount, // Use the exact selected amount (e.g., "2 box")
+          quantity: cartItem.quantity, // Use the quantity from selected amount
+          totalPrice: cartItem.totalPrice, // Use the calculated total price
           // Ensure all Android app fields are present
           productId: cartItem.productId,
           name: existingData.name,
           unitPrice: finalPriceValue,
           priceValue: finalPriceValue,
-          unit: existingData.unit,
+          unit: cartItem.unit, // Use the unit from new selection
           imageUrls: existingData.imageUrls || existingData.image_urls || cartItem.imageUrls,
           image_urls: existingData.image_urls || existingData.imageUrls || cartItem.imageUrls,
           priceLabel: finalPriceLabel,

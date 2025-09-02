@@ -213,8 +213,6 @@ const ProductDetails = () => {
   }
 
   const handleAddToCart = () => {
-    console.log('🔍 ProductDetails: selectedAmount at add to cart:', selectedAmount);
-    
     if (!authState.isAuthenticated) {
       authDispatch({ type: 'SHOW_AUTH_MODAL' });
       return;
