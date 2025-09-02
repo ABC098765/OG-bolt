@@ -1,10 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Smartphone, Download, Bot, CreditCard, Play, X } from 'lucide-react';
 
 import og_replit_sfc from "@assets/og replit sfc.png";
 
 const AndroidApp = () => {
   const [showComingSoon, setShowComingSoon] = useState(false);
+  const [currentScreenshot, setCurrentScreenshot] = useState(0);
+  
+  const screenshots = [
+    { src: '/android-app-home.jpg', alt: 'Home Screen' },
+    { src: '/android-app-products.jpg', alt: 'Products Screen' },
+    { src: '/android-app-cart.jpg', alt: 'Shopping Cart Screen' }
+  ];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentScreenshot((prev) => (prev + 1) % screenshots.length);
+    }, 3000); // Change image every 3 seconds
+
+    return () => clearInterval(interval);
+  }, [screenshots.length]);
 
   return (
     <>
@@ -139,55 +154,38 @@ const AndroidApp = () => {
             </div>
           </div>
 
-          {/* Mock Phone Display */}
+          {/* Actual Phone Display with Screenshots */}
           <div className="relative">
             <div className="relative z-10 max-w-sm mx-auto">
               {/* Phone Frame */}
               <div className="bg-gray-900 rounded-[3rem] p-2 shadow-2xl">
                 <div className="bg-white rounded-[2.5rem] overflow-hidden">
-                  {/* Status Bar */}
-                  <div className="bg-gray-100 h-8 flex items-center justify-between px-6">
-                    <div className="text-xs font-semibold">9:41</div>
-                    <div className="flex space-x-1">
-                      <div className="w-4 h-2 bg-green-500 rounded-sm"></div>
-                      <div className="w-4 h-2 bg-green-500 rounded-sm"></div>
-                      <div className="w-4 h-2 bg-green-500 rounded-sm"></div>
-                    </div>
-                  </div>
-                  
-                  {/* App Content */}
-                  <div className="h-96 bg-gradient-to-b from-green-50 to-white p-4">
-                    <div className="text-center mb-6">
-                      <div className="w-16 h-16 bg-green-600 rounded-2xl mx-auto mb-3 flex items-center justify-center">
-                        <span className="text-2xl">🍎</span>
-                      </div>
-                      <h3 className="font-bold text-lg">Super Fruit Center</h3>
-                    </div>
+                  {/* App Screenshot */}
+                  <div className="relative h-[600px] overflow-hidden">
+                    <img
+                      src={screenshots[currentScreenshot].src}
+                      alt={screenshots[currentScreenshot].alt}
+                      className="w-full h-full object-cover transition-opacity duration-500"
+                      onError={(e) => {
+                        console.error('Failed to load screenshot:', screenshots[currentScreenshot].src);
+                        const target = e.target as HTMLImageElement;
+                        target.style.display = 'none';
+                      }}
+                    />
                     
-                    <div className="space-y-3">
-                      <div className="bg-white rounded-xl p-3 shadow-sm flex items-center space-x-3">
-                        <div className="w-12 h-12 bg-orange-100 rounded-lg"></div>
-                        <div className="flex-1">
-                          <div className="font-medium text-sm">Fresh Mangoes</div>
-                          <div className="text-green-600 font-bold">₹299</div>
-                        </div>
-                      </div>
-                      
-                      <div className="bg-white rounded-xl p-3 shadow-sm flex items-center space-x-3">
-                        <div className="w-12 h-12 bg-red-100 rounded-lg"></div>
-                        <div className="flex-1">
-                          <div className="font-medium text-sm">Strawberries</div>
-                          <div className="text-green-600 font-bold">₹199</div>
-                        </div>
-                      </div>
-                      
-                      <div className="bg-white rounded-xl p-3 shadow-sm flex items-center space-x-3">
-                        <div className="w-12 h-12 bg-green-100 rounded-lg"></div>
-                        <div className="flex-1">
-                          <div className="font-medium text-sm">Green Apples</div>
-                          <div className="text-green-600 font-bold">₹149</div>
-                        </div>
-                      </div>
+                    {/* Screenshot Navigation Dots */}
+                    <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
+                      {screenshots.map((_, index) => (
+                        <button
+                          key={index}
+                          onClick={() => setCurrentScreenshot(index)}
+                          className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                            index === currentScreenshot 
+                              ? 'bg-white shadow-lg' 
+                              : 'bg-white/50 hover:bg-white/70'
+                          }`}
+                        />
+                      ))}
                     </div>
                   </div>
                 </div>
