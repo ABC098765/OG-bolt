@@ -35,7 +35,18 @@ const Orders = () => {
           authState.user.id,
           (userOrders) => {
             console.log('📦 Orders updated:', userOrders.length, 'orders');
-            setOrders(userOrders);
+            
+            // Fix orders to use payment_status as order_status if available
+            const fixedOrders = userOrders.map(order => {
+              if (order.payment_status && order.payment_status !== order.order_status) {
+                console.log('🔧 Fixing order', order.id, '- using payment_status:', order.payment_status);
+                return { ...order, order_status: order.payment_status };
+              }
+              return order;
+            });
+            
+            console.log('📦 Fixed order statuses:', fixedOrders.map(o => ({ id: o.id, status: o.order_status })));
+            setOrders(fixedOrders);
             setLoading(false);
           }
         );
@@ -102,6 +113,7 @@ const Orders = () => {
       case 'packed':
         return <Package className="w-5 h-5 text-purple-500" />;
       case 'ordered':
+      case 'pending': // Map pending to ordered for display
         return <Clock className="w-5 h-5 text-orange-500" />;
       case 'cancelled':
         return <XCircle className="w-5 h-5 text-red-500" />;
@@ -124,6 +136,7 @@ const Orders = () => {
       case 'packed':
         return 'bg-purple-100 text-purple-800';
       case 'ordered':
+      case 'pending': // Map pending to ordered for display
         return 'bg-orange-100 text-orange-800';
       case 'cancelled':
         return 'bg-red-100 text-red-800';
@@ -134,17 +147,30 @@ const Orders = () => {
     }
   };
 
+  // Helper function to normalize status for filtering - maps pending to ordered
+  const normalizeStatusForFilter = (status: string) => {
+    const normalizedStatus = status?.toLowerCase()?.trim();
+    return normalizedStatus === 'pending' ? 'ordered' : normalizedStatus;
+  };
+
+  // Helper function to check if order matches filter
+  const orderMatchesFilter = (order: FirestoreOrder, filterStatus: string) => {
+    if (filterStatus === 'all') return true;
+    const normalizedOrderStatus = normalizeStatusForFilter(order.order_status);
+    return normalizedOrderStatus === filterStatus;
+  };
+
   const filteredOrders = selectedTab === 'all' 
     ? orders 
-    : orders.filter(order => order.order_status === selectedTab);
+    : orders.filter(order => orderMatchesFilter(order, selectedTab));
 
   const tabs = [
     { id: 'all', name: 'All Orders', count: orders.length },
-    { id: 'ordered', name: 'Ordered', count: orders.filter(o => o.order_status === 'ordered').length },
-    { id: 'packed', name: 'Packed', count: orders.filter(o => o.order_status === 'packed').length },
-    { id: 'out for delivery', name: 'Out for Delivery', count: orders.filter(o => o.order_status === 'out for delivery').length },
-    { id: 'delivered', name: 'Delivered', count: orders.filter(o => o.order_status === 'delivered').length },
-    { id: 'failed', name: 'Failed', count: orders.filter(o => o.order_status === 'failed').length }
+    { id: 'ordered', name: 'Ordered', count: orders.filter(o => orderMatchesFilter(o, 'ordered')).length },
+    { id: 'packed', name: 'Packed', count: orders.filter(o => orderMatchesFilter(o, 'packed')).length },
+    { id: 'out for delivery', name: 'Out for Delivery', count: orders.filter(o => orderMatchesFilter(o, 'out for delivery')).length },
+    { id: 'delivered', name: 'Delivered', count: orders.filter(o => orderMatchesFilter(o, 'delivered')).length },
+    { id: 'failed', name: 'Failed', count: orders.filter(o => orderMatchesFilter(o, 'failed')).length }
   ];
 
   return (
