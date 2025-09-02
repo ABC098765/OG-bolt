@@ -392,9 +392,9 @@ const ProductDetails = () => {
               {/* Description */}
               <div className="mb-8">
                 <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Description</h3>
-                <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-lg">
+                <div className="text-gray-700 dark:text-gray-300 leading-relaxed text-lg whitespace-pre-line">
                   {product.description || 'Fresh and delicious fruit, perfect for healthy snacking and cooking.'}
-                </p>
+                </div>
               </div>
 
               {/* Add to Cart Button */}
