@@ -247,7 +247,8 @@ const ProductDetails = () => {
       price: productPrice,
       displayPrice: product.displayPrice, // Keep original displayPrice format like "₹150-₹400/kg"
       image: productImage,
-      unit: product.unit || 'piece'
+      unit: product.unit || 'piece',
+      selectedAmount: selectedAmount // Pass the selected amount (e.g., "2kg", "3pc")
     });
   };
 

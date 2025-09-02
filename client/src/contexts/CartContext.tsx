@@ -118,6 +118,24 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
   }
 };
 
+// Function to parse selected amount like "2kg" or "3pc" into quantity and unit
+const parseSelectedAmount = (selectedAmount: string, fallbackUnit: string): { quantity: number; unit: string } => {
+  if (!selectedAmount) {
+    return { quantity: 1, unit: fallbackUnit };
+  }
+  
+  // Match patterns like "2kg", "3pc", "1 box", "500g"
+  const match = selectedAmount.match(/^(\d+(?:\.\d+)?)\s*(.+)$/);
+  if (match) {
+    const quantity = parseFloat(match[1]);
+    const unit = match[2].trim();
+    return { quantity, unit };
+  }
+  
+  // If no number found, treat as quantity 1
+  return { quantity: 1, unit: selectedAmount || fallbackUnit };
+};
+
 // Function to extract unit from price string (matching Android app logic)
 const getUnitFromPrice = (priceString: string): { unit: string; amount: string } => {
   const price = priceString.toLowerCase();
@@ -249,9 +267,13 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       })();
 
 
-      // Extract unit from price string like Android app does
+      // Use selectedAmount if provided, otherwise extract from price string
       const priceString = product.displayPrice || product.price || '';
       const { unit: extractedUnit, amount: extractedAmount } = getUnitFromPrice(priceString);
+      
+      // Parse selectedAmount to get quantity and unit
+      const selectedAmount = product.selectedAmount || extractedAmount;
+      const { quantity: selectedQuantity, unit: selectedUnit } = parseSelectedAmount(selectedAmount, extractedUnit);
 
       const cartItem = {
         productId: product.id.toString(),
@@ -260,11 +282,11 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         priceValue: productPrice,
         displayPrice: product.displayPrice || product.price || `₹${productPrice}`, // Use displayPrice or fallback to product.price to maintain Android app sync
         priceLabel: product.displayPrice || product.price || `₹${productPrice}`, // Keep original displayPrice format like "₹150-₹400/kg"
-        amount: extractedAmount, // Use extracted amount like "1kg" instead of "1 pcs"
-        unit: extractedUnit, // Use extracted unit like "kg" instead of "piece"
+        amount: selectedAmount, // Use selected amount like "2kg" instead of default "1kg"
+        unit: selectedUnit, // Use unit from selected amount
         imageUrls: productImages,
-        quantity: 1,
-        totalPrice: productPrice
+        quantity: selectedQuantity, // Use quantity from selected amount (e.g., 2 from "2kg")
+        totalPrice: productPrice * selectedQuantity // Calculate total based on selected quantity
       };
 
 
