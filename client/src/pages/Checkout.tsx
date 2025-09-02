@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'wouter';
-import { ArrowLeft, Plus, Edit3, Trash2, MapPin, CreditCard, Package, Check } from 'lucide-react';
+import { ArrowLeft, Plus, Edit3, Trash2, MapPin, CreditCard, Package, Check, XCircle } from 'lucide-react';
 import { useCart } from '../contexts/CartContext';
 import { useAuth } from '../contexts/AuthContext';
 import { firestoreService } from '../services/firestoreService';
@@ -20,6 +20,9 @@ const Checkout = () => {
   const [editingAddress, setEditingAddress] = useState<FirestoreAddress | null>(null);
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [orderError, setOrderError] = useState<string>('');
+  const [retryAttempt, setRetryAttempt] = useState(0);
+  const [lastOrderId, setLastOrderId] = useState<string>('');
 
   // Form fields
   const [addressName, setAddressName] = useState('');
@@ -184,9 +187,130 @@ const Checkout = () => {
     setPhone('');
   };
 
+  // Helper function to sleep for retry delays
+  const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
+  // Helper function to determine if error is retryable
+  const isRetryableError = (error: any): boolean => {
+    const errorMessage = error?.message?.toLowerCase() || '';
+    const isNetworkError = errorMessage.includes('network') || 
+                          errorMessage.includes('timeout') || 
+                          errorMessage.includes('connection') ||
+                          errorMessage.includes('fetch');
+    const isServerError = error?.code >= 500 && error?.code < 600;
+    return isNetworkError || isServerError;
+  };
+
+  // Helper function to verify if order was actually created
+  const verifyOrderCreation = async (orderData: any, maxAttempts = 3): Promise<string | null> => {
+    for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+      try {
+        console.log(`🔍 Verification attempt ${attempt}: Checking if order was created...`);
+        
+        // Get recent orders and check if any match our order data
+        const userOrders = await firestoreService.getUserOrders(authState.user!.id);
+        
+        // Look for an order that matches our data (created within last 5 minutes)
+        const recentOrder = userOrders.find(order => {
+          const createdAtSeconds = order.created_at?.seconds ?? 0;
+          const isRecent = Date.now() - createdAtSeconds * 1000 < 5 * 60 * 1000;
+          const matchesTotal = (order.total_amount ?? 0) === (orderData.total_amount ?? 0);
+          const matchesItemCount = (order.items?.length ?? 0) === (orderData.items?.length ?? 0);
+          return isRecent && matchesTotal && matchesItemCount;
+        });
+
+        if (recentOrder) {
+          console.log('✅ Order verification successful! Found order:', recentOrder.id);
+          return recentOrder.id;
+        }
+        
+        if (attempt < maxAttempts) {
+          console.log(`⏳ Order not found yet, waiting before next verification attempt...`);
+          await sleep(2000 * attempt); // Increasing delay
+        }
+      } catch (verifyError) {
+        console.error(`❌ Verification attempt ${attempt} failed:`, verifyError);
+        if (attempt < maxAttempts) {
+          await sleep(1000 * attempt);
+        }
+      }
+    }
+    
+    console.log('⚠️ Order verification failed - could not confirm order creation');
+    return null;
+  };
+
+  // Main order creation function with retry logic
+  const createOrderWithRetry = async (orderData: any, attempt = 1): Promise<{ success: boolean; orderId?: string; error?: string }> => {
+    const maxAttempts = 3;
+    
+    try {
+      console.log(`🚀 Order creation attempt ${attempt}/${maxAttempts}`);
+      
+      // Save attempt to local storage for persistence
+      localStorage.setItem('orderAttempt', JSON.stringify({ attempt, orderData, timestamp: Date.now() }));
+      
+      // Create order
+      const createdOrder = await firestoreService.createOrder(orderData);
+      const orderId = createdOrder.id;
+      
+      console.log('✅ Order created successfully:', orderId);
+      
+      // Verify order was actually created
+      const verifiedOrderId = await verifyOrderCreation(orderData);
+      
+      if (verifiedOrderId) {
+        // Clear stored attempt data
+        localStorage.removeItem('orderAttempt');
+        return { success: true, orderId: verifiedOrderId };
+      } else {
+        console.log('⚠️ Order created but verification failed, treating as success');
+        localStorage.removeItem('orderAttempt');
+        return { success: true, orderId };
+      }
+      
+    } catch (error) {
+      console.error(`❌ Order creation attempt ${attempt} failed:`, error);
+      
+      // Check if we should retry
+      if (attempt < maxAttempts && isRetryableError(error)) {
+        console.log(`🔄 Retrying order creation (attempt ${attempt + 1}/${maxAttempts})...`);
+        
+        // Update retry attempt state for UI
+        setRetryAttempt(attempt);
+        
+        // Exponential backoff: 2s, 4s, 8s
+        const delayMs = Math.pow(2, attempt) * 1000;
+        await sleep(delayMs);
+        
+        // First, check if order might have been created despite the error
+        const verifiedOrderId = await verifyOrderCreation(orderData);
+        if (verifiedOrderId) {
+          console.log('✅ Order was actually created despite error! Order ID:', verifiedOrderId);
+          localStorage.removeItem('orderAttempt');
+          setRetryAttempt(0);
+          return { success: true, orderId: verifiedOrderId };
+        }
+        
+        // Retry the creation
+        return createOrderWithRetry(orderData, attempt + 1);
+      }
+      
+      // No more retries or non-retryable error
+      localStorage.removeItem('orderAttempt');
+      
+      let errorMessage = 'Failed to create order after multiple attempts.';
+      if (!isRetryableError(error)) {
+        errorMessage = 'Order creation failed. Please check your information and try again.';
+      }
+      
+      return { success: false, error: errorMessage };
+    }
+  };
+
   const createOrder = async () => {
     if (!selectedAddressId || !selectedPaymentMethod) {
-      alert('Please select an address and payment method');
+      setOrderError('Please select an address and payment method');
       return;
     }
 
@@ -194,6 +318,8 @@ const Checkout = () => {
     if (!confirmed) return;
 
     setIsProcessingPayment(true);
+    setOrderError('');
+    setRetryAttempt(0);
 
     try {
       const selectedAddress = addresses.find(addr => addr.id === selectedAddressId);
@@ -253,22 +379,81 @@ const Checkout = () => {
         }),
       };
 
-      // Create order
-      await firestoreService.createOrder(orderData);
-
-      // Clear cart
-      await clearCart();
-
-      // Navigate to success page
-      navigate('/order-success');
+      // Create order with retry logic
+      const result = await createOrderWithRetry(orderData);
+      
+      if (result.success && result.orderId) {
+        console.log('🎉 Order placement successful!');
+        setLastOrderId(result.orderId);
+        
+        // Only clear cart after successful order verification
+        try {
+          await clearCart();
+          console.log('🛒 Cart cleared successfully');
+        } catch (cartError) {
+          console.error('⚠️ Order created but cart clearing failed:', cartError);
+          // Don't fail the entire process if cart clearing fails
+        }
+        
+        // Navigate to success page
+        navigate('/order-success');
+      } else {
+        // Order creation failed
+        setOrderError(result.error || 'Unknown error occurred');
+        console.error('💥 Order creation failed:', result.error);
+      }
       
     } catch (error) {
-      console.error('Error creating order:', error);
-      alert('Error creating order. Please try again.');
+      console.error('💥 Unexpected error in order creation:', error);
+      setOrderError('An unexpected error occurred. Please try again.');
     } finally {
       setIsProcessingPayment(false);
     }
   };
+
+  // Check for interrupted order on component mount
+  useEffect(() => {
+    const checkInterruptedOrder = async () => {
+      const storedAttempt = localStorage.getItem('orderAttempt');
+      if (storedAttempt && authState.user) {
+        try {
+          const { orderData, timestamp } = JSON.parse(storedAttempt);
+          
+          // Only check if the attempt was recent (within last 10 minutes)
+          if (Date.now() - timestamp < 10 * 60 * 1000) {
+            console.log('🔍 Checking for interrupted order...');
+            
+            const verifiedOrderId = await verifyOrderCreation(orderData);
+            if (verifiedOrderId) {
+              console.log('✅ Found interrupted order that was actually created:', verifiedOrderId);
+              localStorage.removeItem('orderAttempt');
+              
+              // Clear cart and navigate to success
+              try {
+                await clearCart();
+                navigate('/order-success');
+              } catch (error) {
+                console.error('Error handling interrupted order:', error);
+              }
+            } else {
+              // Clean up old attempt data
+              localStorage.removeItem('orderAttempt');
+            }
+          } else {
+            // Clean up old attempt data
+            localStorage.removeItem('orderAttempt');
+          }
+        } catch (error) {
+          console.error('Error checking interrupted order:', error);
+          localStorage.removeItem('orderAttempt');
+        }
+      }
+    };
+
+    if (authState.user && !loading) {
+      checkInterruptedOrder();
+    }
+  }, [authState.user, loading]);
 
   // Calculate pricing
   const subtotal = cartState.total;
@@ -592,6 +777,35 @@ const Checkout = () => {
           </div>
         </div>
 
+        {/* Error Message */}
+        {orderError && (
+          <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-2xl p-6 mb-6">
+            <div className="flex items-start space-x-3">
+              <div className="flex-shrink-0">
+                <XCircle className="w-6 h-6 text-red-600" />
+              </div>
+              <div className="flex-1">
+                <h3 className="text-lg font-semibold text-red-800 dark:text-red-200 mb-2">Order Failed</h3>
+                <p className="text-red-700 dark:text-red-300 mb-4">{orderError}</p>
+                <div className="space-y-2">
+                  <p className="text-sm text-red-600 dark:text-red-400">What you can do:</p>
+                  <ul className="text-sm text-red-600 dark:text-red-400 list-disc list-inside space-y-1">
+                    <li>Check your internet connection and try again</li>
+                    <li>Verify your address and payment method are correct</li>
+                    <li>If the problem persists, check your Orders page to see if the order was created</li>
+                  </ul>
+                </div>
+                <button
+                  onClick={() => setOrderError('')}
+                  className="mt-4 text-sm text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-200 font-medium"
+                >
+                  Dismiss
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Place Order Button */}
         <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
           <button
@@ -603,11 +817,19 @@ const Checkout = () => {
               <>
                 <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-3"></div>
                 Processing Order...
+                {retryAttempt > 0 && <span className="ml-2 text-sm">(Attempt {retryAttempt}/3)</span>}
               </>
             ) : (
               'Place Order'
             )}
           </button>
+          
+          {!selectedAddressId && (
+            <p className="text-sm text-red-600 dark:text-red-400 mt-2 text-center">Please select a delivery address</p>
+          )}
+          {!selectedPaymentMethod && (
+            <p className="text-sm text-red-600 dark:text-red-400 mt-2 text-center">Please select a payment method</p>
+          )}
         </div>
       </div>
     </div>
