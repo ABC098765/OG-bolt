@@ -255,7 +255,7 @@ const Products = () => {
         </div>
 
         {/* Filters */}
-        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 mb-6">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 mb-4">
           <div className="flex flex-col lg:flex-row gap-6 items-center">
             {/* Search */}
             <div className="relative flex-1 max-w-md">
