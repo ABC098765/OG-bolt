@@ -9,21 +9,50 @@ interface LazyImageProps {
   loading?: 'lazy' | 'eager';
 }
 
-// Loading animation state
+// Cached animation data to avoid repeated fetches
+let cachedAnimationData: any = null;
+let animationPromise: Promise<any> | null = null;
+
+// Preload animation data on module load
+const preloadAnimation = async () => {
+  if (cachedAnimationData) return cachedAnimationData;
+  
+  try {
+    const response = await fetch('/bouncing-fruits-new.json');
+    cachedAnimationData = await response.json();
+    return cachedAnimationData;
+  } catch (error) {
+    try {
+      const fallbackResponse = await fetch('/bouncing-fruits.json');
+      cachedAnimationData = await fallbackResponse.json();
+      return cachedAnimationData;
+    } catch (fallbackError) {
+      console.error('Failed to load animation:', fallbackError);
+      return null;
+    }
+  }
+};
+
+// Start preloading immediately
+if (!animationPromise) {
+  animationPromise = preloadAnimation();
+}
+
+// Loading animation state with improved caching
 const useLoadingAnimation = () => {
-  const [animationData, setAnimationData] = useState(null);
+  const [animationData, setAnimationData] = useState(cachedAnimationData);
 
   useEffect(() => {
-    fetch('/bouncing-fruits-new.json')
-      .then(response => response.json())
-      .then(data => setAnimationData(data))
-      .catch(() => {
-        // Fallback to original bouncing fruits animation
-        fetch('/bouncing-fruits.json')
-          .then(response => response.json())
-          .then(data => setAnimationData(data))
-          .catch(console.error);
+    if (cachedAnimationData) {
+      setAnimationData(cachedAnimationData);
+      return;
+    }
+
+    if (animationPromise) {
+      animationPromise.then(data => {
+        setAnimationData(data);
       });
+    }
   }, []);
 
   return animationData;
