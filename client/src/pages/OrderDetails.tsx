@@ -281,7 +281,7 @@ const OrderDetails = () => {
                 const isValidStatus = currentStepIndex !== -1;
 
                 return (
-                  <div className="flex items-start justify-between relative px-2 sm:px-0">
+                  <div className="flex items-start justify-between relative px-1 sm:px-0 gap-1 sm:gap-0">
                     {/* Enhanced Progress Line with Gradient */}
                     <div className="absolute top-5 sm:top-6 left-6 right-6 sm:left-8 sm:right-8 h-1 bg-gradient-to-r from-gray-200 to-gray-300 rounded-full shadow-inner -z-10">
                       <div 
@@ -337,7 +337,7 @@ const OrderDetails = () => {
                       };
 
                       return (
-                        <div key={step.id} className="flex flex-col items-center relative z-10 flex-1 min-w-0 sm:min-w-20 group">
+                        <div key={step.id} className="flex flex-col items-center relative z-10 flex-1 min-w-0 sm:min-w-20 group px-1 sm:px-0">
                           {/* Step Icon Container */}
                           <div className="relative">
                             <div 
