@@ -111,31 +111,6 @@ const Profile = () => {
             </button>
           </div>
         </div>
-
-        {/* Account Actions */}
-        <div className="lg:col-span-3 mt-8">
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
-            <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Account Actions</h3>
-            <div className="flex justify-center">
-              <button
-                onClick={async () => {
-                  if (window.confirm('Are you sure you want to sign out?')) {
-                    try {
-                      await authService.signOut();
-                      navigate('/');
-                    } catch (error) {
-                      console.error('Error signing out:', error);
-                    }
-                  }
-                }}
-                className="flex items-center px-6 py-3 bg-red-600 text-white rounded-full hover:bg-red-700 transition-colors font-semibold"
-              >
-                <LogOut className="w-5 h-5 mr-2" />
-                Sign Out
-              </button>
-            </div>
-          </div>
-        </div>
       </div>
     );
   }
