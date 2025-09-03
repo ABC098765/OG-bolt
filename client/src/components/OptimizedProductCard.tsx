@@ -33,9 +33,9 @@ const OptimizedProductCard = memo<OptimizedProductCardProps>(({ product, onAddTo
   
   const productImages = product.imageUrls || product.image_urls || (product.image ? [product.image] : []);
   
-  // Filter out invalid URLs and provide fallback
+  // Filter out invalid URLs - no fallback placeholder
   const validImages = productImages.filter(url => url && typeof url === 'string' && url.trim() !== '');
-  const primaryImage = validImages.length > 0 ? validImages[0] : '/logo-placeholder.png';
+  const primaryImage = validImages.length > 0 ? validImages[0] : null;
   const isInStock = product.inStock !== false && (product.stock === undefined || product.stock > 0);
   return (
     <div 
@@ -69,13 +69,24 @@ const OptimizedProductCard = memo<OptimizedProductCardProps>(({ product, onAddTo
 
       {/* Product Image */}
       <div className="relative overflow-hidden">
-        <LazyImage
-          src={primaryImage}
-          alt={product.name}
-          className="w-full h-40 sm:h-48 md:h-56 lg:h-64 object-cover group-hover:scale-110 transition-transform duration-500"
-          loading="lazy"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+        {primaryImage ? (
+          <>
+            <LazyImage
+              src={primaryImage}
+              alt={product.name}
+              className="w-full h-40 sm:h-48 md:h-56 lg:h-64 object-cover group-hover:scale-110 transition-transform duration-500"
+              loading="lazy"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          </>
+        ) : (
+          <div className="w-full h-40 sm:h-48 md:h-56 lg:h-64 bg-gradient-to-br from-green-50 to-orange-50 dark:from-gray-700 dark:to-gray-600 flex items-center justify-center">
+            <div className="text-center text-gray-400 dark:text-gray-500">
+              <div className="text-4xl sm:text-5xl md:text-6xl mb-2">🍎</div>
+              <p className="text-sm font-medium">No Image</p>
+            </div>
+          </div>
+        )}
         {!isInStock && (
           <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
             <span className="bg-red-500 text-white px-4 py-2 rounded-full font-semibold text-sm">
