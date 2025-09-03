@@ -66,8 +66,7 @@ const LazyImage = memo<LazyImageProps>(({
               className="drop-shadow-lg"
             />
           ) : (
-            <div className="w-20 h-20 bg-gray-200 dark:bg-gray-600 rounded-lg animate-pulse flex items-center justify-center">
-              <div className="text-2xl animate-bounce">🍎</div>
+            <div className="w-20 h-20 bg-gray-200 dark:bg-gray-600 rounded-lg animate-pulse">
             </div>
           )}
         </div>
