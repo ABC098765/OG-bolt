@@ -42,17 +42,6 @@ const LazyImage = memo<LazyImageProps>(({
   const imgRef = useRef<HTMLImageElement>(null);
   const animationData = useLoadingAnimation();
 
-  // Add minimum loading time to see animation
-  useEffect(() => {
-    const minLoadingTime = setTimeout(() => {
-      if (isLoaded) {
-        setShowAnimation(false);
-      }
-    }, 1500); // Show animation for at least 1.5 seconds
-
-    return () => clearTimeout(minLoadingTime);
-  }, [isLoaded]);
-
   useEffect(() => {
     const img = imgRef.current;
     if (!img) return;
@@ -76,19 +65,14 @@ const LazyImage = memo<LazyImageProps>(({
   }, [src, loading]);
 
   const handleImageLoad = () => {
-    console.log('🖼️ Image loaded for:', alt);
     setIsLoaded(true);
-    // Delay hiding animation to ensure users see it
-    setTimeout(() => setShowAnimation(false), 800);
+    setShowAnimation(false); // Hide animation immediately when image loads
   };
 
   const handleImageError = () => {
-    console.error('❌ Image failed to load for:', alt);
     setHasError(true);
     setShowAnimation(false);
   };
-
-  console.log('🎬 Animation data loaded:', !!animationData, 'Show animation:', showAnimation);
 
   return (
     <div className="relative">
@@ -115,8 +99,8 @@ const LazyImage = memo<LazyImageProps>(({
         ref={imgRef}
         src={loading === 'eager' ? src : ''}
         alt={alt}
-        className={`transition-opacity duration-500 ${
-          isLoaded && !showAnimation ? 'opacity-100' : 'opacity-0'
+        className={`transition-opacity duration-300 ${
+          isLoaded ? 'opacity-100' : 'opacity-0'
         } ${className}`}
         onLoad={handleImageLoad}
         onError={handleImageError}
