@@ -83,7 +83,16 @@ const LazyImage = memo<LazyImageProps>(({
   };
 
   const handleImageError = () => {
-    console.error('❌ Image failed to load for:', alt);
+    console.error('❌ Image failed to load for:', alt, 'URL:', src);
+    
+    // Check if it's a problematic external URL
+    const problematicDomains = ['wikipedia.org', 'britannica.com', 'fandom.com', 'plantvine.com'];
+    const isProblematicUrl = problematicDomains.some(domain => src.includes(domain));
+    
+    if (isProblematicUrl) {
+      console.log('🚫 Problematic external URL detected, showing fallback immediately');
+    }
+    
     setHasError(true);
     setShowAnimation(false);
   };

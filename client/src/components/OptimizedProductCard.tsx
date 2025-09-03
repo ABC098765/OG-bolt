@@ -33,8 +33,13 @@ const OptimizedProductCard = memo<OptimizedProductCardProps>(({ product, onAddTo
   
   const productImages = product.imageUrls || product.image_urls || (product.image ? [product.image] : []);
   
-  // Filter out invalid URLs - no fallback placeholder
-  const validImages = productImages.filter(url => url && typeof url === 'string' && url.trim() !== '');
+  // Filter out invalid URLs and known problematic domains
+  const invalidDomains = ['wikipedia.org', 'britannica.com', 'fandom.com', 'plantvine.com'];
+  const validImages = productImages.filter(url => {
+    if (!url || typeof url !== 'string' || url.trim() === '') return false;
+    // Check if URL contains any problematic domains
+    return !invalidDomains.some(domain => url.includes(domain));
+  });
   const primaryImage = validImages.length > 0 ? validImages[0] : null;
   const isInStock = product.inStock !== false && (product.stock === undefined || product.stock > 0);
   return (

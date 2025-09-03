@@ -145,10 +145,13 @@ const Products = () => {
     try {
       setLoading(true);
       setError(null);
+      console.log('🔍 Fetching products from Firestore...');
       const productsData = await firestoreService.getProducts().catch((err) => {
         console.error('Firebase products error:', err);
         throw err;
       });
+      
+      console.log('📦 Fetched products:', productsData?.length || 0);
       
       if (productsData && productsData.length > 0) {
         setProducts(productsData);
@@ -162,7 +165,7 @@ const Products = () => {
         setCategories(categoryOptions);
       } else {
         // Use fallback sample products
-        console.log('No products in database, using sample data');
+        console.log('❌ No products in database, using sample data');
         setProducts(sampleProducts);
         setCategories([
           { id: 'all', name: 'All Products' },
