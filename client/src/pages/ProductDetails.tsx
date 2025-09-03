@@ -270,9 +270,9 @@ const ProductDetails = () => {
         </div>
 
         <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden">
-          <div className="grid lg:grid-cols-2 gap-8">
+          <div className="grid lg:grid-cols-2 gap-0">
             {/* Product Image */}
-            <div className="relative p-4">
+            <div className="relative p-6 lg:p-8">
               {/* Main Image Carousel */}
               <div 
                 className="mb-4 relative touch-pan-y select-none overflow-hidden rounded-lg cursor-grab active:cursor-grabbing bg-gray-100 dark:bg-gray-700"
@@ -414,41 +414,41 @@ const ProductDetails = () => {
             </div>
 
             {/* Product Details */}
-            <div className="p-8">
-              <div className="mb-6">
-                <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">{product.name}</h1>
+            <div className="p-6 lg:p-10 border-l border-gray-100 dark:border-gray-700">
+              <div className="mb-8">
+                <h1 className="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-4 leading-tight">{product.name}</h1>
                 
                 {/* Category */}
-                <span className="inline-block bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium mb-6">
+                <span className="inline-block bg-green-100 text-green-800 px-4 py-2 rounded-full text-sm font-medium">
                   {product.category}
                 </span>
               </div>
 
               {/* Price */}
-              <div className="mb-8">
-                <div className="flex items-baseline">
-                  <span className="text-4xl font-bold text-green-600">
+              <div className="mb-10">
+                <div className="flex items-baseline mb-3">
+                  <span className="text-3xl lg:text-4xl font-bold text-green-600">
                     {product.displayPrice || (typeof product.price === 'string' && product.price.includes('₹') ? product.price : `₹${productPrice}`)}
                   </span>
                 </div>
                 
                 {/* Available Units */}
-                <div className="mt-4">
-                  <span className="text-lg text-gray-700 dark:text-gray-300">
+                <div className="bg-gray-50 dark:bg-gray-700/50 p-4 rounded-lg">
+                  <span className="text-base text-gray-700 dark:text-gray-300">
                     <span className="font-semibold">Available units:</span> {product.stock || 50}
                   </span>
                 </div>
               </div>
 
               {/* Amount Selection Chips */}
-              <div className="mb-8">
-                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Select Amount</h3>
-                <div className="flex flex-wrap gap-3">
+              <div className="mb-10">
+                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">Select Amount</h3>
+                <div className="flex flex-wrap gap-4">
                   {getAmountOptions().map((amount: string, index: number) => (
                     <button
                       key={index}
                       onClick={() => setSelectedAmount(amount)}
-                      className={`px-4 py-2 rounded-full border-2 font-medium transition-all duration-200 ${
+                      className={`px-6 py-3 rounded-full border-2 font-medium transition-all duration-200 min-w-[80px] ${
                         selectedAmount === amount
                           ? 'border-green-500 bg-green-500 text-white shadow-lg transform scale-105'
                           : 'border-gray-300 bg-white text-gray-700 hover:border-green-400 hover:shadow-md dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:border-green-400'
@@ -459,28 +459,32 @@ const ProductDetails = () => {
                   ))}
                 </div>
                 {selectedAmount && (
-                  <p className="mt-3 text-sm text-gray-600 dark:text-gray-400">
-                    Selected: <span className="font-semibold text-green-600">{selectedAmount}</span>
-                  </p>
+                  <div className="mt-4 p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                      Selected: <span className="font-semibold text-green-600">{selectedAmount}</span>
+                    </p>
+                  </div>
                 )}
               </div>
 
               {/* Description */}
-              <div className="mb-8">
-                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Description</h3>
-                <div className="text-gray-700 dark:text-gray-300 leading-relaxed text-lg whitespace-pre-line">
-                  {product.description || 'Fresh and delicious fruit, perfect for healthy snacking and cooking.'}
+              <div className="mb-10">
+                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">Description</h3>
+                <div className="bg-gray-50 dark:bg-gray-700/50 p-6 rounded-lg">
+                  <div className="text-gray-700 dark:text-gray-300 leading-relaxed text-base whitespace-pre-line">
+                    {product.description || 'Fresh and delicious fruit, perfect for healthy snacking and cooking.'}
+                  </div>
                 </div>
               </div>
 
               {/* Add to Cart Button */}
-              <div className="space-y-4">
+              <div className="space-y-6">
                 <button 
                   onClick={handleAddToCart}
                   disabled={!isInStock}
-                  className={`w-full py-4 px-8 rounded-full font-semibold text-lg transition-colors flex items-center justify-center ${
+                  className={`w-full py-5 px-8 rounded-xl font-semibold text-lg transition-all duration-200 flex items-center justify-center shadow-lg ${
                     isInStock 
-                      ? 'bg-green-600 text-white hover:bg-green-700' 
+                      ? 'bg-green-600 text-white hover:bg-green-700 hover:shadow-xl transform hover:-translate-y-0.5' 
                       : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                   }`}
                 >
@@ -492,9 +496,9 @@ const ProductDetails = () => {
                 </button>
 
                 {isInStock && (
-                  <div className="text-center">
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
-                      Free delivery on orders above ₹1000
+                  <div className="text-center bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
+                    <p className="text-sm text-blue-700 dark:text-blue-300 font-medium">
+                      🚚 Free delivery on orders above ₹1000
                     </p>
                   </div>
                 )}
@@ -504,20 +508,20 @@ const ProductDetails = () => {
         </div>
 
         {/* Additional Product Info */}
-        <div className="mt-8 bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8">
-          <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Product Information</h3>
-          <div className="grid md:grid-cols-3 gap-6">
-            <div className="text-center p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
-              <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Fresh Quality</h4>
-              <p className="text-gray-600 dark:text-gray-300 text-sm">Hand-picked and quality checked</p>
+        <div className="mt-12 bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8 lg:p-10">
+          <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-8">Product Information</h3>
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="text-center p-6 bg-green-50 dark:bg-green-900/20 rounded-xl">
+              <h4 className="font-semibold text-gray-900 dark:text-white mb-3 text-lg">Fresh Quality</h4>
+              <p className="text-gray-600 dark:text-gray-300">Hand-picked and quality checked</p>
             </div>
-            <div className="text-center p-4 bg-orange-50 dark:bg-orange-900/20 rounded-lg">
-              <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Fast Delivery</h4>
-              <p className="text-gray-600 dark:text-gray-300 text-sm">Same day delivery available</p>
+            <div className="text-center p-6 bg-orange-50 dark:bg-orange-900/20 rounded-xl">
+              <h4 className="font-semibold text-gray-900 dark:text-white mb-3 text-lg">Fast Delivery</h4>
+              <p className="text-gray-600 dark:text-gray-300">Same day delivery available</p>
             </div>
-            <div className="text-center p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-              <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Best Price</h4>
-              <p className="text-gray-600 dark:text-gray-300 text-sm">Competitive pricing guaranteed</p>
+            <div className="text-center p-6 bg-blue-50 dark:bg-blue-900/20 rounded-xl">
+              <h4 className="font-semibold text-gray-900 dark:text-white mb-3 text-lg">Best Price</h4>
+              <p className="text-gray-600 dark:text-gray-300">Competitive pricing guaranteed</p>
             </div>
           </div>
         </div>
