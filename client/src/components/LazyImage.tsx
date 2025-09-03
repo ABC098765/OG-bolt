@@ -14,7 +14,7 @@ const useLoadingAnimation = () => {
   const [animationData, setAnimationData] = useState(null);
 
   useEffect(() => {
-    fetch('/bouncing-fruits.lottie')
+    fetch('/bouncing-fruits.json')
       .then(response => response.json())
       .then(data => setAnimationData(data))
       .catch(console.error);
@@ -27,13 +27,25 @@ const LazyImage = memo<LazyImageProps>(({
   src, 
   alt, 
   className = '', 
-  placeholder = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgdmlld0JveD0iMCAwIDQwMCAzMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iMzAwIiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0xNzUgMTUwTDEyNSAxMDBMMTI1IDE4NUwxNzUgMTM1TDE4NSAxMjVMMjc1IDEyNUwyNzUgMTg1TDE3NSAxNTBaIiBmaWxsPSIjQ0JEMkQ4Ii8+Cjwvc3ZnPgo=',
+  placeholder = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgdmlld0JveD0iMCAwIDQwMCAzMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iMzAwIiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0xNzUgMTUwTDEyNSAxMDBMMTI1IDE4NUwxNzUgMTM1TDE4NSAxMjVMMjc1IDEyNUwyNzUgMTg1TDE3NSAxNTBaIiBmaWxsPSIjQ0JEMkQ4Ci8+Cjwvc3ZnPgo=',
   loading = 'lazy'
 }) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [hasError, setHasError] = useState(false);
+  const [showAnimation, setShowAnimation] = useState(true);
   const imgRef = useRef<HTMLImageElement>(null);
   const animationData = useLoadingAnimation();
+
+  // Add minimum loading time to see animation
+  useEffect(() => {
+    const minLoadingTime = setTimeout(() => {
+      if (isLoaded) {
+        setShowAnimation(false);
+      }
+    }, 1500); // Show animation for at least 1.5 seconds
+
+    return () => clearTimeout(minLoadingTime);
+  }, [isLoaded]);
 
   useEffect(() => {
     const img = imgRef.current;
@@ -57,20 +69,36 @@ const LazyImage = memo<LazyImageProps>(({
     }
   }, [src, loading]);
 
+  const handleImageLoad = () => {
+    console.log('🖼️ Image loaded for:', alt);
+    setIsLoaded(true);
+    // Delay hiding animation to ensure users see it
+    setTimeout(() => setShowAnimation(false), 800);
+  };
+
+  const handleImageError = () => {
+    console.error('❌ Image failed to load for:', alt);
+    setHasError(true);
+    setShowAnimation(false);
+  };
+
+  console.log('🎬 Animation data loaded:', !!animationData, 'Show animation:', showAnimation);
+
   return (
     <div className="relative">
       {/* Bouncing Fruits Loading Animation */}
-      {!isLoaded && !hasError && (
+      {showAnimation && !hasError && (
         <div className="absolute inset-0 flex items-center justify-center bg-gray-50 dark:bg-gray-700 z-10 rounded-lg">
           {animationData ? (
             <Lottie 
               animationData={animationData}
               loop={true}
               style={{ width: 80, height: 80 }}
+              className="drop-shadow-lg"
             />
           ) : (
             <div className="w-20 h-20 bg-gray-200 dark:bg-gray-600 rounded-lg animate-pulse flex items-center justify-center">
-              <div className="text-2xl">🍎</div>
+              <div className="text-2xl animate-bounce">🍎</div>
             </div>
           )}
         </div>
@@ -82,10 +110,10 @@ const LazyImage = memo<LazyImageProps>(({
         src={loading === 'eager' ? src : placeholder}
         alt={alt}
         className={`transition-opacity duration-500 ${
-          isLoaded ? 'opacity-100' : 'opacity-0'
+          isLoaded && !showAnimation ? 'opacity-100' : 'opacity-0'
         } ${className}`}
-        onLoad={() => setIsLoaded(true)}
-        onError={() => setHasError(true)}
+        onLoad={handleImageLoad}
+        onError={handleImageError}
         loading={loading}
       />
       
