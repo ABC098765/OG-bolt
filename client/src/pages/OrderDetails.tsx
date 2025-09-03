@@ -266,9 +266,9 @@ const OrderDetails = () => {
                 const isValidStatus = currentStepIndex !== -1;
 
                 return (
-                  <div className="flex items-center justify-between relative">
+                  <div className="flex items-center justify-between relative sm:justify-between justify-around">
                     {/* Progress Line */}
-                    <div className="absolute top-6 left-8 right-8 h-0.5 bg-gray-200 -z-10">
+                    <div className="absolute top-6 left-4 right-4 sm:left-8 sm:right-8 h-0.5 bg-gray-200 -z-10">
                       <div 
                         className="h-full bg-green-500 transition-all duration-500 ease-in-out"
                         style={{ 
@@ -303,9 +303,9 @@ const OrderDetails = () => {
                       };
 
                       return (
-                        <div key={step.id} className="flex flex-col items-center relative z-10">
+                        <div key={step.id} className="flex flex-col items-center relative z-10 flex-1 max-w-20 sm:max-w-none sm:flex-none">
                           <div 
-                            className={`w-12 h-12 rounded-full flex items-center justify-center border-2 transition-all duration-300 ${
+                            className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center border-2 transition-all duration-300 ${
                               isActive 
                                 ? getActiveColors(step.color)
                                 : isCompleted 
@@ -314,14 +314,16 @@ const OrderDetails = () => {
                             }`}
                           >
                             {isCompleted && !isActive ? (
-                              <CheckCircle className="w-5 h-5" />
+                              <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5" />
                             ) : (
-                              step.icon
+                              <div className="w-4 h-4 sm:w-5 sm:h-5 flex items-center justify-center">
+                                {step.icon}
+                              </div>
                             )}
                           </div>
-                          <div className="mt-3 text-center">
+                          <div className="mt-2 sm:mt-3 text-center px-1">
                             <p 
-                              className={`text-sm font-semibold ${
+                              className={`text-xs sm:text-sm font-semibold leading-tight ${
                                 isActive 
                                   ? getActiveTextColor(step.color)
                                   : isCompleted 
@@ -332,7 +334,7 @@ const OrderDetails = () => {
                               {step.name}
                             </p>
                             {isActive && (
-                              <p className="text-xs text-gray-500 mt-1">Current Status</p>
+                              <p className="text-xs text-gray-500 mt-1 hidden sm:block">Current Status</p>
                             )}
                           </div>
                         </div>
