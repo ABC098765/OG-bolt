@@ -266,9 +266,9 @@ const OrderDetails = () => {
                 const isValidStatus = currentStepIndex !== -1;
 
                 return (
-                  <div className="flex items-center justify-between relative sm:justify-between justify-around">
+                  <div className="flex items-start justify-between relative sm:justify-between justify-around">
                     {/* Progress Line */}
-                    <div className="absolute top-6 left-4 right-4 sm:left-8 sm:right-8 h-0.5 bg-gray-200 -z-10">
+                    <div className="absolute top-5 sm:top-6 left-4 right-4 sm:left-8 sm:right-8 h-0.5 bg-gray-200 -z-10">
                       <div 
                         className="h-full bg-green-500 transition-all duration-500 ease-in-out"
                         style={{ 
@@ -305,7 +305,7 @@ const OrderDetails = () => {
                       return (
                         <div key={step.id} className="flex flex-col items-center relative z-10 flex-1 max-w-20 sm:max-w-none sm:flex-none">
                           <div 
-                            className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center border-2 transition-all duration-300 ${
+                            className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center border-2 transition-all duration-300 flex-shrink-0 ${
                               isActive 
                                 ? getActiveColors(step.color)
                                 : isCompleted 
@@ -321,15 +321,16 @@ const OrderDetails = () => {
                               </div>
                             )}
                           </div>
-                          <div className="mt-2 sm:mt-3 text-center px-1">
+                          <div className="mt-2 sm:mt-3 text-center px-1 min-h-0">
                             <p 
-                              className={`text-xs sm:text-sm font-semibold leading-tight ${
+                              className={`text-xs sm:text-sm font-semibold leading-tight break-words ${
                                 isActive 
                                   ? getActiveTextColor(step.color)
                                   : isCompleted 
                                   ? 'text-green-600' 
                                   : 'text-gray-400'
                               }`}
+                              style={{ wordBreak: 'break-word', hyphens: 'auto' }}
                             >
                               {step.name}
                             </p>
