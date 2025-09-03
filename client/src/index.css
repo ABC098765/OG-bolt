@@ -57,11 +57,11 @@ html, body {
   }
 }
 
-/* Mobile: Ensure minimum 2 columns */
+/* Mobile: Exactly 2 columns */
 @media (max-width: 640px) {
   .product-grid-container {
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)) !important;
-    gap: 1rem !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 0.75rem !important;
     padding: 0 0.5rem;
   }
 }
