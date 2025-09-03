@@ -14,7 +14,7 @@ const Footer = () => {
           {/* Company Info */}
           <div className="space-y-4">
             <div className="flex items-center text-2xl font-bold text-white">
-              <span className="text-3xl mr-3">🍎</span>
+              <img src="/sfc-logo.png" alt="SFC Logo" className="h-10 w-auto mr-3" />
               Super Fruit Center
             </div>
             <p className="text-gray-300 leading-relaxed">
