@@ -33,7 +33,7 @@ const LazyImage = memo<LazyImageProps>(({
   src, 
   alt, 
   className = '', 
-  placeholder = '',
+  placeholder = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgdmlld0JveD0iMCAwIDQwMCAzMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iMzAwIiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0xNzUgMTUwTDEyNSAxMDBMMTI1IDE4NUwxNzUgMTM1TDE4NSAxMjVMMjc1IDEyNUwyNzUgMTg1TDE3NSAxNTBaIiBmaWxsPSIjQ0JEMkQ4Ci8+Cjwvc3ZnPgo=',
   loading = 'lazy'
 }) => {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -42,10 +42,31 @@ const LazyImage = memo<LazyImageProps>(({
   const imgRef = useRef<HTMLImageElement>(null);
   const animationData = useLoadingAnimation();
 
-  // Simplified approach - just load the image directly
+  useEffect(() => {
+    const img = imgRef.current;
+    if (!img) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          img.src = src;
+          observer.disconnect();
+        }
+      },
+      { rootMargin: '50px' }
+    );
+
+    if (loading === 'lazy') {
+      observer.observe(img);
+      return () => observer.disconnect();
+    } else {
+      img.src = src;
+    }
+  }, [src, loading]);
+
   const handleImageLoad = () => {
     setIsLoaded(true);
-    setShowAnimation(false);
+    setShowAnimation(false); // Hide animation immediately when image loads
   };
 
   const handleImageError = () => {
@@ -76,7 +97,7 @@ const LazyImage = memo<LazyImageProps>(({
       {/* Actual Image */}
       <img
         ref={imgRef}
-        src={src}
+        src={loading === 'eager' ? src : ''}
         alt={alt}
         className={`transition-opacity duration-300 ${
           isLoaded ? 'opacity-100' : 'opacity-0'
