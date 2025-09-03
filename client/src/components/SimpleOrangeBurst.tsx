@@ -32,6 +32,7 @@ const SimpleOrangeBurst: React.FC = () => {
   }));
 
   // State management
+  const [mounted, setMounted] = useState(false);
   const [orangeVisible, setOrangeVisible] = useState(false);
   const [orangePosition, setOrangePosition] = useState({ x: -100, y: 50 });
   const [orangeDirection, setOrangeDirection] = useState<'left' | 'right' | 'top'>('left');
@@ -53,6 +54,8 @@ const SimpleOrangeBurst: React.FC = () => {
 
   // Get starting position based on direction
   const getStartPosition = useCallback((direction: 'left' | 'right' | 'top') => {
+    if (typeof window === 'undefined') return { x: -100, y: 50 };
+    
     switch (direction) {
       case 'left':
         return { x: -100, y: 50 };
@@ -67,6 +70,8 @@ const SimpleOrangeBurst: React.FC = () => {
 
   // Create splash particles targeting random characters
   const createSplashParticles = useCallback(() => {
+    if (typeof window === 'undefined') return [];
+    
     const newParticles: SplashParticle[] = [];
     const numSplashes = 8 + Math.floor(Math.random() * 7); // 8-15 splashes
     
@@ -83,31 +88,35 @@ const SimpleOrangeBurst: React.FC = () => {
       const targetIndex = availableChars[Math.floor(Math.random() * availableChars.length)];
       const charElement = characterRefs.current[targetIndex];
       
-      if (charElement) {
-        const charBounds = charElement.getBoundingClientRect();
-        const containerBounds = containerRef.current?.getBoundingClientRect() || { left: 0, top: 0 };
-        
-        // Create splash particle
-        const particle: SplashParticle = {
-          id: `splash-${Date.now()}-${i}`,
-          x: window.innerWidth / 2, // Start from orange position
-          y: window.innerHeight / 2,
-          velocityX: (Math.random() - 0.5) * 8, // Random horizontal velocity
-          velocityY: Math.random() * -3, // Initial upward velocity
-          targetCharIndex: targetIndex,
-          charBounds: {
-            ...charBounds,
-            left: charBounds.left - containerBounds.left,
-            top: charBounds.top - containerBounds.top,
-            right: charBounds.right - containerBounds.left,
-            bottom: charBounds.bottom - containerBounds.top,
-          } as DOMRect,
-          size: 8 + Math.random() * 12, // Random size 8-20px
-          opacity: 0.8 + Math.random() * 0.2,
-          rotation: Math.random() * 360
-        };
-        
-        newParticles.push(particle);
+      if (charElement && containerRef.current) {
+        try {
+          const charBounds = charElement.getBoundingClientRect();
+          const containerBounds = containerRef.current.getBoundingClientRect();
+          
+          // Create splash particle
+          const particle: SplashParticle = {
+            id: `splash-${Date.now()}-${i}`,
+            x: window.innerWidth / 2, // Start from orange position
+            y: window.innerHeight / 2,
+            velocityX: (Math.random() - 0.5) * 8, // Random horizontal velocity
+            velocityY: Math.random() * -3, // Initial upward velocity
+            targetCharIndex: targetIndex,
+            charBounds: {
+              ...charBounds,
+              left: charBounds.left - containerBounds.left,
+              top: charBounds.top - containerBounds.top,
+              right: charBounds.right - containerBounds.left,
+              bottom: charBounds.bottom - containerBounds.top,
+            } as DOMRect,
+            size: 8 + Math.random() * 12, // Random size 8-20px
+            opacity: 0.8 + Math.random() * 0.2,
+            rotation: Math.random() * 360
+          };
+          
+          newParticles.push(particle);
+        } catch (error) {
+          console.warn('Error creating splash particle:', error);
+        }
       }
     }
     
@@ -177,11 +186,12 @@ const SimpleOrangeBurst: React.FC = () => {
           velocityY: newVelocityY,
           opacity: particle.opacity * 0.995 // Gradual fade
         };
-      }).filter(particle => 
-        particle.opacity > 0.1 && 
-        particle.y < window.innerHeight + 100 &&
-        particle.x > -100 && particle.x < window.innerWidth + 100
-      );
+      }).filter(particle => {
+        if (typeof window === 'undefined') return false;
+        return particle.opacity > 0.1 && 
+               particle.y < window.innerHeight + 100 &&
+               particle.x > -100 && particle.x < window.innerWidth + 100;
+      });
 
       return updatedParticles;
     });
@@ -221,7 +231,9 @@ const SimpleOrangeBurst: React.FC = () => {
 
     // Move orange to center
     setTimeout(() => {
-      setOrangePosition({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
+      if (typeof window !== 'undefined') {
+        setOrangePosition({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
+      }
     }, 100);
 
     // Burst and create splashes
@@ -249,9 +261,14 @@ const SimpleOrangeBurst: React.FC = () => {
     }
   }, [characterStates, animationStopped]);
 
+  // Mount check for client-side only rendering
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   // Start animation sequence
   useEffect(() => {
-    if (!animationStopped) {
+    if (!animationStopped && mounted) {
       const intervals: NodeJS.Timeout[] = [];
       
       // Schedule oranges at different intervals
@@ -264,7 +281,20 @@ const SimpleOrangeBurst: React.FC = () => {
         intervals.forEach(clearTimeout);
       };
     }
-  }, [startOrangeAnimation, animationStopped]);
+  }, [startOrangeAnimation, animationStopped, mounted]);
+
+  // Don't render until mounted to avoid SSR issues
+  if (!mounted) {
+    return (
+      <section className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 overflow-hidden">
+        <div className="relative z-10 text-center">
+          <h1 className="text-6xl sm:text-7xl lg:text-9xl font-black leading-tight text-orange-300/20">
+            SUPER FRUIT CENTER
+          </h1>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section 
