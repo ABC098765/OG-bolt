@@ -109,12 +109,12 @@ const OptimizedProductCard = memo<OptimizedProductCardProps>(({ product, onAddTo
         )}
 
         <div className="flex flex-col space-y-3 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
-          <div className="flex items-center space-x-2">
-            <span className="text-lg sm:text-xl font-bold text-green-600">
+          <div className="flex items-center space-x-2 min-w-0 flex-1">
+            <span className="text-sm sm:text-lg md:text-xl font-bold text-green-600 truncate">
               {product.displayPrice || product.price || 'Price not available'}
             </span>
             {product.originalPrice && (
-              <span className="text-sm text-gray-500 dark:text-gray-400 line-through">{product.originalPrice}</span>
+              <span className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 line-through flex-shrink-0">{product.originalPrice}</span>
             )}
           </div>
           <button 
