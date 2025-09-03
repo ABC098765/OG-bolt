@@ -239,7 +239,7 @@ const Products = () => {
             Our <span className="text-green-600 underline-animated">Fresh Products</span>
           </h1>
           <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto animate-slide-up">
-            Discover our complete selection of premium fresh fruits, sourced daily from the finest farms.
+            Discover our complete selection of premium fresh fruits.
           </p>
           <div className="mt-6 flex justify-center items-center space-x-4 animate-slide-up" style={{animationDelay: '0.3s'}}>
             <div className="flex items-center text-green-600">
