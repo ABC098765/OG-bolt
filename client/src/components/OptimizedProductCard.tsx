@@ -83,7 +83,7 @@ const OptimizedProductCard = memo<OptimizedProductCardProps>(({ product, onAddTo
       </div>
 
       {/* Product Info */}
-      <div className="p-6">
+      <div className="p-3 sm:p-6">
         {product.rating && (
           <div className="flex items-center mb-3">
             <div className="flex items-center">
@@ -95,12 +95,12 @@ const OptimizedProductCard = memo<OptimizedProductCardProps>(({ product, onAddTo
           </div>
         )}
 
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3 group-hover:text-green-600 transition-colors line-clamp-2">
+        <h3 className="text-sm sm:text-lg font-semibold text-gray-900 dark:text-white mb-2 sm:mb-3 group-hover:text-green-600 transition-colors line-clamp-2">
           {product.name}
         </h3>
         
         {product.description && (
-          <p className="text-gray-600 dark:text-gray-300 mb-4 text-sm line-clamp-2">
+          <p className="text-gray-600 dark:text-gray-300 mb-2 sm:mb-4 text-xs sm:text-sm line-clamp-2 hidden sm:block">
             {product.description.length > 80 
               ? `${product.description.substring(0, 80)}...`
               : product.description
@@ -108,7 +108,7 @@ const OptimizedProductCard = memo<OptimizedProductCardProps>(({ product, onAddTo
           </p>
         )}
 
-        <div className="flex flex-col space-y-3 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
+        <div className="flex flex-col space-y-2 sm:space-y-3 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
           <div className="flex items-center space-x-2 min-w-0 flex-1">
             <span className="text-sm sm:text-lg md:text-xl font-bold text-green-600 truncate">
               {product.displayPrice || product.price || 'Price not available'}
