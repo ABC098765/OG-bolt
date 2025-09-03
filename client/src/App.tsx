@@ -27,25 +27,27 @@ function AppContent() {
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors">
       <Header />
-      <Notification />
-      <AuthModal />
-      <OrderTutorial 
-        isOpen={state.showTutorial}
-        onClose={hideTutorial}
-        onSkip={skipTutorial}
-      />
-      <Route path="/" component={Home} />
-      <Route path="/products" component={Products} />
-      <Route path="/cart" component={Cart} />
-      <Route path="/orders" component={Orders} />
-      <Route path="/profile" component={Profile} />
-      <Route path="/checkout" component={Checkout} />
-      <Route path="/order/:orderId" component={OrderDetails} />
-      <Route path="/order-success" component={OrderSuccess} />
-      <Route path="/terms-and-conditions" component={TermsAndConditions} />
-      <Route path="/product/:productId" component={ProductDetails} />
-      <Route path="/notifications" component={Notifications} />
-      <Footer />
+      <div className="pt-24">
+        <Notification />
+        <AuthModal />
+        <OrderTutorial 
+          isOpen={state.showTutorial}
+          onClose={hideTutorial}
+          onSkip={skipTutorial}
+        />
+        <Route path="/" component={Home} />
+        <Route path="/products" component={Products} />
+        <Route path="/cart" component={Cart} />
+        <Route path="/orders" component={Orders} />
+        <Route path="/profile" component={Profile} />
+        <Route path="/checkout" component={Checkout} />
+        <Route path="/order/:orderId" component={OrderDetails} />
+        <Route path="/order-success" component={OrderSuccess} />
+        <Route path="/terms-and-conditions" component={TermsAndConditions} />
+        <Route path="/product/:productId" component={ProductDetails} />
+        <Route path="/notifications" component={Notifications} />
+        <Footer />
+      </div>
     </div>
   );
 }
