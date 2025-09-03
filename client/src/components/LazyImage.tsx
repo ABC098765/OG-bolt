@@ -78,6 +78,14 @@ const LazyImage = memo<LazyImageProps>(({
 
   const handleImageError = () => {
     console.error('❌ Image failed to load for:', alt);
+    
+    // Try fallback image first
+    const img = imgRef.current;
+    if (img && img.src !== '/logo-placeholder.png' && !img.src.includes('logo-placeholder.png')) {
+      img.src = '/logo-placeholder.png';
+      return;
+    }
+    
     setHasError(true);
     setShowAnimation(false);
   };

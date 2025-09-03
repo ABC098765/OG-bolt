@@ -32,7 +32,10 @@ const OptimizedProductCard = memo<OptimizedProductCardProps>(({ product, onAddTo
   const navigate = (path: string) => setLocation(path);
   
   const productImages = product.imageUrls || product.image_urls || (product.image ? [product.image] : []);
-  const primaryImage = productImages[0] || 'https://images.pexels.com/photos/1128678/pexels-photo-1128678.jpeg?auto=compress&cs=tinysrgb&w=400';
+  
+  // Filter out invalid URLs and provide fallback
+  const validImages = productImages.filter(url => url && typeof url === 'string' && url.trim() !== '');
+  const primaryImage = validImages.length > 0 ? validImages[0] : '/logo-placeholder.png';
   const isInStock = product.inStock !== false && (product.stock === undefined || product.stock > 0);
   return (
     <div 
