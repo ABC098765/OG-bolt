@@ -15,14 +15,36 @@ const useLoadingAnimation = () => {
 
   useEffect(() => {
     fetch('/bouncing-fruits-new.json')
-      .then(response => response.json())
-      .then(data => setAnimationData(data))
+      .then(response => {
+        if (!response.ok) throw new Error('Failed to fetch');
+        return response.json();
+      })
+      .then(data => {
+        // Validate animation data structure
+        if (data && typeof data === 'object' && data.v && data.layers) {
+          setAnimationData(data);
+        } else {
+          throw new Error('Invalid animation data');
+        }
+      })
       .catch(() => {
         // Fallback to original bouncing fruits animation
         fetch('/bouncing-fruits.json')
-          .then(response => response.json())
-          .then(data => setAnimationData(data))
-          .catch(console.error);
+          .then(response => {
+            if (!response.ok) throw new Error('Failed to fetch fallback');
+            return response.json();
+          })
+          .then(data => {
+            // Validate fallback animation data structure
+            if (data && typeof data === 'object' && data.v && data.layers) {
+              setAnimationData(data);
+            }
+          })
+          .catch(error => {
+            console.error('Failed to load animation:', error);
+            // Set to null to prevent Lottie from trying to render
+            setAnimationData(null);
+          });
       });
   }, []);
 
@@ -39,6 +61,7 @@ const LazyImage = memo<LazyImageProps>(({
   const [isLoaded, setIsLoaded] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [showAnimation, setShowAnimation] = useState(true);
+  const [animationError, setAnimationError] = useState(false);
   const imgRef = useRef<HTMLImageElement>(null);
   const animationData = useLoadingAnimation();
 
@@ -58,12 +81,20 @@ const LazyImage = memo<LazyImageProps>(({
       {/* Bouncing Fruits Loading Animation */}
       {showAnimation && !hasError && (
         <div className="absolute inset-0 flex items-center justify-center bg-gray-50 dark:bg-gray-700 z-10 rounded-lg">
-          {animationData ? (
+          {animationData && !animationError ? (
             <Lottie 
               animationData={animationData}
               loop={true}
+              autoplay={true}
               style={{ width: 80, height: 80 }}
               className="drop-shadow-lg"
+              onLoadedData={() => {
+                // Animation loaded successfully
+              }}
+              onError={() => {
+                console.error('Lottie animation error');
+                setAnimationError(true);
+              }}
             />
           ) : (
             <div className="w-20 h-20 bg-gray-200 dark:bg-gray-600 rounded-lg animate-pulse">
