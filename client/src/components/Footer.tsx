@@ -14,20 +14,7 @@ const Footer = () => {
           {/* Company Info */}
           <div className="space-y-4">
             <div className="flex items-center text-2xl font-bold text-white">
-              <img 
-                src="/logo-placeholder.png" 
-                alt="Super Fruit Center Logo" 
-                className="w-12 h-12 mr-3"
-                onError={(e) => {
-                  // Fallback to text if logo not found
-                  e.currentTarget.style.display = 'none';
-                  const nextElement = e.currentTarget.nextElementSibling;
-                  if (nextElement && nextElement instanceof HTMLElement) {
-                    nextElement.style.display = 'inline';
-                  }
-                }}
-              />
-              <span style={{ display: 'none' }}>🍎</span>
+              <span className="text-3xl mr-3">🍎</span>
               Super Fruit Center
             </div>
             <p className="text-gray-300 leading-relaxed">

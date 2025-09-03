@@ -113,7 +113,7 @@ const LazyImage = memo<LazyImageProps>(({
       {/* Actual Image */}
       <img
         ref={imgRef}
-        src={loading === 'eager' ? src : placeholder}
+        src={loading === 'eager' ? src : ''}
         alt={alt}
         className={`transition-opacity duration-500 ${
           isLoaded && !showAnimation ? 'opacity-100' : 'opacity-0'

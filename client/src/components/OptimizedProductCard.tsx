@@ -37,14 +37,6 @@ const OptimizedProductCard = memo<OptimizedProductCardProps>(({ product, onAddTo
   const validImages = productImages.filter(url => url && typeof url === 'string' && url.trim() !== '');
   const primaryImage = validImages.length > 0 ? validImages[0] : null;
   
-  // Debug logging for image URLs
-  if (validImages.length === 0) {
-    console.log(`🖼️ No valid images for product: ${product.name}`, {
-      imageUrls: product.imageUrls,
-      image_urls: product.image_urls,
-      image: product.image
-    });
-  }
   const isInStock = product.inStock !== false && (product.stock === undefined || product.stock > 0);
   return (
     <div 
