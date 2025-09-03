@@ -36,7 +36,7 @@ const OptimizedProductCard = memo<OptimizedProductCardProps>(({ product, onAddTo
   const isInStock = product.inStock !== false && (product.stock === undefined || product.stock > 0);
   return (
     <div 
-      className="group relative bg-white dark:bg-gray-800 rounded-lg sm:rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-4 overflow-hidden cursor-pointer w-full"
+      className="group relative bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 overflow-hidden cursor-pointer w-full max-w-full"
       onClick={() => navigate(`/product/${product.id}`)}
     >
       {/* Stock Badge */}
@@ -83,7 +83,7 @@ const OptimizedProductCard = memo<OptimizedProductCardProps>(({ product, onAddTo
       </div>
 
       {/* Product Info */}
-      <div className="p-2 sm:p-4 lg:p-6">
+      <div className="p-3 sm:p-4 lg:p-6">
         {product.rating && (
           <div className="flex items-center mb-3">
             <div className="flex items-center">
@@ -95,14 +95,14 @@ const OptimizedProductCard = memo<OptimizedProductCardProps>(({ product, onAddTo
           </div>
         )}
 
-        <h3 className="text-xs sm:text-sm lg:text-lg font-semibold text-gray-900 dark:text-white mb-2 sm:mb-3 group-hover:text-green-600 transition-colors line-clamp-2">
+        <h3 className="text-sm sm:text-base lg:text-lg font-semibold text-gray-900 dark:text-white mb-2 sm:mb-3 group-hover:text-green-600 transition-colors line-clamp-2">
           {product.name}
         </h3>
         
 
         <div className="flex flex-col space-y-2 sm:space-y-3 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
           <div className="flex items-center space-x-2 min-w-0 flex-1">
-            <span className="text-xs sm:text-sm lg:text-lg font-bold text-green-600 truncate">
+            <span className="text-sm sm:text-base lg:text-lg font-bold text-green-600 truncate">
               {product.displayPrice || product.price || 'Price not available'}
             </span>
             {product.originalPrice && (
@@ -116,7 +116,7 @@ const OptimizedProductCard = memo<OptimizedProductCardProps>(({ product, onAddTo
               onAddToCart(product);
             }}
             disabled={!isInStock}
-            className={`w-full sm:w-auto px-2 sm:px-3 py-1 sm:py-2 rounded-lg sm:rounded-xl font-semibold transition-all duration-200 flex items-center justify-center text-xs min-w-fit whitespace-nowrap shadow-lg transform hover:scale-105 active:scale-95 ${
+            className={`w-full sm:w-auto px-3 py-2 rounded-lg sm:rounded-xl font-semibold transition-all duration-200 flex items-center justify-center text-xs sm:text-sm min-w-fit whitespace-nowrap shadow-lg transform hover:scale-105 active:scale-95 ${
               isInStock 
                 ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white hover:from-orange-600 hover:to-orange-700 hover:shadow-xl' 
                 : 'bg-gray-300 text-gray-500 cursor-not-allowed shadow-sm'
@@ -124,8 +124,8 @@ const OptimizedProductCard = memo<OptimizedProductCardProps>(({ product, onAddTo
           >
             {isInStock ? (
               <>
-                <ShoppingCart className="w-3 h-3 sm:w-4 sm:h-4 lg:w-5 lg:h-5 mr-1 sm:mr-2" />
-                <span className="font-bold text-xs">
+                <ShoppingCart className="w-4 h-4 sm:w-5 sm:h-5 mr-1 sm:mr-2" />
+                <span className="font-bold text-xs sm:text-sm">
                   {isAuthenticated ? 'Add to Cart' : 'Sign In'}
                 </span>
               </>

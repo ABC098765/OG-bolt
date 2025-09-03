@@ -85,7 +85,7 @@ const FeaturedProducts = memo(() => {
       <div className="absolute bottom-10 left-10 w-16 h-16 bg-orange-200 rounded-full opacity-30 animate-float" style={{ animationDelay: '1s' }}></div>
       <div className="absolute top-1/2 left-1/4 w-12 h-12 bg-yellow-200 rounded-full opacity-30 animate-float" style={{ animationDelay: '2s' }}></div>
       
-      <div className="w-full mx-auto px-2 sm:px-4 relative z-10 max-w-full box-border overflow-hidden">
+      <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 relative z-10 max-w-7xl">
         <div className="text-center mb-16">
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-6">
             Featured <span className="text-green-600 underline-animated">
@@ -98,7 +98,7 @@ const FeaturedProducts = memo(() => {
         </div>
 
         {/* Real Products Display */}
-        <div className="w-full grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 sm:gap-3 lg:gap-4 mb-12 px-0">
+        <div className="w-full grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-6 lg:gap-8 mb-12">
           {loading ? (
             Array.from({ length: 4 }).map((_, index) => (
               <div 
