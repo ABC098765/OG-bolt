@@ -14,7 +14,7 @@ const useLoadingAnimation = () => {
   const [animationData, setAnimationData] = useState(null);
 
   useEffect(() => {
-    fetch('/bouncing-fruits-new.lottie')
+    fetch('/bouncing-fruits-new.json')
       .then(response => response.json())
       .then(data => setAnimationData(data))
       .catch(() => {
