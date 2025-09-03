@@ -14,10 +14,16 @@ const useLoadingAnimation = () => {
   const [animationData, setAnimationData] = useState(null);
 
   useEffect(() => {
-    fetch('/bouncing-fruits.json')
+    fetch('/bouncing-fruits-new.lottie')
       .then(response => response.json())
       .then(data => setAnimationData(data))
-      .catch(console.error);
+      .catch(() => {
+        // Fallback to original bouncing fruits animation
+        fetch('/bouncing-fruits.json')
+          .then(response => response.json())
+          .then(data => setAnimationData(data))
+          .catch(console.error);
+      });
   }, []);
 
   return animationData;
