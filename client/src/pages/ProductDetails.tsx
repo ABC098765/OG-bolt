@@ -417,11 +417,6 @@ const ProductDetails = () => {
             <div className="p-6 lg:p-10 border-l border-gray-100 dark:border-gray-700">
               <div className="mb-4">
                 <h1 className="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-4 leading-tight">{product.name}</h1>
-                
-                {/* Category */}
-                <span className="inline-block bg-green-100 text-green-800 px-4 py-2 rounded-full text-sm font-medium">
-                  {product.category}
-                </span>
               </div>
 
               {/* Price */}
