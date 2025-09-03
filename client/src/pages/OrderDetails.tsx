@@ -242,7 +242,7 @@ const OrderDetails = () => {
                 </div>
               </div>
             </div>
-            <div className="relative bg-white dark:bg-gray-800 rounded-xl p-6 shadow-inner border border-gray-100 dark:border-gray-700">
+            <div className="relative bg-white dark:bg-gray-800 rounded-xl p-3 sm:p-4 md:p-6 shadow-inner border border-gray-100 dark:border-gray-700">
               {(() => {
                 let currentStatus = order.order_status?.toLowerCase()?.trim();
                 // Map pending to ordered for tracking display
@@ -281,9 +281,9 @@ const OrderDetails = () => {
                 const isValidStatus = currentStepIndex !== -1;
 
                 return (
-                  <div className="flex items-start justify-between relative px-1 sm:px-0 gap-1 sm:gap-0">
+                  <div className="flex items-start justify-between relative px-2 sm:px-4 md:px-6 lg:px-8 gap-2 sm:gap-4 md:gap-6">
                     {/* Enhanced Progress Line with Gradient */}
-                    <div className="absolute top-5 sm:top-6 left-6 right-6 sm:left-8 sm:right-8 h-1 bg-gradient-to-r from-gray-200 to-gray-300 rounded-full shadow-inner -z-10">
+                    <div className="absolute top-5 sm:top-6 left-4 right-4 sm:left-6 sm:right-6 md:left-8 md:right-8 lg:left-10 lg:right-10 h-1 bg-gradient-to-r from-gray-200 to-gray-300 rounded-full shadow-inner -z-10">
                       <div 
                         className="h-full bg-gradient-to-r from-green-400 via-green-500 to-emerald-500 rounded-full transition-all duration-1000 ease-in-out shadow-sm"
                         style={{ 
@@ -337,11 +337,11 @@ const OrderDetails = () => {
                       };
 
                       return (
-                        <div key={step.id} className="flex flex-col items-center relative z-10 flex-1 min-w-0 sm:min-w-20 group px-1 sm:px-0">
+                        <div key={step.id} className="flex flex-col items-center relative z-10 flex-1 min-w-0 sm:min-w-16 md:min-w-20 lg:min-w-24 group px-1 sm:px-2 md:px-3">
                           {/* Step Icon Container */}
                           <div className="relative">
                             <div 
-                              className={`w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center border-3 transition-all duration-500 flex-shrink-0 ${
+                              className={`w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 rounded-full flex items-center justify-center border-3 transition-all duration-500 flex-shrink-0 ${
                                 isActive 
                                   ? getActiveColors(step.color)
                                   : isCompleted 
@@ -350,9 +350,9 @@ const OrderDetails = () => {
                               }`}
                             >
                               {isCompleted && !isActive ? (
-                                <CheckCircle className="w-5 h-5 sm:w-6 sm:h-6 drop-shadow-sm" />
+                                <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 drop-shadow-sm" />
                               ) : (
-                                <div className="w-5 h-5 sm:w-6 sm:h-6 flex items-center justify-center drop-shadow-sm">
+                                <div className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 flex items-center justify-center drop-shadow-sm">
                                   {step.icon}
                                 </div>
                               )}
@@ -360,28 +360,28 @@ const OrderDetails = () => {
                             
                             {/* Completion checkmark overlay */}
                             {isCompleted && (
-                              <div className="absolute -top-1 -right-1 w-5 h-5 bg-green-500 rounded-full flex items-center justify-center shadow-lg">
-                                <CheckCircle className="w-3 h-3 text-white" />
+                              <div className="absolute -top-1 -right-1 w-4 h-4 sm:w-5 sm:h-5 bg-green-500 rounded-full flex items-center justify-center shadow-lg">
+                                <CheckCircle className="w-2 h-2 sm:w-3 sm:h-3 text-white" />
                               </div>
                             )}
                           </div>
                           
                           {/* Step Label */}
-                          <div className="mt-3 sm:mt-4 text-center px-1 min-h-0 w-full">
+                          <div className="mt-2 sm:mt-3 md:mt-4 text-center px-1 min-h-0 w-full">
                             <p 
-                              className={`text-xs sm:text-sm font-semibold leading-tight break-words transition-colors duration-300 ${
+                              className={`text-xs sm:text-sm md:text-base font-semibold leading-tight break-words transition-colors duration-300 ${
                                 isActive 
                                   ? getActiveTextColor(step.color)
                                   : isCompleted 
                                   ? 'text-emerald-600 font-bold' 
                                   : 'text-gray-500 group-hover:text-gray-700'
                               }`}
-                              style={{ wordBreak: 'break-word', hyphens: 'auto', fontSize: '10px' }}
+                              style={{ wordBreak: 'break-word', hyphens: 'auto' }}
                             >
                               {step.name}
                             </p>
                             {isActive && currentStatus !== 'delivered' && (
-                              <div className="mt-2 hidden sm:block">
+                              <div className="mt-1 sm:mt-2 hidden sm:block">
                                 <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 border border-green-200">
                                   <div className="w-2 h-2 bg-green-500 rounded-full mr-1"></div>
                                   Current Status
@@ -389,7 +389,7 @@ const OrderDetails = () => {
                               </div>
                             )}
                             {isCompleted && !isActive && (
-                              <p className="text-xs text-emerald-600 mt-1 font-medium hidden sm:block opacity-75">
+                              <p className="text-xs sm:text-sm text-emerald-600 mt-1 font-medium hidden sm:block opacity-75">
                                 Completed ✓
                               </p>
                             )}
