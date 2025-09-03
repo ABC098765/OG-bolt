@@ -382,9 +382,9 @@ const OrderDetails = () => {
                             </p>
                             {isActive && currentStatus !== 'delivered' && (
                               <div className="mt-0.5 sm:mt-1 md:mt-2 hidden sm:block">
-                                <span className="inline-flex items-center px-1 sm:px-2 py-1 rounded-full text-[10px] sm:text-xs font-medium bg-green-100 text-green-800 border border-green-200">
-                                  <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-green-500 rounded-full mr-1"></div>
-                                  Current Status
+                                <span className="inline-flex items-center px-2 sm:px-3 py-1.5 sm:py-2 rounded-full text-[10px] sm:text-xs font-semibold bg-gradient-to-r from-green-50 to-emerald-50 text-green-700 border-2 border-green-200 shadow-sm backdrop-blur-sm">
+                                  <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-green-500 rounded-full mr-1.5 sm:mr-2 animate-pulse"></div>
+                                  <span className="tracking-wide">Current Status</span>
                                 </span>
                               </div>
                             )}
