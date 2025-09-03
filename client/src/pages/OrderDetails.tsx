@@ -242,7 +242,7 @@ const OrderDetails = () => {
                 </div>
               </div>
             </div>
-            <div className="relative bg-white dark:bg-gray-800 rounded-xl p-3 sm:p-4 md:p-6 shadow-inner border border-gray-100 dark:border-gray-700">
+            <div className="relative bg-white dark:bg-gray-800 rounded-xl p-3 sm:p-4 md:p-6 shadow-inner border border-gray-100 dark:border-gray-700 pl-[0px] pr-[0px] pt-[0px] pb-[0px]">
               {(() => {
                 let currentStatus = order.order_status?.toLowerCase()?.trim();
                 // Map pending to ordered for tracking display
