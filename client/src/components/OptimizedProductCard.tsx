@@ -36,7 +36,7 @@ const OptimizedProductCard = memo<OptimizedProductCardProps>(({ product, onAddTo
   const isInStock = product.inStock !== false && (product.stock === undefined || product.stock > 0);
   return (
     <div 
-      className="group relative bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-4 overflow-hidden cursor-pointer"
+      className="group relative bg-white dark:bg-gray-800 rounded-lg sm:rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-4 overflow-hidden cursor-pointer w-full"
       onClick={() => navigate(`/product/${product.id}`)}
     >
       {/* Stock Badge */}
@@ -69,7 +69,7 @@ const OptimizedProductCard = memo<OptimizedProductCardProps>(({ product, onAddTo
         <LazyImage
           src={primaryImage}
           alt={product.name}
-          className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
+          className="w-full h-32 sm:h-48 md:h-56 lg:h-64 object-cover group-hover:scale-110 transition-transform duration-500"
           loading="lazy"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>

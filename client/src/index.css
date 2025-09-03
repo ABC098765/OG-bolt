@@ -26,9 +26,10 @@
 
 /* Product grid enhancements */
 .product-grid-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1.5rem;
+  display: grid !important;
+  grid-template-columns: repeat(2, 1fr) !important;
+  gap: 0.75rem !important;
+  width: 100% !important;
   animation: fadeInGrid 0.6s ease-out;
 }
 
@@ -43,38 +44,27 @@
   }
 }
 
-/* Mobile: 2 products side by side */
-@media (max-width: 640px) {
-  .product-grid-container {
-    grid-template-columns: 1fr 1fr;
-    gap: 0.5rem;
-    padding: 0;
-    width: 100%;
-    max-width: 100%;
-    overflow-x: hidden;
-  }
-}
-
 /* Tablet: 3 products per row */
-@media (min-width: 641px) and (max-width: 1023px) {
+@media (min-width: 768px) {
   .product-grid-container {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.25rem;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 1rem !important;
   }
 }
 
-/* Desktop: 4+ products per row */
+/* Desktop: 4 products per row */
 @media (min-width: 1024px) {
   .product-grid-container {
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 1.5rem;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 1.25rem !important;
   }
 }
 
-@media (min-width: 1280px) {
+/* Large Desktop: 5 products per row */
+@media (min-width: 1400px) {
   .product-grid-container {
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 2rem;
+    grid-template-columns: repeat(5, 1fr) !important;
+    gap: 1.5rem !important;
   }
 }
 
