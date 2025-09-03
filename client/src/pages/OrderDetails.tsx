@@ -337,7 +337,7 @@ const OrderDetails = () => {
                       };
 
                       return (
-                        <div key={step.id} className="flex flex-col items-center relative z-10 flex-1 min-w-0 sm:min-w-16 md:min-w-20 lg:min-w-24 group px-1 sm:px-2 md:px-3">
+                        <div key={step.id} className="flex flex-col items-center relative z-10 flex-1 min-w-0 sm:min-w-14 md:min-w-18 lg:min-w-24 group px-0.5 sm:px-1 md:px-2 lg:px-3">
                           {/* Step Icon Container */}
                           <div className="relative">
                             <div 
@@ -367,9 +367,9 @@ const OrderDetails = () => {
                           </div>
                           
                           {/* Step Label */}
-                          <div className="mt-2 sm:mt-3 md:mt-4 text-center px-1 min-h-0 w-full">
+                          <div className="mt-1.5 sm:mt-2 md:mt-3 lg:mt-4 text-center px-0.5 sm:px-1 min-h-0 w-full">
                             <p 
-                              className={`text-xs sm:text-sm md:text-base font-semibold leading-tight break-words transition-colors duration-300 ${
+                              className={`text-[10px] xs:text-xs sm:text-sm md:text-base lg:text-lg font-semibold leading-tight break-words transition-colors duration-300 ${
                                 isActive 
                                   ? getActiveTextColor(step.color)
                                   : isCompleted 
@@ -381,15 +381,15 @@ const OrderDetails = () => {
                               {step.name}
                             </p>
                             {isActive && currentStatus !== 'delivered' && (
-                              <div className="mt-1 sm:mt-2 hidden sm:block">
-                                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 border border-green-200">
-                                  <div className="w-2 h-2 bg-green-500 rounded-full mr-1"></div>
+                              <div className="mt-0.5 sm:mt-1 md:mt-2 hidden sm:block">
+                                <span className="inline-flex items-center px-1 sm:px-2 py-1 rounded-full text-[10px] sm:text-xs font-medium bg-green-100 text-green-800 border border-green-200">
+                                  <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-green-500 rounded-full mr-1"></div>
                                   Current Status
                                 </span>
                               </div>
                             )}
                             {isCompleted && !isActive && (
-                              <p className="text-xs sm:text-sm text-emerald-600 mt-1 font-medium hidden sm:block opacity-75">
+                              <p className="text-[10px] sm:text-xs md:text-sm text-emerald-600 mt-1 font-medium hidden sm:block opacity-75">
                                 Completed ✓
                               </p>
                             )}
