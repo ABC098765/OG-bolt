@@ -225,9 +225,24 @@ const OrderDetails = () => {
           </div>
 
           {/* Order Tracking Status Bar */}
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
-            <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-6">Order Tracking</h3>
-            <div className="relative">
+          <div className="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 p-8">
+            <div className="flex items-center justify-between mb-8">
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center">
+                  <Truck className="w-5 h-5 text-white" />
+                </div>
+                <div>
+                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white">Order Tracking</h3>
+                  <p className="text-gray-500 dark:text-gray-400 text-sm">Track your order status in real-time</p>
+                </div>
+              </div>
+              <div className="hidden sm:block">
+                <div className="bg-gradient-to-r from-green-500 to-emerald-500 text-white px-4 py-2 rounded-full text-sm font-medium shadow-lg">
+                  Live Updates
+                </div>
+              </div>
+            </div>
+            <div className="relative bg-white dark:bg-gray-800 rounded-xl p-6 shadow-inner border border-gray-100 dark:border-gray-700">
               {(() => {
                 let currentStatus = order.order_status?.toLowerCase()?.trim();
                 // Map pending to ordered for tracking display
@@ -267,75 +282,116 @@ const OrderDetails = () => {
 
                 return (
                   <div className="flex items-start justify-between relative sm:justify-between justify-around">
-                    {/* Progress Line */}
-                    <div className="absolute top-5 sm:top-6 left-4 right-4 sm:left-8 sm:right-8 h-0.5 bg-gray-200 -z-10">
+                    {/* Enhanced Progress Line with Gradient */}
+                    <div className="absolute top-5 sm:top-6 left-4 right-4 sm:left-8 sm:right-8 h-1 bg-gradient-to-r from-gray-200 to-gray-300 rounded-full shadow-inner -z-10">
                       <div 
-                        className="h-full bg-green-500 transition-all duration-500 ease-in-out"
+                        className="h-full bg-gradient-to-r from-green-400 via-green-500 to-emerald-500 rounded-full transition-all duration-1000 ease-in-out shadow-sm"
                         style={{ 
                           width: isValidStatus ? `${(currentStepIndex / (steps.length - 1)) * 100}%` : '0%' 
                         }}
                       />
+                      {/* Animated glow effect for active progress */}
+                      {isValidStatus && (
+                        <div 
+                          className="absolute top-0 h-full bg-gradient-to-r from-green-300 to-emerald-300 rounded-full opacity-50 animate-pulse"
+                          style={{ 
+                            width: `${(currentStepIndex / (steps.length - 1)) * 100}%` 
+                          }}
+                        />
+                      )}
                     </div>
 
                     {steps.map((step, index) => {
                       const isActive = step.id === currentStatus;
                       const isCompleted = isValidStatus && index <= currentStepIndex;
                       
-                      // Get specific colors for each step
+                      // Enhanced colors with gradients and effects
                       const getActiveColors = (color: string) => {
                         switch (color) {
-                          case 'orange': return 'bg-orange-500 border-orange-500 text-white shadow-lg scale-110';
-                          case 'purple': return 'bg-purple-500 border-purple-500 text-white shadow-lg scale-110';
-                          case 'blue': return 'bg-blue-500 border-blue-500 text-white shadow-lg scale-110';
-                          case 'green': return 'bg-green-500 border-green-500 text-white shadow-lg scale-110';
-                          default: return 'bg-gray-500 border-gray-500 text-white shadow-lg scale-110';
+                          case 'orange': return 'bg-gradient-to-r from-orange-500 to-orange-600 border-orange-400 text-white shadow-xl scale-110 animate-pulse ring-4 ring-orange-200 ring-opacity-50';
+                          case 'purple': return 'bg-gradient-to-r from-purple-500 to-purple-600 border-purple-400 text-white shadow-xl scale-110 animate-pulse ring-4 ring-purple-200 ring-opacity-50';
+                          case 'blue': return 'bg-gradient-to-r from-blue-500 to-blue-600 border-blue-400 text-white shadow-xl scale-110 animate-pulse ring-4 ring-blue-200 ring-opacity-50';
+                          case 'green': return 'bg-gradient-to-r from-green-500 to-emerald-600 border-green-400 text-white shadow-xl scale-110 animate-pulse ring-4 ring-green-200 ring-opacity-50';
+                          default: return 'bg-gradient-to-r from-gray-500 to-gray-600 border-gray-400 text-white shadow-xl scale-110 ring-4 ring-gray-200 ring-opacity-50';
+                        }
+                      };
+
+                      const getCompletedColors = (color: string) => {
+                        switch (color) {
+                          case 'orange': return 'bg-gradient-to-r from-orange-400 to-orange-500 border-orange-300 text-white shadow-lg transform hover:scale-105';
+                          case 'purple': return 'bg-gradient-to-r from-purple-400 to-purple-500 border-purple-300 text-white shadow-lg transform hover:scale-105';
+                          case 'blue': return 'bg-gradient-to-r from-blue-400 to-blue-500 border-blue-300 text-white shadow-lg transform hover:scale-105';
+                          case 'green': return 'bg-gradient-to-r from-green-400 to-emerald-500 border-green-300 text-white shadow-lg transform hover:scale-105';
+                          default: return 'bg-gradient-to-r from-gray-400 to-gray-500 border-gray-300 text-white shadow-lg';
                         }
                       };
 
                       const getActiveTextColor = (color: string) => {
                         switch (color) {
-                          case 'orange': return 'text-orange-600';
-                          case 'purple': return 'text-purple-600';
-                          case 'blue': return 'text-blue-600';
-                          case 'green': return 'text-green-600';
-                          default: return 'text-gray-600';
+                          case 'orange': return 'text-orange-700 font-bold';
+                          case 'purple': return 'text-purple-700 font-bold';
+                          case 'blue': return 'text-blue-700 font-bold';
+                          case 'green': return 'text-emerald-700 font-bold';
+                          default: return 'text-gray-700 font-bold';
                         }
                       };
 
                       return (
-                        <div key={step.id} className="flex flex-col items-center relative z-10 flex-1 max-w-20 sm:max-w-none sm:flex-none">
-                          <div 
-                            className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center border-2 transition-all duration-300 flex-shrink-0 ${
-                              isActive 
-                                ? getActiveColors(step.color)
-                                : isCompleted 
-                                ? 'bg-green-500 border-green-500 text-white' 
-                                : 'bg-white border-gray-300 text-gray-400'
-                            }`}
-                          >
-                            {isCompleted && !isActive ? (
-                              <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5" />
-                            ) : (
-                              <div className="w-4 h-4 sm:w-5 sm:h-5 flex items-center justify-center">
-                                {step.icon}
+                        <div key={step.id} className="flex flex-col items-center relative z-10 flex-1 max-w-20 sm:max-w-none sm:flex-none group">
+                          {/* Step Icon Container */}
+                          <div className="relative">
+                            <div 
+                              className={`w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center border-3 transition-all duration-500 flex-shrink-0 ${
+                                isActive 
+                                  ? getActiveColors(step.color)
+                                  : isCompleted 
+                                  ? getCompletedColors(step.color)
+                                  : 'bg-gradient-to-r from-gray-100 to-gray-200 border-gray-300 text-gray-400 shadow-sm hover:shadow-md hover:scale-105'
+                              }`}
+                            >
+                              {isCompleted && !isActive ? (
+                                <CheckCircle className="w-5 h-5 sm:w-6 sm:h-6 drop-shadow-sm" />
+                              ) : (
+                                <div className="w-5 h-5 sm:w-6 sm:h-6 flex items-center justify-center drop-shadow-sm">
+                                  {step.icon}
+                                </div>
+                              )}
+                            </div>
+                            
+                            {/* Completion checkmark overlay */}
+                            {isCompleted && (
+                              <div className="absolute -top-1 -right-1 w-5 h-5 bg-green-500 rounded-full flex items-center justify-center shadow-lg animate-bounce">
+                                <CheckCircle className="w-3 h-3 text-white" />
                               </div>
                             )}
                           </div>
-                          <div className="mt-2 sm:mt-3 text-center px-1 min-h-0">
+                          
+                          {/* Step Label */}
+                          <div className="mt-3 sm:mt-4 text-center px-1 min-h-0">
                             <p 
-                              className={`text-xs sm:text-sm font-semibold leading-tight break-words ${
+                              className={`text-xs sm:text-sm font-semibold leading-tight break-words transition-colors duration-300 ${
                                 isActive 
                                   ? getActiveTextColor(step.color)
                                   : isCompleted 
-                                  ? 'text-green-600' 
-                                  : 'text-gray-400'
+                                  ? 'text-emerald-600 font-bold' 
+                                  : 'text-gray-500 group-hover:text-gray-700'
                               }`}
                               style={{ wordBreak: 'break-word', hyphens: 'auto' }}
                             >
                               {step.name}
                             </p>
                             {isActive && (
-                              <p className="text-xs text-gray-500 mt-1 hidden sm:block">Current Status</p>
+                              <div className="mt-2 hidden sm:block">
+                                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 border border-green-200 animate-pulse">
+                                  <div className="w-2 h-2 bg-green-500 rounded-full mr-1 animate-ping"></div>
+                                  Current Status
+                                </span>
+                              </div>
+                            )}
+                            {isCompleted && !isActive && (
+                              <p className="text-xs text-emerald-600 mt-1 font-medium hidden sm:block opacity-75">
+                                Completed ✓
+                              </p>
                             )}
                           </div>
                         </div>
