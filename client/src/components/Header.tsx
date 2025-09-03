@@ -63,7 +63,7 @@ const Header = () => {
         <div className="flex justify-between items-center">
           <div className="flex items-center">
             <div className="flex items-center text-2xl font-bold text-green-600 dark:text-green-400">
-              <span className="text-3xl mr-3">🍎</span>
+              <img src="/sfc-logo.png" alt="SFC Logo" className="w-10 h-10 mr-3" />
               Super Fruit Center
             </div>
           </div>
