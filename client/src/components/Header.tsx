@@ -45,6 +45,8 @@ const Header = () => {
         <div className="max-w-7xl mx-auto px-4 flex justify-between items-center text-sm">
           <div className="w-full text-center overflow-hidden relative">
             <div className="relative bg-green-600 py-3 px-6">
+              {/* Shining effect overlay */}
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-20 animate-shine rounded-lg"></div>
               
               {/* Content */}
               <div className="relative z-10 flex items-center justify-center">
