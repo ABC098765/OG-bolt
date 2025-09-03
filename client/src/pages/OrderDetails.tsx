@@ -380,7 +380,7 @@ const OrderDetails = () => {
                             >
                               {step.name}
                             </p>
-                            {isActive && (
+                            {isActive && currentStatus !== 'delivered' && (
                               <div className="mt-2 hidden sm:block">
                                 <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 border border-green-200">
                                   <div className="w-2 h-2 bg-green-500 rounded-full mr-1"></div>
