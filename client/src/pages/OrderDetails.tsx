@@ -281,9 +281,9 @@ const OrderDetails = () => {
                 const isValidStatus = currentStepIndex !== -1;
 
                 return (
-                  <div className="flex items-start justify-between relative sm:justify-between justify-around">
+                  <div className="flex items-start justify-between relative px-2 sm:px-0">
                     {/* Enhanced Progress Line with Gradient */}
-                    <div className="absolute top-5 sm:top-6 left-4 right-4 sm:left-8 sm:right-8 h-1 bg-gradient-to-r from-gray-200 to-gray-300 rounded-full shadow-inner -z-10">
+                    <div className="absolute top-5 sm:top-6 left-6 right-6 sm:left-8 sm:right-8 h-1 bg-gradient-to-r from-gray-200 to-gray-300 rounded-full shadow-inner -z-10">
                       <div 
                         className="h-full bg-gradient-to-r from-green-400 via-green-500 to-emerald-500 rounded-full transition-all duration-1000 ease-in-out shadow-sm"
                         style={{ 
@@ -337,7 +337,7 @@ const OrderDetails = () => {
                       };
 
                       return (
-                        <div key={step.id} className="flex flex-col items-center relative z-10 flex-1 max-w-20 sm:max-w-none sm:flex-none group">
+                        <div key={step.id} className="flex flex-col items-center relative z-10 flex-1 min-w-0 sm:min-w-20 group">
                           {/* Step Icon Container */}
                           <div className="relative">
                             <div 
@@ -367,7 +367,7 @@ const OrderDetails = () => {
                           </div>
                           
                           {/* Step Label */}
-                          <div className="mt-3 sm:mt-4 text-center px-1 min-h-0">
+                          <div className="mt-3 sm:mt-4 text-center px-1 min-h-0 w-full">
                             <p 
                               className={`text-xs sm:text-sm font-semibold leading-tight break-words transition-colors duration-300 ${
                                 isActive 
@@ -376,7 +376,7 @@ const OrderDetails = () => {
                                   ? 'text-emerald-600 font-bold' 
                                   : 'text-gray-500 group-hover:text-gray-700'
                               }`}
-                              style={{ wordBreak: 'break-word', hyphens: 'auto' }}
+                              style={{ wordBreak: 'break-word', hyphens: 'auto', fontSize: '10px' }}
                             >
                               {step.name}
                             </p>
