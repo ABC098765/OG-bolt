@@ -33,13 +33,20 @@ const OptimizedProductCard = memo<OptimizedProductCardProps>(({ product, onAddTo
   
   const productImages = product.imageUrls || product.image_urls || (product.image ? [product.image] : []);
   
-  // Filter out invalid URLs and known problematic domains
-  const invalidDomains = ['wikipedia.org', 'britannica.com', 'fandom.com', 'plantvine.com'];
+  // Only allow Firebase Storage URLs or well-known working image hosts
   const validImages = productImages.filter(url => {
     if (!url || typeof url !== 'string' || url.trim() === '') return false;
-    // Check if URL contains any problematic domains
-    return !invalidDomains.some(domain => url.includes(domain));
+    
+    // Allow Firebase Storage URLs
+    if (url.includes('firebasestorage.googleapis.com')) {
+      return true;
+    }
+    
+    // Allow certain reliable image hosts
+    const allowedHosts = ['images.pexels.com', 'images.unsplash.com', 'cdn.pixabay.com'];
+    return allowedHosts.some(host => url.includes(host));
   });
+  
   const primaryImage = validImages.length > 0 ? validImages[0] : null;
   const isInStock = product.inStock !== false && (product.stock === undefined || product.stock > 0);
   return (
