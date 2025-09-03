@@ -33,9 +33,9 @@ const OptimizedProductCard = memo<OptimizedProductCardProps>(({ product, onAddTo
   
   const productImages = product.imageUrls || product.image_urls || (product.image ? [product.image] : []);
   
-  // Filter out invalid URLs and provide fallback
+  // Filter out invalid URLs - no fallback placeholder
   const validImages = productImages.filter(url => url && typeof url === 'string' && url.trim() !== '');
-  const primaryImage = validImages.length > 0 ? validImages[0] : '/logo-placeholder.png';
+  const primaryImage = validImages.length > 0 ? validImages[0] : null;
   const isInStock = product.inStock !== false && (product.stock === undefined || product.stock > 0);
   return (
     <div 
@@ -67,23 +67,25 @@ const OptimizedProductCard = memo<OptimizedProductCardProps>(({ product, onAddTo
         </button>
       </div>
 
-      {/* Product Image */}
-      <div className="relative overflow-hidden">
-        <LazyImage
-          src={primaryImage}
-          alt={product.name}
-          className="w-full h-40 sm:h-48 md:h-56 lg:h-64 object-cover group-hover:scale-110 transition-transform duration-500"
-          loading="lazy"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-        {!isInStock && (
-          <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-            <span className="bg-red-500 text-white px-4 py-2 rounded-full font-semibold text-sm">
-              Out of Stock
-            </span>
-          </div>
-        )}
-      </div>
+      {/* Product Image - Only show if valid image exists */}
+      {primaryImage && (
+        <div className="relative overflow-hidden">
+          <LazyImage
+            src={primaryImage}
+            alt={product.name}
+            className="w-full h-40 sm:h-48 md:h-56 lg:h-64 object-cover group-hover:scale-110 transition-transform duration-500"
+            loading="lazy"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          {!isInStock && (
+            <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+              <span className="bg-red-500 text-white px-4 py-2 rounded-full font-semibold text-sm">
+                Out of Stock
+              </span>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Product Info */}
       <div className="p-3 sm:p-4 lg:p-6">
