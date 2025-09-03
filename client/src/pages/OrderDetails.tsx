@@ -293,7 +293,7 @@ const OrderDetails = () => {
                       {/* Animated glow effect for active progress */}
                       {isValidStatus && (
                         <div 
-                          className="absolute top-0 h-full bg-gradient-to-r from-green-300 to-emerald-300 rounded-full opacity-50 animate-pulse"
+                          className="absolute top-0 h-full bg-gradient-to-r from-green-300 to-emerald-300 rounded-full opacity-50"
                           style={{ 
                             width: `${(currentStepIndex / (steps.length - 1)) * 100}%` 
                           }}
@@ -308,11 +308,11 @@ const OrderDetails = () => {
                       // Enhanced colors with gradients and effects
                       const getActiveColors = (color: string) => {
                         switch (color) {
-                          case 'orange': return 'bg-gradient-to-r from-orange-500 to-orange-600 border-orange-400 text-white shadow-xl scale-110 animate-pulse ring-4 ring-orange-200 ring-opacity-50';
-                          case 'purple': return 'bg-gradient-to-r from-purple-500 to-purple-600 border-purple-400 text-white shadow-xl scale-110 animate-pulse ring-4 ring-purple-200 ring-opacity-50';
-                          case 'blue': return 'bg-gradient-to-r from-blue-500 to-blue-600 border-blue-400 text-white shadow-xl scale-110 animate-pulse ring-4 ring-blue-200 ring-opacity-50';
-                          case 'green': return 'bg-gradient-to-r from-green-500 to-emerald-600 border-green-400 text-white shadow-xl scale-110 animate-pulse ring-4 ring-green-200 ring-opacity-50';
-                          default: return 'bg-gradient-to-r from-gray-500 to-gray-600 border-gray-400 text-white shadow-xl scale-110 ring-4 ring-gray-200 ring-opacity-50';
+                          case 'orange': return 'bg-gradient-to-r from-orange-500 to-orange-600 border-orange-400 text-white shadow-xl scale-110';
+                          case 'purple': return 'bg-gradient-to-r from-purple-500 to-purple-600 border-purple-400 text-white shadow-xl scale-110';
+                          case 'blue': return 'bg-gradient-to-r from-blue-500 to-blue-600 border-blue-400 text-white shadow-xl scale-110';
+                          case 'green': return 'bg-gradient-to-r from-green-500 to-emerald-600 border-green-400 text-white shadow-xl scale-110';
+                          default: return 'bg-gradient-to-r from-gray-500 to-gray-600 border-gray-400 text-white shadow-xl scale-110';
                         }
                       };
 
@@ -382,8 +382,8 @@ const OrderDetails = () => {
                             </p>
                             {isActive && (
                               <div className="mt-2 hidden sm:block">
-                                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 border border-green-200 animate-pulse">
-                                  <div className="w-2 h-2 bg-green-500 rounded-full mr-1 animate-ping"></div>
+                                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 border border-green-200">
+                                  <div className="w-2 h-2 bg-green-500 rounded-full mr-1"></div>
                                   Current Status
                                 </span>
                               </div>
