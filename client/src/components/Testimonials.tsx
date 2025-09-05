@@ -154,46 +154,92 @@ const AndroidApp = () => {
             </div>
           </div>
 
-          {/* Actual Phone Display with Screenshots */}
+          {/* Enhanced Phone Display with Screenshots */}
           <div className="relative">
-            <div className="relative z-10 max-w-sm mx-auto">
-              {/* Phone Frame */}
-              <div className="bg-gray-900 rounded-[3rem] p-2 shadow-2xl">
-                <div className="bg-white rounded-[2.5rem] overflow-hidden">
-                  {/* App Screenshot */}
-                  <div className="relative h-[600px] overflow-hidden">
-                    <img
-                      src={screenshots[currentScreenshot].src}
-                      alt={screenshots[currentScreenshot].alt}
-                      className="w-full h-full object-cover transition-opacity duration-500"
-                      onError={(e) => {
-                        console.error('Failed to load screenshot:', screenshots[currentScreenshot].src);
-                        const target = e.target as HTMLImageElement;
-                        target.style.display = 'none';
-                      }}
-                    />
+            <div className="relative z-10 max-w-sm mx-auto transform hover:scale-105 transition-transform duration-300">
+              {/* Phone Frame with Realistic Details */}
+              <div className="bg-gradient-to-b from-gray-800 via-gray-900 to-black rounded-[3.5rem] p-3 shadow-2xl ring-4 ring-gray-700/20">
+                
+                {/* Phone Speaker and Camera */}
+                <div className="flex justify-center items-center mb-2">
+                  <div className="w-16 h-2 bg-gray-700 rounded-full"></div>
+                  <div className="w-3 h-3 bg-gray-800 rounded-full ml-3 ring-2 ring-gray-600"></div>
+                </div>
+                
+                {/* Screen Container */}
+                <div className="bg-black rounded-[2.8rem] p-1 shadow-inner">
+                  <div className="bg-white rounded-[2.5rem] overflow-hidden relative">
                     
-                    {/* Screenshot Navigation Dots */}
-                    <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
-                      {screenshots.map((_, index) => (
-                        <button
-                          key={index}
-                          onClick={() => setCurrentScreenshot(index)}
-                          className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                            index === currentScreenshot 
-                              ? 'bg-white shadow-lg' 
-                              : 'bg-white/50 hover:bg-white/70'
-                          }`}
-                        />
-                      ))}
+                    {/* Status Bar */}
+                    <div className="bg-gradient-to-r from-green-500 to-emerald-500 h-8 flex items-center justify-between px-6 text-white text-xs font-medium">
+                      <div className="flex items-center space-x-1">
+                        <div className="text-white">9:41 AM</div>
+                      </div>
+                      <div className="flex items-center space-x-1">
+                        <div className="flex space-x-1">
+                          <div className="w-1 h-1 bg-white rounded-full"></div>
+                          <div className="w-1 h-1 bg-white rounded-full"></div>
+                          <div className="w-1 h-1 bg-white rounded-full"></div>
+                        </div>
+                        <div className="w-6 h-3 border border-white rounded-sm relative">
+                          <div className="w-4 h-1.5 bg-white rounded-xs absolute top-0.5 left-0.5"></div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    {/* App Screenshot */}
+                    <div className="relative h-[580px] overflow-hidden bg-gray-50">
+                      <img
+                        src={screenshots[currentScreenshot].src}
+                        alt={screenshots[currentScreenshot].alt}
+                        className="w-full h-full object-cover transition-all duration-700 transform"
+                        onError={(e) => {
+                          console.error('Failed to load screenshot:', screenshots[currentScreenshot].src);
+                          const target = e.target as HTMLImageElement;
+                          target.style.display = 'none';
+                        }}
+                      />
+                      
+                      {/* Floating Action Button Simulation */}
+                      <div className="absolute bottom-20 right-4 w-14 h-14 bg-gradient-to-r from-orange-500 to-orange-600 rounded-full shadow-lg flex items-center justify-center">
+                        <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                        </svg>
+                      </div>
+                      
+                      {/* Screenshot Navigation Dots */}
+                      <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex space-x-3 bg-black/30 backdrop-blur-sm rounded-full px-4 py-2">
+                        {screenshots.map((_, index) => (
+                          <button
+                            key={index}
+                            onClick={() => setCurrentScreenshot(index)}
+                            className={`w-3 h-3 rounded-full transition-all duration-300 transform ${
+                              index === currentScreenshot 
+                                ? 'bg-orange-500 shadow-lg scale-125' 
+                                : 'bg-white/60 hover:bg-white/80 hover:scale-110'
+                            }`}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                    
+                    {/* Home Indicator */}
+                    <div className="flex justify-center pb-2 pt-1">
+                      <div className="w-32 h-1 bg-gray-300 rounded-full"></div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
             
-            {/* Background decoration */}
-            <div className="absolute -top-4 -right-4 w-full h-full bg-gradient-to-br from-green-400 to-emerald-400 rounded-[3rem] -z-10 opacity-20"></div>
+            {/* Enhanced Background Decoration */}
+            <div className="absolute -top-8 -right-8 w-full h-full bg-gradient-to-br from-green-400 via-emerald-400 to-teal-500 rounded-[4rem] -z-10 opacity-15 blur-sm"></div>
+            <div className="absolute -bottom-4 -left-4 w-3/4 h-3/4 bg-gradient-to-tr from-orange-400 to-yellow-400 rounded-[3rem] -z-20 opacity-10"></div>
+            
+            {/* Floating Elements */}
+            <div className="absolute top-10 -left-6 w-4 h-4 bg-green-400 rounded-full opacity-30 animate-pulse"></div>
+            <div className="absolute bottom-20 -right-8 w-6 h-6 bg-orange-400 rounded-full opacity-40 animate-pulse delay-300"></div>
+            <div className="absolute top-32 -right-4 w-3 h-3 bg-emerald-400 rounded-full opacity-35 animate-pulse delay-700"></div>
           </div>
         </div>
       </div>
