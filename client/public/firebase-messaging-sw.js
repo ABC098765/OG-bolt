@@ -4,12 +4,12 @@ importScripts('https://www.gstatic.com/firebasejs/12.0.0/firebase-messaging-comp
 
 // Initialize Firebase in the service worker
 firebase.initializeApp({
-  apiKey: "AIzaSyDBk7Njz9W1Gd6q97S-XtxqnXrkStbJZnk",
-  authDomain: "super-fruit-center-69794.firebaseapp.com",
-  projectId: "super-fruit-center-69794",
-  storageBucket: "super-fruit-center-69794.appspot.com",
-  messagingSenderId: "334494456886",
-  appId: "1:334494456886:web:super-fruit-center-69794"
+  apiKey: "AIzaSyBcenzLE1BSgtC6zs1Iat0DUb-OKgvu_w4",
+  authDomain: "superfruitcenter1979.firebaseapp.com",
+  projectId: "superfruitcenter1979",
+  storageBucket: "superfruitcenter1979.firebasestorage.app",
+  messagingSenderId: "352081158916",
+  appId: "1:352081158916:web:36e178fa7ec061f092a651"
 });
 
 const messaging = firebase.messaging();
