@@ -24,7 +24,7 @@ const Contact = () => {
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">Visit Our Store</h3>
-                  <p className="text-gray-600 dark:text-gray-300">123 Fresh Street<br />Fruit Valley, FV 12345</p>
+                  <p className="text-gray-600 dark:text-gray-300">Opp PH Medical Centre, Near Challenger out gate,<br />behind Thakur Mall, NS Phadke Road,<br />Thakur Village, Kandivali(E), Mumbai 400101</p>
                 </div>
               </div>
 
@@ -34,7 +34,7 @@ const Contact = () => {
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">Call Us</h3>
-                  <p className="text-gray-600 dark:text-gray-300">(555) 123-4567<br />Toll-free: (800) 123-FRUIT</p>
+                  <p className="text-gray-600 dark:text-gray-300">+91 9004335515<br />For orders & inquiries</p>
                 </div>
               </div>
 
@@ -44,7 +44,7 @@ const Contact = () => {
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">Email Us</h3>
-                  <p className="text-gray-600 dark:text-gray-300">info@superfruitcenter.com<br />orders@superfruitcenter.com</p>
+                  <p className="text-gray-600 dark:text-gray-300">superfruitcenter@gmail.com<br />For orders & support</p>
                 </div>
               </div>
             </div>
