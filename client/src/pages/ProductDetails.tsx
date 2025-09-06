@@ -5,6 +5,7 @@ import { ArrowLeft, ShoppingCart } from 'lucide-react';
 import { useCart } from '../contexts/CartContext';
 import { useAuth } from '../contexts/AuthContext';
 import { firestoreService } from '../services/firestoreService';
+import ProductStructuredData from '../components/ProductStructuredData';
 
 const ProductDetails = () => {
   const { productId } = useParams();
@@ -258,6 +259,9 @@ const ProductDetails = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
+      {/* Add structured data for SEO */}
+      {product && <ProductStructuredData product={product} />}
+      
       <div className="max-w-6xl mx-auto px-4">
         <div className="mb-8">
           <button 
