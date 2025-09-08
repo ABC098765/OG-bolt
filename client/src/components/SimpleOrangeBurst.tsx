@@ -7,10 +7,11 @@ interface SplashParticle {
   velocityX: number;
   velocityY: number;
   targetCharIndex: number;
-  charBounds: DOMRect;
   size: number;
   opacity: number;
   rotation: number;
+  color: string;
+  trail: { x: number; y: number; opacity: number }[];
 }
 
 interface CharacterState {
@@ -18,24 +19,27 @@ interface CharacterState {
   painted: boolean;
   splashCount: number;
   opacity: number;
+  glowIntensity: number;
 }
 
 const SimpleOrangeBurst: React.FC = () => {
-  // Text broken into individual characters
   const text = "SUPER FRUIT CENTER";
   const characters = text.split('').map((char, index) => ({
     char,
     index,
     painted: false,
     splashCount: 0,
-    opacity: 0
+    opacity: 0,
+    glowIntensity: 0
   }));
 
-  // Performance configuration per orange.md
+  // Enhanced performance config
   const PERFORMANCE_CONFIG = useMemo(() => ({
-    maxActiveParticles: 30,        // Hard limit per orange.md
-    particlePoolSize: 50,          // Pre-allocated particle pool
-    cleanupThreshold: 0.05,        // Remove particles below this opacity
+    maxActiveParticles: 40,
+    particleSpeed: 12,
+    animationDuration: 8000,
+    burstInterval: 1500,
+    trailLength: 8,
     isMobile: /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
       typeof navigator !== 'undefined' ? navigator.userAgent : ''
     )
@@ -44,396 +48,270 @@ const SimpleOrangeBurst: React.FC = () => {
   // State management
   const [mounted, setMounted] = useState(false);
   const [orangeVisible, setOrangeVisible] = useState(false);
-  const [orangePosition, setOrangePosition] = useState({ x: -100, y: 50 });
-  const [orangeDirection, setOrangeDirection] = useState<'left' | 'right' | 'top'>('left');
+  const [orangePosition, setOrangePosition] = useState({ x: 0, y: 0 });
+  const [orangeScale, setOrangeScale] = useState(1);
+  const [orangeRotation, setOrangeRotation] = useState(0);
   const [splashParticles, setSplashParticles] = useState<SplashParticle[]>([]);
   const [characterStates, setCharacterStates] = useState<CharacterState[]>(characters);
-  const [animationStopped, setAnimationStopped] = useState(false);
-  const [orangeCount, setOrangeCount] = useState(0);
+  const [animationPhase, setAnimationPhase] = useState<'idle' | 'entering' | 'exploding' | 'revealing'>('idle');
+  const [screenShake, setScreenShake] = useState(0);
 
   // Refs
   const containerRef = useRef<HTMLDivElement>(null);
   const characterRefs = useRef<(HTMLSpanElement | null)[]>([]);
   const animationFrameRef = useRef<number>();
-  
-  // Particle pool for memory efficiency
-  const particlePoolRef = useRef<SplashParticle[]>([]);
-  const activeParticleCount = useRef<number>(0);
+  const lastFrameTime = useRef<number>(0);
 
-  // Get random entry direction for orange
-  const getRandomDirection = useCallback(() => {
-    const directions: ('left' | 'right' | 'top')[] = ['left', 'right', 'top'];
-    return directions[Math.floor(Math.random() * directions.length)];
+  // Enhanced orange entry animation
+  const startOrangeAnimation = useCallback(() => {
+    if (!containerRef.current) return;
+
+    setAnimationPhase('entering');
+    setOrangeVisible(true);
+    
+    const centerX = window.innerWidth / 2;
+    const centerY = window.innerHeight / 2;
+    
+    // Start from random edge with dynamic entry
+    const entryDirections = [
+      { x: -200, y: centerY, targetX: centerX, targetY: centerY },
+      { x: window.innerWidth + 200, y: centerY, targetX: centerX, targetY: centerY },
+      { x: centerX, y: -200, targetX: centerX, targetY: centerY },
+      { x: centerX, y: window.innerHeight + 200, targetX: centerX, targetY: centerY }
+    ];
+    
+    const entry = entryDirections[Math.floor(Math.random() * entryDirections.length)];
+    setOrangePosition({ x: entry.x, y: entry.y });
+
+    // Animate orange to center with bounce and rotation
+    const startTime = Date.now();
+    const duration = 1500;
+
+    const animateEntry = () => {
+      const elapsed = Date.now() - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      
+      // Easing function for bouncy effect
+      const easeOut = 1 - Math.pow(1 - progress, 3);
+      const bounce = 1 + Math.sin(progress * Math.PI * 4) * 0.1 * (1 - progress);
+      
+      const currentX = entry.x + (entry.targetX - entry.x) * easeOut;
+      const currentY = entry.y + (entry.targetY - entry.y) * easeOut;
+      
+      setOrangePosition({ x: currentX, y: currentY });
+      setOrangeScale(bounce);
+      setOrangeRotation(progress * 720); // 2 full rotations
+      
+      if (progress < 1) {
+        requestAnimationFrame(animateEntry);
+      } else {
+        // Start explosion after a brief pause
+        setTimeout(() => {
+          setAnimationPhase('exploding');
+          explodeOrange();
+        }, 300);
+      }
+    };
+    
+    requestAnimationFrame(animateEntry);
   }, []);
 
-  // Get starting position based on direction
-  const getStartPosition = useCallback((direction: 'left' | 'right' | 'top') => {
-    if (typeof window === 'undefined') return { x: -100, y: 50 };
-    
-    switch (direction) {
-      case 'left':
-        return { x: -100, y: 50 };
-      case 'right':
-        return { x: window.innerWidth + 100, y: 50 };
-      case 'top':
-        return { x: window.innerWidth / 2, y: -100 };
-      default:
-        return { x: -100, y: 50 };
-    }
-  }, []);
+  // Enhanced explosion with screen shake and particle burst
+  const explodeOrange = useCallback(() => {
+    if (!containerRef.current) return;
 
-  // Create splash particles targeting random characters
-  const createSplashParticles = useCallback(() => {
-    if (typeof window === 'undefined') return [];
+    // Screen shake effect
+    setScreenShake(20);
+    setTimeout(() => setScreenShake(0), 300);
+
+    // Hide orange with explosion scale
+    setOrangeVisible(false);
     
+    // Create enhanced splash particles
     const newParticles: SplashParticle[] = [];
-    // Mobile optimization: reduce particle count
-    const baseSplashCount = PERFORMANCE_CONFIG.isMobile ? 6 : 8;
-    const maxSplashCount = PERFORMANCE_CONFIG.isMobile ? 10 : 15;
-    const numSplashes = baseSplashCount + Math.floor(Math.random() * (maxSplashCount - baseSplashCount + 1));
+    const particleCount = PERFORMANCE_CONFIG.isMobile ? 30 : 50;
     
-    // Get available characters (not fully painted)
+    // Available target characters
     const availableChars = characterStates
-      .filter(char => char.char !== ' ' && char.splashCount < 3)
       .map((_, index) => index)
       .filter(index => characterStates[index].char !== ' ');
 
-    if (availableChars.length === 0) return [];
-
-    for (let i = 0; i < numSplashes; i++) {
-      // Pick random character to target
+    for (let i = 0; i < particleCount; i++) {
+      if (availableChars.length === 0) break;
+      
       const targetIndex = availableChars[Math.floor(Math.random() * availableChars.length)];
       const charElement = characterRefs.current[targetIndex];
       
       if (charElement && containerRef.current) {
-        try {
-          const charBounds = charElement.getBoundingClientRect();
-          const containerBounds = containerRef.current.getBoundingClientRect();
-          
-          // Enhanced splash particle creation with trajectory calculation
-          const startX = window.innerWidth / 2;
-          const startY = window.innerHeight / 2;
-          const targetX = charBounds.left - containerBounds.left + (charBounds.width / 2);
-          const targetY = charBounds.top - containerBounds.top + (charBounds.height / 2);
-          
-          // Calculate trajectory toward character center (orange.md mathematical approach)
-          const distance = Math.sqrt(Math.pow(targetX - startX, 2) + Math.pow(targetY - startY, 2));
-          const timeToTarget = Math.max(30, distance / 8); // Minimum 30 frames to target
-          
-          // Enhanced initial velocity calculation for precise targeting
-          const baseVelocityX = (targetX - startX) / timeToTarget;
-          const baseVelocityY = (targetY - startY) / timeToTarget;
-          
-          // Add random variation for natural splash spread
-          const velocityX = baseVelocityX + (Math.random() - 0.5) * 3;
-          const velocityY = baseVelocityY + (Math.random() - 0.5) * 2 - 1; // Slight upward bias
-          
-          const particle: SplashParticle = {
-            id: `splash-${Date.now()}-${i}`,
-            x: startX,
-            y: startY,
-            velocityX,
-            velocityY,
-            targetCharIndex: targetIndex,
-            charBounds: {
-              ...charBounds,
-              left: charBounds.left - containerBounds.left,
-              top: charBounds.top - containerBounds.top,
-              right: charBounds.right - containerBounds.left,
-              bottom: charBounds.bottom - containerBounds.top,
-              width: charBounds.width,
-              height: charBounds.height
-            } as DOMRect,
-            size: 6 + Math.random() * 18, // Enhanced size variation (6-24px per orange.md)
-            opacity: 0.85 + Math.random() * 0.15,
-            rotation: Math.random() * 360
-          };
-          
-          newParticles.push(particle);
-        } catch (error) {
-          console.warn('Error creating splash particle:', error);
-        }
+        const charBounds = charElement.getBoundingClientRect();
+        const containerBounds = containerRef.current.getBoundingClientRect();
+        
+        // Calculate trajectory with some spread
+        const targetX = charBounds.left - containerBounds.left + (charBounds.width / 2);
+        const targetY = charBounds.top - containerBounds.top + (charBounds.height / 2);
+        
+        const spread = 100;
+        const finalTargetX = targetX + (Math.random() - 0.5) * spread;
+        const finalTargetY = targetY + (Math.random() - 0.5) * spread;
+        
+        // Random initial direction with arc
+        const angle = (Math.random() * Math.PI * 2);
+        const speed = PERFORMANCE_CONFIG.particleSpeed + Math.random() * 8;
+        
+        newParticles.push({
+          id: `particle-${i}`,
+          x: orangePosition.x,
+          y: orangePosition.y,
+          velocityX: Math.cos(angle) * speed,
+          velocityY: Math.sin(angle) * speed,
+          targetCharIndex: targetIndex,
+          size: 8 + Math.random() * 12,
+          opacity: 1,
+          rotation: Math.random() * 360,
+          color: `hsl(${20 + Math.random() * 30}, ${80 + Math.random() * 20}%, ${50 + Math.random() * 30}%)`,
+          trail: []
+        });
       }
     }
     
-    return newParticles;
-  }, [characterStates]);
-
-  // Enhanced physics configuration per orange.md specifications
-  const PHYSICS_CONFIG = useMemo(() => ({
-    gravity: 0.2,              // pixels per frame² (mathematical approach)
-    airResistance: 0.99,       // velocity damping coefficient  
-    restitution: 0.3,          // bounce factor for boundary collisions
-    maxVelocity: 15,           // maximum velocity limit for stability
-    deltaTime: 1,              // frame time multiplier for consistent physics
-  }), []);
-
-  // Enhanced splash visual styles per orange.md
-  const SPLASH_STYLES = useMemo(() => ({
-    cartoonish: {
-      borderRadius: '60% 40% 55% 65%',
-      background: 'radial-gradient(ellipse at 30% 30%, rgba(255, 180, 71, 0.9) 0%, rgba(255, 140, 0, 0.8) 40%, rgba(255, 101, 24, 0.7) 80%, rgba(255, 69, 0, 0.6) 100%)',
-      filter: 'drop-shadow(0 0 3px rgba(255, 140, 0, 0.4)) blur(0.2px)',
-      transform: 'scale(1.1)'
-    },
-    realistic: {
-      clipPath: 'ellipse(50% 60% at 40% 35%)',
-      background: 'linear-gradient(135deg, rgba(255, 140, 0, 0.9) 0%, rgba(255, 183, 71, 0.8) 30%, rgba(255, 117, 24, 0.7) 70%, rgba(255, 69, 0, 0.6) 100%)',
-      filter: 'blur(0.3px) brightness(1.05) saturate(1.1)',
-      transform: 'scale(0.95)'
-    }
-  }), []);
-
-  // Particle pool management functions
-  const getParticleFromPool = useCallback((): SplashParticle | null => {
-    if (activeParticleCount.current >= PERFORMANCE_CONFIG.maxActiveParticles) {
-      return null; // Respect particle limit
-    }
+    setSplashParticles(newParticles);
+    setAnimationPhase('revealing');
     
-    if (particlePoolRef.current.length > 0) {
-      activeParticleCount.current++;
-      return particlePoolRef.current.pop()!;
-    }
-    
-    // Create new particle if pool is empty
-    activeParticleCount.current++;
-    return {
-      id: `splash-${Date.now()}-${Math.random()}`,
-      x: 0, y: 0, velocityX: 0, velocityY: 0,
-      targetCharIndex: 0, charBounds: {} as DOMRect,
-      size: 0, opacity: 0, rotation: 0
+    // Start particle animation
+    animateParticles();
+  }, [orangePosition, characterStates, PERFORMANCE_CONFIG]);
+
+  // Enhanced particle animation with trails and physics
+  const animateParticles = useCallback(() => {
+    const animate = (currentTime: number) => {
+      const deltaTime = currentTime - lastFrameTime.current;
+      lastFrameTime.current = currentTime;
+      
+      setSplashParticles(prevParticles => {
+        return prevParticles.map(particle => {
+          // Update trail
+          const newTrail = [
+            { x: particle.x, y: particle.y, opacity: particle.opacity },
+            ...particle.trail.slice(0, PERFORMANCE_CONFIG.trailLength - 1)
+          ].map((point, index) => ({
+            ...point,
+            opacity: point.opacity * (1 - index / PERFORMANCE_CONFIG.trailLength)
+          }));
+
+          // Apply gravity and arc motion
+          const gravity = 0.2;
+          const drag = 0.99;
+          
+          particle.velocityY += gravity;
+          particle.velocityX *= drag;
+          particle.velocityY *= drag;
+          
+          // Update position
+          particle.x += particle.velocityX;
+          particle.y += particle.velocityY;
+          particle.rotation += 5;
+          
+          // Check collision with target character
+          const charElement = characterRefs.current[particle.targetCharIndex];
+          if (charElement && containerRef.current) {
+            const charBounds = charElement.getBoundingClientRect();
+            const containerBounds = containerRef.current.getBoundingClientRect();
+            
+            const charCenterX = charBounds.left - containerBounds.left + (charBounds.width / 2);
+            const charCenterY = charBounds.top - containerBounds.top + (charBounds.height / 2);
+            
+            const distance = Math.sqrt(
+              Math.pow(particle.x - charCenterX, 2) + 
+              Math.pow(particle.y - charCenterY, 2)
+            );
+            
+            if (distance < 30) {
+              // Hit character - start painting
+              setCharacterStates(prev => {
+                const newStates = [...prev];
+                if (newStates[particle.targetCharIndex]) {
+                  newStates[particle.targetCharIndex].painted = true;
+                  newStates[particle.targetCharIndex].opacity = Math.min(1, 
+                    newStates[particle.targetCharIndex].opacity + 0.2);
+                  newStates[particle.targetCharIndex].glowIntensity = 1;
+                  newStates[particle.targetCharIndex].splashCount += 1;
+                }
+                return newStates;
+              });
+              
+              particle.opacity = 0; // Remove particle
+            }
+          }
+          
+          // Fade out over time
+          particle.opacity -= 0.01;
+          
+          return {
+            ...particle,
+            trail: newTrail
+          };
+        }).filter(particle => particle.opacity > 0);
+      });
+      
+      // Continue animation if particles exist
+      setTimeout(() => {
+        setSplashParticles(current => {
+          if (current.length > 0) {
+            animationFrameRef.current = requestAnimationFrame(animate);
+          }
+          return current;
+        });
+      }, 16); // ~60fps
     };
-  }, [PERFORMANCE_CONFIG.maxActiveParticles]);
-
-  const recycleParticle = useCallback((particle: SplashParticle) => {
-    // Reset particle properties for reuse
-    particle.x = 0;
-    particle.y = 0;
-    particle.velocityX = 0;
-    particle.velocityY = 0;
-    particle.opacity = 1;
-    particle.rotation = 0;
     
-    particlePoolRef.current.push(particle);
-    activeParticleCount.current = Math.max(0, activeParticleCount.current - 1);
+    lastFrameTime.current = performance.now();
+    animationFrameRef.current = requestAnimationFrame(animate);
+  }, [PERFORMANCE_CONFIG]);
+
+  // Glow decay animation
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCharacterStates(prev => prev.map(char => ({
+        ...char,
+        glowIntensity: Math.max(0, char.glowIntensity - 0.02)
+      })));
+    }, 50);
+    
+    return () => clearInterval(interval);
   }, []);
 
-  // Enhanced physics animation loop with precise timing
-  const lastUpdateRef = useRef<number>(0);
-  const animateSplashes = useCallback(() => {
-    if (animationStopped) return;
-
-    // Target 60fps with high-resolution timing
-    const now = Date.now();
-    if (now - lastUpdateRef.current < 16) { // 60fps = ~16ms per frame
-      animationFrameRef.current = requestAnimationFrame(animateSplashes);
-      return;
-    }
-    const deltaTime = Math.min((now - lastUpdateRef.current) / 16, 2); // Cap delta for stability
-    lastUpdateRef.current = now;
-
-    setSplashParticles(prevParticles => {
-      if (prevParticles.length === 0) return prevParticles;
-      
-      const updatedParticles = prevParticles.map(particle => {
-        // Enhanced physics calculations per orange.md mathematical approach
-        let newVelocityX = particle.velocityX;
-        let newVelocityY = particle.velocityY;
-        
-        // Apply gravity (constant downward acceleration)
-        newVelocityY += PHYSICS_CONFIG.gravity * deltaTime;
-        
-        // Apply air resistance (velocity damping)
-        newVelocityX *= PHYSICS_CONFIG.airResistance;
-        newVelocityY *= PHYSICS_CONFIG.airResistance;
-        
-        // Clamp velocities to prevent instability
-        newVelocityX = Math.max(-PHYSICS_CONFIG.maxVelocity, Math.min(PHYSICS_CONFIG.maxVelocity, newVelocityX));
-        newVelocityY = Math.max(-PHYSICS_CONFIG.maxVelocity, Math.min(PHYSICS_CONFIG.maxVelocity, newVelocityY));
-        
-        // Update position using enhanced velocity calculations
-        let newX = particle.x + newVelocityX * deltaTime;
-        let newY = particle.y + newVelocityY * deltaTime;
-        
-        // Enhanced boundary constraint system
-        const charBounds = particle.charBounds;
-        const constraintPadding = 2; // Buffer for natural splash overflow
-        
-        // Horizontal boundary enforcement with bounce
-        if (newX < charBounds.left - constraintPadding) {
-          newX = charBounds.left - constraintPadding;
-          newVelocityX *= -PHYSICS_CONFIG.restitution;
-        } else if (newX > charBounds.right + constraintPadding) {
-          newX = charBounds.right + constraintPadding;
-          newVelocityX *= -PHYSICS_CONFIG.restitution;
-        }
-        
-        // Vertical boundary enforcement (allow dripping to character bottom)
-        if (newY < charBounds.top - constraintPadding) {
-          newY = charBounds.top - constraintPadding;
-          newVelocityY *= -PHYSICS_CONFIG.restitution;
-        } else if (newY > charBounds.bottom + 10) {
-          // Allow slight drip past character bottom for natural effect
-          newY = charBounds.bottom + 10;
-          newVelocityY = 0; // Stop dripping
-        }
-        
-        // Enhanced character paint detection
-        const withinCharBounds = (
-          newX >= charBounds.left - 1 && 
-          newX <= charBounds.right + 1 && 
-          newY >= charBounds.top - 1 && 
-          newY <= charBounds.bottom + 1
-        );
-        
-        // Enhanced paint detection with progressive character painting
-        if (withinCharBounds) {
-          setCharacterStates(prevStates => {
-            const newStates = [...prevStates];
-            if (newStates[particle.targetCharIndex]) {
-              // More precise paint accumulation
-              const paintIncrement = 0.15; // Faster painting response
-              newStates[particle.targetCharIndex].splashCount += paintIncrement;
-              
-              // Progressive opacity revelation based on splash count
-              const splashCount = newStates[particle.targetCharIndex].splashCount;
-              if (splashCount >= 0.5 && splashCount < 1.5) {
-                // Partial paint state
-                newStates[particle.targetCharIndex].opacity = splashCount / 1.5 * 0.6;
-              } else if (splashCount >= 1.5) {
-                // Full paint state
-                newStates[particle.targetCharIndex].opacity = Math.min(splashCount / 2.5, 1);
-                newStates[particle.targetCharIndex].painted = true;
-              }
-            }
-            return newStates;
-          });
-        }
-        
-        return {
-          ...particle,
-          x: newX,
-          y: newY,
-          velocityX: newVelocityX,
-          velocityY: newVelocityY,
-          opacity: particle.opacity * 0.992, // Enhanced gradual fade
-          rotation: particle.rotation + 1.5 // Continuous rotation for visual appeal
-        };
-      }).filter(particle => {
-        if (typeof window === 'undefined') return false;
-        
-        // Enhanced particle cleanup with recycling
-        const isVisible = particle.opacity > PERFORMANCE_CONFIG.cleanupThreshold;
-        const isOnScreen = particle.y < window.innerHeight + 50;
-        const withinBounds = particle.x > -50 && particle.x < window.innerWidth + 50;
-        
-        if (!isVisible || !isOnScreen || !withinBounds) {
-          // Recycle particle back to pool
-          recycleParticle(particle);
-          return false;
-        }
-        
-        return true;
-      });
-
-      return updatedParticles;
-    });
-
-    if (!animationStopped) {
-      animationFrameRef.current = requestAnimationFrame(animateSplashes);
-    }
-  }, [animationStopped]);
-
-  // Start splash animation
-  useEffect(() => {
-    if (splashParticles.length > 0 && !animationStopped) {
-      // Clear any existing animation frame before starting new one
-      if (animationFrameRef.current) {
-        cancelAnimationFrame(animationFrameRef.current);
-      }
-      animationFrameRef.current = requestAnimationFrame(animateSplashes);
-    }
-    return () => {
-      if (animationFrameRef.current) {
-        cancelAnimationFrame(animationFrameRef.current);
-        animationFrameRef.current = undefined;
-      }
-    };
-  }, [splashParticles, animateSplashes, animationStopped]);
-
-  // Orange animation sequence
-  const startOrangeAnimation = useCallback(() => {
-    if (animationStopped) return;
-
-    const direction = getRandomDirection();
-    const startPos = getStartPosition(direction);
-    
-    setOrangeDirection(direction);
-    setOrangePosition(startPos);
-    setOrangeVisible(true);
-
-    // Move orange to center
-    setTimeout(() => {
-      if (typeof window !== 'undefined') {
-        setOrangePosition({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
-      }
-    }, 100);
-
-    // Burst and create splashes
-    setTimeout(() => {
-      setOrangeVisible(false);
-      const newSplashes = createSplashParticles();
-      setSplashParticles(prev => [...prev, ...newSplashes]);
-      setOrangeCount(prev => prev + 1);
-    }, 2000);
-
-  }, [getRandomDirection, getStartPosition, createSplashParticles, animationStopped]);
-
-  // Check if animation should stop (all characters painted)
-  useEffect(() => {
-    const allCharactersPainted = characterStates.every(char => 
-      char.char === ' ' || char.painted
-    );
-    
-    if (allCharactersPainted && !animationStopped) {
-      setAnimationStopped(true);
-      // Clear any remaining splashes after a delay
-      setTimeout(() => {
-        setSplashParticles([]);
-      }, 2000);
-    }
-  }, [characterStates, animationStopped]);
-
-  // Mount check for client-side only rendering
+  // Auto-start animation sequence
   useEffect(() => {
     setMounted(true);
-  }, []);
-
-  // Start animation sequence
-  useEffect(() => {
-    if (!animationStopped && mounted) {
-      const intervals: NodeJS.Timeout[] = [];
+    
+    const startSequence = () => {
+      // Reset everything
+      setCharacterStates(characters);
+      setSplashParticles([]);
+      setAnimationPhase('idle');
       
-      // Schedule oranges at different intervals
-      intervals.push(setTimeout(startOrangeAnimation, 1000));
-      intervals.push(setTimeout(startOrangeAnimation, 6000));
-      intervals.push(setTimeout(startOrangeAnimation, 11000));
-      intervals.push(setTimeout(startOrangeAnimation, 16000));
+      // Start after delay
+      setTimeout(startOrangeAnimation, 1000);
+    };
 
-      return () => {
-        intervals.forEach(clearTimeout);
-      };
-    }
-  }, [startOrangeAnimation, animationStopped, mounted]);
+    startSequence();
+    
+    // Repeat animation every 12 seconds
+    const interval = setInterval(startSequence, 12000);
+    
+    return () => {
+      clearInterval(interval);
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
+    };
+  }, [startOrangeAnimation]);
 
-  // Don't render until mounted to avoid SSR issues
   if (!mounted) {
     return (
-      <section className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 overflow-hidden">
-        <div className="relative z-10 text-center">
-          <h1 className="text-6xl sm:text-7xl lg:text-9xl font-black leading-tight text-orange-300/20">
-            SUPER FRUIT CENTER
-          </h1>
+      <section className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+        <div className="text-6xl font-black text-orange-500 animate-pulse">
+          Loading...
         </div>
       </section>
     );
@@ -443,60 +321,66 @@ const SimpleOrangeBurst: React.FC = () => {
     <section 
       ref={containerRef}
       className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 overflow-hidden"
+      style={{
+        transform: screenShake > 0 ? `translate(${(Math.random() - 0.5) * screenShake}px, ${(Math.random() - 0.5) * screenShake}px)` : 'none',
+        transition: screenShake > 0 ? 'none' : 'transform 0.3s ease-out'
+      }}
     >
-      
-      {/* Orange Emoji */}
+      {/* Enhanced Orange with glow and rotation */}
       {orangeVisible && (
         <div 
-          className="absolute text-6xl z-30 transition-all duration-2000 ease-out"
+          className="absolute text-8xl z-30 transition-all duration-300 ease-out"
           style={{
-            left: orangePosition.x - 30,
-            top: orangePosition.y - 30,
-            transform: orangeVisible ? 'scale(1)' : 'scale(0)',
+            left: orangePosition.x - 40,
+            top: orangePosition.y - 40,
+            transform: `scale(${orangeScale}) rotate(${orangeRotation}deg)`,
+            filter: `drop-shadow(0 0 30px rgba(255, 140, 0, 0.8)) drop-shadow(0 0 60px rgba(255, 140, 0, 0.4))`,
+            animation: animationPhase === 'entering' ? 'pulse 0.5s infinite alternate' : 'none'
           }}
         >
           🍊
         </div>
       )}
 
-      {/* Enhanced Splash Particles with Visual Styles */}
-      {splashParticles.map((particle, index) => {
-        // Choose visual style based on particle index for variety
-        const useRealistic = index % 3 === 0;
-        const visualStyle = useRealistic ? SPLASH_STYLES.realistic : SPLASH_STYLES.cartoonish;
-        
-        // Mobile performance: reduce visual effects
-        const mobileOptimizedStyle = PERFORMANCE_CONFIG.isMobile ? {
-          filter: 'none', // Remove complex filters on mobile
-          transform: `rotate(${particle.rotation}deg) scale(${PERFORMANCE_CONFIG.isMobile ? 0.8 : 1})`
-        } : {
-          filter: visualStyle.filter,
-          transform: `rotate(${particle.rotation}deg) ${visualStyle.transform}`
-        };
-        
-        return (
+      {/* Enhanced Splash Particles with trails */}
+      {splashParticles.map((particle) => (
+        <div key={particle.id}>
+          {/* Particle trail */}
+          {particle.trail.map((trailPoint, index) => (
+            <div
+              key={`${particle.id}-trail-${index}`}
+              className="absolute pointer-events-none z-20 rounded-full"
+              style={{
+                left: trailPoint.x - particle.size / 4,
+                top: trailPoint.y - particle.size / 4,
+                width: particle.size / 2,
+                height: particle.size / 2,
+                background: particle.color,
+                opacity: trailPoint.opacity * 0.6,
+                filter: 'blur(2px)'
+              }}
+            />
+          ))}
+          
+          {/* Main particle */}
           <div
-            key={particle.id}
-            className="absolute pointer-events-none z-20 transition-opacity duration-100"
+            className="absolute pointer-events-none z-20 rounded-full"
             style={{
               left: particle.x - particle.size / 2,
               top: particle.y - particle.size / 2,
               width: particle.size,
               height: particle.size,
-              background: visualStyle.background,
-              borderRadius: 'borderRadius' in visualStyle ? visualStyle.borderRadius : undefined,
-              clipPath: 'clipPath' in visualStyle ? visualStyle.clipPath : undefined,
+              background: `radial-gradient(circle, ${particle.color}, ${particle.color}dd)`,
               opacity: particle.opacity,
-              boxShadow: PERFORMANCE_CONFIG.isMobile 
-                ? 'none' 
-                : `0 0 ${particle.size * 0.3}px rgba(255, 140, 0, ${particle.opacity * 0.4})`,
-              ...mobileOptimizedStyle
+              transform: `rotate(${particle.rotation}deg)`,
+              filter: `drop-shadow(0 0 ${particle.size}px ${particle.color}) blur(1px)`,
+              animation: 'sparkle 0.1s infinite alternate'
             }}
           />
-        );
-      })}
+        </div>
+      ))}
       
-      {/* Text with Individual Character Spans */}
+      {/* Enhanced Text with Dynamic Effects */}
       <div className="relative z-10 text-center">
         <h1 className="text-6xl sm:text-7xl lg:text-9xl font-black leading-tight">
           {characterStates.map((charState, index) => (
@@ -507,21 +391,43 @@ const SimpleOrangeBurst: React.FC = () => {
               style={{
                 opacity: charState.opacity,
                 background: charState.painted 
-                  ? `linear-gradient(45deg, rgba(255, 102, 0, 1) 0%, rgba(255, 149, 0, 1) 50%, rgba(255, 69, 0, 1) 100%)`
+                  ? `linear-gradient(45deg, 
+                      hsl(20, 90%, 50%) 0%, 
+                      hsl(30, 100%, 60%) 30%,
+                      hsl(15, 95%, 45%) 70%,
+                      hsl(35, 100%, 55%) 100%)`
                   : 'transparent',
                 WebkitBackgroundClip: charState.painted ? 'text' : 'unset',
                 backgroundClip: charState.painted ? 'text' : 'unset',
                 color: charState.painted ? 'transparent' : 'rgba(255, 140, 0, 0.1)',
-                textShadow: charState.painted ? '0 0 20px rgba(255, 102, 0, 0.3)' : 'none',
-                transform: charState.painted ? 'scale(1.02)' : 'scale(1)',
+                textShadow: charState.painted && charState.glowIntensity > 0
+                  ? `0 0 ${20 * charState.glowIntensity}px rgba(255, 102, 0, ${charState.glowIntensity * 0.8}),
+                     0 0 ${40 * charState.glowIntensity}px rgba(255, 140, 0, ${charState.glowIntensity * 0.4})`
+                  : 'none',
+                transform: `scale(${charState.painted ? 1.02 + charState.glowIntensity * 0.05 : 1})`,
+                filter: charState.painted && charState.glowIntensity > 0 
+                  ? `brightness(${1 + charState.glowIntensity * 0.3})`
+                  : 'none'
               }}
             >
               {charState.char === ' ' ? '\u00A0' : charState.char}
-              {index === 10 && <br />} {/* Line break after "SUPER FRUIT" */}
+              {index === 10 && <br />}
             </span>
           ))}
         </h1>
       </div>
+
+      <style>{`
+        @keyframes sparkle {
+          0% { filter: brightness(1) drop-shadow(0 0 10px currentColor); }
+          100% { filter: brightness(1.5) drop-shadow(0 0 20px currentColor); }
+        }
+        
+        @keyframes pulse {
+          0% { filter: drop-shadow(0 0 20px rgba(255, 140, 0, 0.6)); }
+          100% { filter: drop-shadow(0 0 40px rgba(255, 140, 0, 1)); }
+        }
+      `}</style>
     </section>
   );
 };

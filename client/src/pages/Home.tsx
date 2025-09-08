@@ -1,6 +1,6 @@
 import React from 'react';
 import Hero from '../components/Hero';
-import ThreeJsOrangeBurst from '../components/ThreeJsOrangeBurst';
+import SimpleOrangeBurst from '../components/SimpleOrangeBurst';
 import WhyChooseUs from '../components/WhyChooseUs';
 import FeaturedProducts from '../components/FeaturedProducts';
 import AndroidApp from '../components/Testimonials';
@@ -9,7 +9,7 @@ const Home = () => {
   return (
     <>
       <Hero />
-      <ThreeJsOrangeBurst />
+      <SimpleOrangeBurst />
       <WhyChooseUs />
       <FeaturedProducts />
       <AndroidApp />
