@@ -1,0 +1,285 @@
+I want you to build a realistic orange burst animation for my homepage using Three.js. The animation should follow real-world physics and math, feel cinematic, and integrate seamlessly into my fruit store website.
+
+🎬 Animation Flow (Step-by-Step)
+
+Initial State
+
+Scene background visible.
+
+3D text “SUPER FRUIT CENTER” exists but is invisible.
+
+Orange Entry
+
+A single orange (sphere with realistic texture) falls or rolls into the center.
+
+Uses bounce physics (damped oscillation, squash & stretch).
+
+Orange Burst
+
+The orange bursts open in the middle of the scene.
+
+Instead of simple particles, splashes are streak-like juice streams that spread out with slightly random curved trajectories.
+
+Splashes have glossy, liquid-like material.
+
+Juice Interaction with Text
+
+Splashes hit the invisible 3D text and color it smoothly.
+
+The coloring spreads gradually, like juice soaking into the letters.
+
+While spreading, opacity interpolates smoothly:
+
+𝐶
+new
+=
+(
+1
+−
+𝛼
+)
+𝐶
+old
++
+𝛼
+𝐶
+orange
+C
+new
+	​
+
+=(1−α)C
+old
+	​
+
++αC
+orange
+	​
+
+
+Final State
+
+Orange disappears.
+
+Fully colored “SUPER FRUIT CENTER” text remains, glossy and vibrant.
+
+Optional: a shiny light sweep across the text.
+
+📐 Physics + Math
+Orange Bounce
+
+Drop modeled as damped harmonic oscillator:
+
+𝑦
+(
+𝑡
+)
+=
+𝐴
+cos
+⁡
+(
+𝜔
+𝑡
+)
+𝑒
+−
+𝑘
+𝑡
+y(t)=Acos(ωt)e
+−kt
+
+Squash/stretch scaling:
+
+𝑠
+(
+𝑡
+)
+=
+1
++
+0.1
+sin
+⁡
+(
+𝜔
+𝑡
+)
+s(t)=1+0.1sin(ωt)
+Splash Motion
+
+Position with gravity:
+
+𝑝
+⃗
+(
+𝑡
+)
+=
+𝑝
+0
+⃗
++
+𝑣
+0
+⃗
+𝑡
+−
+1
+2
+𝑔
+𝑡
+2
+𝑦
+^
+p
+	​
+
+(t)=
+p
+0
+	​
+
+	​
+
++
+v
+0
+	​
+
+	​
+
+t−
+2
+1
+	​
+
+gt
+2
+y
+^
+	​
+
+
+Velocity with drag:
+
+𝑣
+⃗
+(
+𝑡
+)
+=
+𝑣
+0
+⃗
+𝑒
+−
+𝜇
+𝑡
+v
+(t)=
+v
+0
+	​
+
+	​
+
+e
+−μt
+
+Random curved paths: add a sinusoidal offset
+
+𝑥
+(
+𝑡
+)
+=
+𝑣
+𝑥
+𝑡
++
+𝐴
+sin
+⁡
+(
+𝛽
+𝑡
+)
+x(t)=v
+x
+	​
+
+t+Asin(βt)
+Text Coloring
+
+Gaussian falloff for splash impact:
+
+𝛼
+(
+𝑟
+)
+=
+𝑒
+−
+𝑟
+2
+2
+𝜎
+2
+α(r)=e
+−
+2σ
+2
+r
+2
+	​
+
+
+Smooth color transition applied per splash.
+
+⚡ Optimization
+
+Use InstancedMesh for droplets/splashes.
+
+Max 200–300 splashes at once.
+
+Kill splashes when opacity < 0.01.
+
+Use dynamic canvas texture or shader for applying splashes on 3D text surface.
+
+All constants (A, ω, k, μ, σ, splashCount) should be easily tweakable.
+
+🛠 Technical Instructions
+
+Use Three.js ES Modules.
+
+Orange: SphereGeometry with realistic texture.
+
+Splashes: instanced small stretched spheres or procedural streaks.
+
+Text: TextGeometry using helvetiker_regular.typeface.json.
+
+Renderer: { antialias: true, alpha: true }.
+
+Responsive: must run smoothly on both desktop and mobile.
+
+Write modular, reusable functions:
+
+createOrange()
+
+animateOrangeBounce()
+
+burstOrange()
+
+spawnSplashes()
+
+updateSplashes()
+
+applyJuiceToText()
+
+revealText()
+
+✅ Final output flow:
+Invisible Text → Orange Enters → Orange Bursts → Splashes Color Text → Text Visible
+✅ Must look cinematic, smooth, and optimized.
+✅ Provide full working code (HTML + CSS + JS) in one snippet so I can paste it into my project.
