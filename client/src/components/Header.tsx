@@ -44,7 +44,7 @@ const Header = () => {
       <div className="bg-green-600/80 text-white py-2 pt-[0px] pb-[0px] rounded-t-2xl">
         <div className="max-w-7xl mx-auto px-4 flex justify-between items-center text-sm">
           <div className="w-full text-center overflow-hidden relative">
-            <div className="relative bg-green-600/60 py-3 px-6">
+            <div className="relative bg-green-600/80 py-3 px-6">
               
               {/* Content */}
               <div className="relative z-10 flex items-center justify-center">
