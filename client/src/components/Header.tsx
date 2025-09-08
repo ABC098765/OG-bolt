@@ -41,10 +41,10 @@ const Header = () => {
   return (
     <header className="bg-red-50/40 dark:bg-gray-800/90 backdrop-blur-md shadow-md fixed top-0 left-0 right-0 z-50 rounded-b-2xl mx-4">
       {/* Top bar */}
-      <div className="bg-green-600 text-white py-2 pt-[0px] pb-[0px] rounded-t-2xl">
+      <div className="bg-green-600/80 text-white py-2 pt-[0px] pb-[0px] rounded-t-2xl">
         <div className="max-w-7xl mx-auto px-4 flex justify-between items-center text-sm">
           <div className="w-full text-center overflow-hidden relative">
-            <div className="relative bg-green-600 py-3 px-6">
+            <div className="relative bg-green-600/80 py-3 px-6">
               
               {/* Content */}
               <div className="relative z-10 flex items-center justify-center">
