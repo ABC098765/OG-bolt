@@ -822,7 +822,7 @@ html, body {
 }
 
 .badge-3d-green:hover {
-  transform: perspective(100px) rotateX(0deg) rotateY(0deg) translateY(-2px);
+  transform: perspective(100px) rotateX(0deg) rotateY(0deg) scale(1.1);
   box-shadow: 
     0 12px 24px rgba(34, 197, 94, 0.3),
     0 6px 12px rgba(34, 197, 94, 0.15),
@@ -843,7 +843,7 @@ html, body {
 }
 
 .badge-3d-orange:hover {
-  transform: perspective(100px) rotateX(0deg) rotateY(0deg) translateY(-2px);
+  transform: perspective(100px) rotateX(0deg) rotateY(0deg) scale(1.1);
   box-shadow: 
     0 12px 24px rgba(249, 115, 22, 0.3),
     0 6px 12px rgba(249, 115, 22, 0.15),
@@ -864,7 +864,7 @@ html, body {
 }
 
 .badge-3d-blue:hover {
-  transform: perspective(100px) rotateX(0deg) rotateY(0deg) translateY(-2px);
+  transform: perspective(100px) rotateX(0deg) rotateY(0deg) scale(1.1);
   box-shadow: 
     0 12px 24px rgba(59, 130, 246, 0.3),
     0 6px 12px rgba(59, 130, 246, 0.15),
