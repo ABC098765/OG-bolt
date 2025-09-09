@@ -44,7 +44,7 @@ const WhyChooseUs = memo(() => {
             return (
               <div 
                 key={index}
-                className="group p-6 rounded-2xl border border-gray-100 dark:border-gray-700 hover:border-gray-200 dark:hover:border-gray-600 dark:bg-gray-800 transition-all duration-300 hover:shadow-xl hover:-translate-y-2"
+                className="group p-6 rounded-2xl bg-transparent transition-all duration-300 hover:-translate-y-2"
               >
                 <div className={`w-16 h-16 ${feature.bgColor} rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
                   <IconComponent className={`w-8 h-8 ${feature.color}`} />
