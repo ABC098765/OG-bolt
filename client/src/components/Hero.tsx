@@ -4,11 +4,18 @@ import { ShoppingCart, Truck, Star, Heart, Award, Clock } from 'lucide-react';
 
 const Hero = memo(() => {
   return (
-    <section id="home" className="relative overflow-hidden bg-gradient-to-br from-green-50 via-emerald-50 to-orange-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-20">
+    <section id="home" className="relative overflow-hidden py-20" style={{
+      backgroundImage: 'url(/Fresh_fruit_hero_display_11baa93f.png)',
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat'
+    }}>
+      {/* Background overlay */}
+      <div className="absolute inset-0 bg-white/80 dark:bg-gray-900/80"></div>
 
       <div className="max-w-7xl mx-auto px-4 relative z-10">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
-          <div className="space-y-8">
+        <div className="flex justify-center items-center min-h-[80vh]">
+          <div className="space-y-8 text-center max-w-4xl">
             {/* Badge */}
             <div className="inline-flex items-center px-4 py-2 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-full text-sm font-medium">
               <Award className="w-4 h-4 mr-2" />
@@ -73,28 +80,6 @@ const Hero = memo(() => {
               </button>
             </div>
 
-          </div>
-
-          <div className="relative">
-            <div className="relative z-10 group">
-              <img
-                src="/Fresh_fruit_hero_display_11baa93f.png"
-                alt="Fresh fruits display"
-                className="rounded-2xl shadow-2xl w-full transform group-hover:scale-105 transition-transform duration-500"
-                loading="lazy"
-              />
-              {/* Overlay badges */}
-              <div className="absolute bottom-4 right-4 bg-green-600/90 backdrop-blur-sm text-white px-3 py-2 rounded-full shadow-lg">
-                <div className="flex items-center text-sm font-medium">
-                  <Truck className="w-4 h-4 mr-1" />
-                  Fast Delivery
-                </div>
-              </div>
-            </div>
-            <div className="absolute -top-4 -right-4 w-full h-full bg-gradient-to-br from-green-400 via-emerald-400 to-orange-400 rounded-2xl -z-10 opacity-80"></div>
-            {/* Additional decorative elements */}
-            <div className="absolute -bottom-4 -left-4 w-20 h-20 bg-gradient-to-r from-yellow-400 to-orange-400 rounded-full opacity-60 blur-xl"></div>
-            <div className="absolute -top-4 -left-4 w-16 h-16 bg-gradient-to-r from-green-400 to-blue-400 rounded-full opacity-60 blur-xl"></div>
           </div>
         </div>
       </div>
