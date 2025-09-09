@@ -39,7 +39,7 @@ const Header = () => {
   };
 
   return (
-    <header className="bg-red-50/40 dark:bg-gray-800/90 backdrop-blur-md shadow-md fixed top-0 left-0 right-0 z-50 rounded-b-2xl mx-4">
+    <header className="bg-red-50/20 dark:bg-gray-800/20 backdrop-blur-md shadow-md fixed top-0 left-0 right-0 z-50 rounded-b-2xl mx-4">
       {/* Top bar */}
       <div className="bg-green-600 text-white py-2 pt-[0px] pb-[0px] rounded-t-2xl">
         <div className="max-w-7xl mx-auto px-4 flex justify-between items-center text-sm">
