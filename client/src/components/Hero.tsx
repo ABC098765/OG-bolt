@@ -5,7 +5,7 @@ import { ShoppingCart, Truck, Star, Heart, Award, Clock, Leaf } from 'lucide-rea
 const Hero = memo(() => {
   return (
     <section id="home" className="relative overflow-hidden py-20" style={{
-      backgroundImage: 'url(/splash1.png)',
+      backgroundImage: 'url(/attached_assets/generated_images/Fresh_fruit_hero_background_63662b70.png)',
       backgroundSize: 'cover',
       backgroundPosition: 'center',
       backgroundRepeat: 'no-repeat'
