@@ -84,7 +84,7 @@ const AndroidApp = () => {
           <div className="space-y-8">
             {/* Logo and App Name */}
             <div className="flex items-center space-x-4 mb-8">
-              <div className="w-20 h-20 bg-gradient-to-br from-green-600 to-emerald-600 rounded-2xl flex items-center justify-center shadow-2xl">
+              <div className="w-20 h-20 bg-white rounded-2xl flex items-center justify-center shadow-2xl">
                 <img
                   src={og_replit_sfc}
                   alt="Super Fruit Center Logo"
