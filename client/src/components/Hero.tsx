@@ -30,7 +30,7 @@ const Hero = memo(() => {
                   Daily
                 </span>
               </h1>
-              <p className="text-xl text-gray-600 dark:text-gray-300 leading-relaxed max-w-xl">
+              <p className="text-xl text-gray-600 dark:text-gray-300 leading-relaxed max-w-xl font-bold">
                 Experience the finest selection of farm-fresh fruits at Super Fruit Center. 
                 From exotic imports to local favorites, we bring nature's sweetness directly to your doorstep with premium quality and same-day delivery.
               </p>
