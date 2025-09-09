@@ -14,8 +14,8 @@ const Hero = memo(() => {
       <div className="absolute inset-0 bg-black/40"></div>
 
       <div className="max-w-7xl mx-auto px-4 relative z-10">
-        <div className="flex justify-center items-center min-h-[80vh]">
-          <div className="space-y-8 text-center max-w-4xl">
+        <div className="flex justify-start items-center min-h-[80vh]">
+          <div className="space-y-8 text-left max-w-4xl">
             {/* Badge */}
             <div className="inline-flex items-center px-4 py-2 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-full text-sm font-medium">
               <Award className="w-4 h-4 mr-2" />
