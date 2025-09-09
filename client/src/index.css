@@ -756,9 +756,28 @@ html, body {
   animation-delay: 2s;
 }
 
-/* Text color effects */
+/* Text gradient effects */
 .text-glow-green {
-  color: rgb(34, 197, 94);
+  background: linear-gradient(90deg, 
+    rgba(16, 185, 129, 0.8) 0%, 
+    rgba(16, 185, 129, 1) 25%, 
+    rgba(16, 185, 129, 1) 50%, 
+    rgba(16, 185, 129, 1) 75%, 
+    rgba(16, 185, 129, 0.8) 100%);
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer-green 4s ease-in-out infinite;
+}
+
+@keyframes shimmer-green {
+  0% {
+    background-position: -300% center;
+  }
+  100% {
+    background-position: 300% center;
+  }
 }
 
 /* Text gradient effects */
