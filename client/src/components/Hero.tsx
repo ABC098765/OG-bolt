@@ -18,10 +18,10 @@ const Hero = memo(() => {
             <div className="space-y-6">
               <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold text-gray-900 dark:text-white leading-tight">
                 <span className="text-lg sm:text-xl lg:text-2xl font-medium text-gray-600 dark:text-gray-400 block mb-2">Super Fruit Center</span>
-                Fresh <span className="text-green-600 underline-animated">
+                Fresh <span className="text-green-600 text-glow-green">
                   Fruits
                 </span><br />
-                Delivered <span className="text-orange-500 underline-gradient">
+                Delivered <span className="text-orange-500 text-gradient-orange">
                   Daily
                 </span>
               </h1>
