@@ -11,7 +11,7 @@ const Hero = memo(() => {
       backgroundRepeat: 'no-repeat'
     }}>
       {/* Background overlay */}
-      <div className="absolute inset-0 bg-white/30 dark:bg-gray-900/30"></div>
+      <div className="absolute inset-0 bg-white/60 dark:bg-gray-900/30"></div>
 
       <div className="max-w-7xl mx-auto px-4 relative z-10">
         <div className="flex justify-center items-center min-h-[80vh]">
