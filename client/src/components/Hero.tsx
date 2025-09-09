@@ -41,19 +41,19 @@ const Hero = memo(() => {
             {/* Features */}
             <div className="grid grid-cols-3 gap-4 py-6">
               <div className="text-center">
-                <div className="w-12 h-12 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mx-auto mb-2 feature-badge feature-badge-1">
+                <div className="w-12 h-12 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mx-auto mb-2 feature-badge feature-badge-1 badge-3d-green">
                   <Heart className="w-6 h-6 text-green-600 relative z-10" />
                 </div>
                 <p className="text-sm font-medium text-gray-700 dark:text-gray-300">100% Fresh</p>
               </div>
               <div className="text-center">
-                <div className="w-12 h-12 bg-orange-100 dark:bg-orange-900 rounded-full flex items-center justify-center mx-auto mb-2 feature-badge feature-badge-2">
+                <div className="w-12 h-12 bg-orange-100 dark:bg-orange-900 rounded-full flex items-center justify-center mx-auto mb-2 feature-badge feature-badge-2 badge-3d-orange">
                   <Clock className="w-6 h-6 text-orange-600 relative z-10" />
                 </div>
                 <p className="text-sm font-medium text-gray-700 dark:text-gray-300">Same Day</p>
               </div>
               <div className="text-center">
-                <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center mx-auto mb-2 feature-badge feature-badge-3">
+                <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center mx-auto mb-2 feature-badge feature-badge-3 badge-3d-blue">
                   <Star className="w-6 h-6 text-blue-600 relative z-10" />
                 </div>
                 <p className="text-sm font-medium text-gray-700 dark:text-gray-300">Premium Quality</p>
