@@ -44,7 +44,7 @@ const Hero = memo(() => {
                 <div className="w-12 h-12 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mx-auto mb-2 feature-badge feature-badge-1 badge-3d-green">
                   <Leaf className="w-6 h-6 text-green-600 relative z-10" />
                 </div>
-                <p className="text-sm font-medium text-gray-700 dark:text-gray-300">Farm Fresh</p>
+                <p className="text-sm font-medium text-gray-700 dark:text-gray-300">100% Fresh</p>
               </div>
               <div className="text-center">
                 <div className="w-12 h-12 bg-orange-100 dark:bg-orange-900 rounded-full flex items-center justify-center mx-auto mb-2 feature-badge feature-badge-2 badge-3d-orange">
