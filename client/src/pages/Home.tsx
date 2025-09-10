@@ -7,7 +7,24 @@ import AndroidApp from '../components/Testimonials';
 const Home = () => {
   return (
     <div className="snap-scroll-container">
-      {/* Navigation Dots */}
+      {/* Sections with IDs */}
+      <section id="home" className="snap-section">
+        <Hero />
+      </section>
+      
+      <section id="features" className="snap-section">
+        <WhyChooseUs />
+      </section>
+      
+      <section id="products" className="snap-section">
+        <FeaturedProducts />
+      </section>
+      
+      <section id="app" className="snap-section">
+        <AndroidApp />
+      </section>
+      
+      {/* Navigation Dots - placed after sections for CSS :target selectors */}
       <nav className="scroll-nav" aria-label="Page navigation">
         <a 
           href="#home" 
@@ -34,23 +51,6 @@ const Home = () => {
           aria-label="Go to App section"
         ></a>
       </nav>
-
-      {/* Sections with IDs */}
-      <section id="home" className="snap-section">
-        <Hero />
-      </section>
-      
-      <section id="features" className="snap-section">
-        <WhyChooseUs />
-      </section>
-      
-      <section id="products" className="snap-section">
-        <FeaturedProducts />
-      </section>
-      
-      <section id="app" className="snap-section">
-        <AndroidApp />
-      </section>
     </div>
   );
 };

@@ -8,6 +8,7 @@
   overflow-y: auto;
   height: 100vh;
   scroll-behavior: smooth;
+  scroll-padding-top: 6rem; /* Account for fixed header */
 }
 
 /* =================== SNAP SECTIONS =================== */
@@ -17,10 +18,7 @@
   position: relative;
 }
 
-/* Adjust for fixed header */
-.snap-section:not(:first-child) {
-  scroll-margin-top: 6rem; /* Account for fixed header */
-}
+/* Sections now use container's scroll-padding-top */
 
 /* =================== NAVIGATION DOTS =================== */
 .scroll-nav {
@@ -57,8 +55,7 @@
 #home:target ~ .scroll-nav .scroll-nav-dot[href="#home"],
 #features:target ~ .scroll-nav .scroll-nav-dot[href="#features"],
 #products:target ~ .scroll-nav .scroll-nav-dot[href="#products"],
-#app:target ~ .scroll-nav .scroll-nav-dot[href="#app"],
-#contact:target ~ .scroll-nav .scroll-nav-dot[href="#contact"] {
+#app:target ~ .scroll-nav .scroll-nav-dot[href="#app"] {
   background: #10b981;
   border-color: rgba(16, 185, 129, 0.4);
   transform: scale(1.3);
@@ -76,8 +73,7 @@
 /* Override default when any section is targeted */
 #features:target ~ .scroll-nav .scroll-nav-dot[href="#home"],
 #products:target ~ .scroll-nav .scroll-nav-dot[href="#home"],
-#app:target ~ .scroll-nav .scroll-nav-dot[href="#home"],
-#contact:target ~ .scroll-nav .scroll-nav-dot[href="#home"] {
+#app:target ~ .scroll-nav .scroll-nav-dot[href="#home"] {
   background: rgba(255, 255, 255, 0.4);
   border-color: rgba(255, 255, 255, 0.2);
   transform: scale(1);
