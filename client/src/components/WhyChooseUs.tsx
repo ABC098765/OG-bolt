@@ -27,7 +27,7 @@ const WhyChooseUs = memo(() => {
   ];
 
   return (
-    <section className="py-20 relative bg-gradient-to-br from-lime-100 to-orange-100 dark:bg-gradient-to-br dark:from-lime-900 dark:to-orange-900" style={{
+    <section className="relative bg-gradient-to-br from-lime-100 to-orange-100 dark:bg-gradient-to-br dark:from-lime-900 dark:to-orange-900 flex-1 flex items-center justify-center py-8" style={{
       backgroundImage: 'url(/fruit_background.png)',
       backgroundSize: 'cover',
       backgroundPosition: 'center',
@@ -35,7 +35,7 @@ const WhyChooseUs = memo(() => {
     }}>
       <div className="absolute inset-0 bg-gradient-to-br from-lime-100/80 to-orange-100/80 dark:from-lime-900/80 dark:to-orange-900/80"></div>
       <div className="max-w-7xl mx-auto px-4 relative z-10">
-        <div className="text-center mb-16">
+        <div className="text-center mb-8 lg:mb-12">
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-6">
             Why Choose <span className="text-green-600 underline-gradient">Super Fruit Center</span>?
           </h2>
