@@ -11,6 +11,15 @@
   scroll-padding-top: 6rem; /* Account for fixed header */
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* Internet Explorer 10+ */
+  
+  /* Performance optimizations */
+  will-change: scroll-position;
+  transform: translateZ(0); /* Hardware acceleration */
+  -webkit-overflow-scrolling: touch; /* iOS smooth scrolling */
+  overscroll-behavior: none; /* Prevent page refresh on mobile */
+  
+  /* Enhanced snap responsiveness */
+  scroll-snap-stop: always; /* Force stops at each snap point */
 }
 
 /* Hide scrollbar for Chrome, Safari and Opera */
@@ -23,8 +32,17 @@
 /* =================== SNAP SECTIONS =================== */
 .snap-section {
   scroll-snap-align: start;
+  scroll-snap-stop: always; /* Ensure each section is a mandatory stop */
   min-height: 100vh;
   position: relative;
+  
+  /* Performance optimizations */
+  will-change: transform;
+  transform: translateZ(0); /* Hardware acceleration */
+  backface-visibility: hidden; /* Prevent flickering */
+  
+  /* Smooth transitions */
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Sections now use container's scroll-padding-top */
@@ -34,13 +52,65 @@
 @media (prefers-reduced-motion: reduce) {
   .snap-scroll-container {
     scroll-behavior: auto;
+    will-change: auto; /* Disable hardware acceleration for motion-sensitive users */
+  }
+  
+  .snap-section {
+    transition: none;
+    will-change: auto;
+  }
+}
+
+/* =================== PERFORMANCE OPTIMIZATIONS =================== */
+/* Optimize for high refresh rate displays */
+@media (min-resolution: 120dpi) {
+  .snap-scroll-container {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .snap-scroll-container {
+    /* Enhanced touch scrolling */
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: y mandatory;
+    overscroll-behavior: none;
+    
+    /* Prevent bounce on iOS */
+    -webkit-overflow-scrolling: touch;
+    overflow: auto;
+  }
+  
+  .snap-section {
+    /* Better touch responsiveness */
+    touch-action: pan-y;
+    -webkit-touch-callout: none;
   }
 }
 
 /* =================== RESPONSIVE =================== */
 @media (max-width: 768px) {
   .snap-scroll-container {
-    scroll-snap-type: none; /* Optional: disable snap on mobile */
+    /* Keep snap enabled on mobile for better UX */
+    scroll-snap-type: y mandatory;
+    /* Enhanced mobile scrolling */
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: none;
+    scroll-padding-top: 4rem; /* Smaller header offset on mobile */
+  }
+  
+  .snap-section {
+    /* Mobile optimizations */
+    min-height: 100svh; /* Use small viewport height on mobile */
+    scroll-snap-align: start;
+  }
+}
+
+/* Tablet responsive improvements */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .snap-scroll-container {
+    scroll-padding-top: 5rem; /* Medium header offset for tablets */
   }
 }
 
