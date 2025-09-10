@@ -4,12 +4,33 @@ import { ShoppingCart, Truck, Star, Heart, Award, Clock, Leaf } from 'lucide-rea
 
 const Hero = memo(() => {
   return (
-    <section id="home" className="relative overflow-hidden py-20" style={{
-      backgroundImage: 'url(/Fresh_fruit_hero_display_11baa93f.png)',
-      backgroundSize: 'cover',
-      backgroundPosition: 'center',
-      backgroundRepeat: 'no-repeat'
-    }}>
+    <section id="home" className="relative overflow-hidden py-20">
+      {/* Mobile: Static image background */}
+      <div 
+        className="absolute inset-0 md:hidden bg-cover bg-center"
+        style={{ 
+          backgroundImage: 'url(/Fresh_fruit_hero_display_11baa93f.png)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat'
+        }}
+      />
+      
+      {/* Desktop: Video background */}
+      <video
+        autoPlay
+        muted
+        loop
+        playsInline
+        className="absolute inset-0 w-full h-full object-cover hidden md:block"
+        poster="/Fresh_fruit_hero_display_11baa93f.png"
+      >
+        <source src="/hero-video.mp4" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+      
+      {/* Dark overlay for text readability */}
+      <div className="absolute inset-0 bg-black/30"></div>
 
       <div className="max-w-7xl mx-auto px-4 relative z-10">
         <div className="flex justify-center items-center min-h-[80vh]">
