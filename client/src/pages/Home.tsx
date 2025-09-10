@@ -23,34 +23,6 @@ const Home = () => {
       <section id="app" className="snap-section">
         <AndroidApp />
       </section>
-      
-      {/* Navigation Dots - placed after sections for CSS :target selectors */}
-      <nav className="scroll-nav" aria-label="Page navigation">
-        <a 
-          href="#home" 
-          className="scroll-nav-dot" 
-          data-label="Home"
-          aria-label="Go to Home section"
-        ></a>
-        <a 
-          href="#features" 
-          className="scroll-nav-dot" 
-          data-label="Features"
-          aria-label="Go to Features section"
-        ></a>
-        <a 
-          href="#products" 
-          className="scroll-nav-dot" 
-          data-label="Products"
-          aria-label="Go to Products section"
-        ></a>
-        <a 
-          href="#app" 
-          className="scroll-nav-dot" 
-          data-label="App"
-          aria-label="Go to App section"
-        ></a>
-      </nav>
     </div>
   );
 };
