@@ -46,7 +46,7 @@ function AppContent() {
         <Route path="/terms-and-conditions" component={TermsAndConditions} />
         <Route path="/product/:productId" component={ProductDetails} />
         <Route path="/notifications" component={Notifications} />
-        <Footer />
+        {/* Footer now included in Home component's snap sections */}
       </div>
     </div>
   );

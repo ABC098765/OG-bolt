@@ -3,9 +3,9 @@ import { Phone, Mail, MapPin, Clock, Facebook, Instagram, Twitter } from 'lucide
 
 const Contact = () => {
   return (
-    <section id="contact" className="py-20 bg-white dark:bg-gray-900">
+    <section id="contact" className="py-8 bg-white dark:bg-gray-900 flex-1 flex items-center justify-center">
       <div className="max-w-7xl mx-auto px-4">
-        <div className="text-center mb-16">
+        <div className="text-center mb-8 lg:mb-12">
           <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
             Get In <span className="text-green-600">Touch</span>
           </h2>

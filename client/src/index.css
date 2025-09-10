@@ -8,7 +8,7 @@
   overflow-y: auto;
   height: 100vh;
   scroll-behavior: smooth;
-  scroll-padding-top: 6rem; /* Account for fixed header */
+  scroll-padding-top: 7rem; /* Account for fixed header - increased */
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* Internet Explorer 10+ */
   
@@ -52,6 +52,10 @@
 @media (max-width: 768px) {
   .snap-section {
     height: 100svh; /* Small viewport height on mobile */
+  }
+  
+  .snap-scroll-container {
+    scroll-padding-top: 5rem; /* Smaller header offset on mobile */
   }
 }
 
