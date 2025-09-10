@@ -1,27 +1,48 @@
-import React, { memo } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import { Link } from 'wouter';
 import { ShoppingCart, Truck, Star, Heart, Award, Clock, Leaf } from 'lucide-react';
 
 const Hero = memo(() => {
+  // Accessibility: Respect user's motion preferences
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    setPrefersReducedMotion(mediaQuery.matches);
+
+    const handleChange = (e: MediaQueryListEvent) => {
+      setPrefersReducedMotion(e.matches);
+    };
+
+    // Use modern addEventListener (with fallback for older browsers)
+    if (mediaQuery.addEventListener) {
+      mediaQuery.addEventListener('change', handleChange);
+      return () => mediaQuery.removeEventListener('change', handleChange);
+    } else {
+      // Fallback for older browsers
+      mediaQuery.addListener(handleChange);
+      return () => mediaQuery.removeListener(handleChange);
+    }
+  }, []);
+
   return (
     <section id="home" className="relative overflow-hidden py-20">
-      {/* Mobile: Static image background */}
-      <div 
-        className="absolute inset-0 md:hidden bg-cover bg-center"
-        style={{ 
-          backgroundImage: 'url(/Fresh_fruit_hero_display_11baa93f.png)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat'
-        }}
-      />
+      {/* Mobile: Static image background - SEO friendly with proper alt text */}
+      <div className="absolute inset-0 md:hidden">
+        <img 
+          src="/Fresh_fruit_hero_display_11baa93f.png"
+          alt="Fresh colorful fruits display - Super Fruit Center premium fruit delivery service"
+          className="w-full h-full object-cover"
+        />
+      </div>
       
-      {/* Desktop: Video background */}
+      {/* Desktop: Video background with accessibility and performance optimizations */}
       <video
-        autoPlay
+        autoPlay={!prefersReducedMotion}
         muted
-        loop
+        loop={!prefersReducedMotion}
         playsInline
+        preload="none"
         className="absolute inset-0 w-full h-full object-cover hidden md:block"
         poster="/Fresh_fruit_hero_display_11baa93f.png"
       >

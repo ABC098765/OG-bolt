@@ -26,56 +26,76 @@ client/
 ### Code Implementation
 
 ```jsx
-<section id="home" className="relative overflow-hidden py-20">
-  {/* Mobile: Static image background */}
-  <div 
-    className="absolute inset-0 md:hidden bg-cover bg-center"
-    style={{ 
-      backgroundImage: 'url(/Fresh_fruit_hero_display_11baa93f.png)',
-      backgroundSize: 'cover',
-      backgroundPosition: 'center',
-      backgroundRepeat: 'no-repeat'
-    }}
-  />
-  
-  {/* Desktop: Video background */}
-  <video
-    autoPlay
-    muted
-    loop
-    playsInline
-    className="absolute inset-0 w-full h-full object-cover hidden md:block"
-    poster="/Fresh_fruit_hero_display_11baa93f.png"
-  >
-    <source src="/hero-video.mp4" type="video/mp4" />
-    Your browser does not support the video tag.
-  </video>
-  
-  {/* Dark overlay for text readability */}
-  <div className="absolute inset-0 bg-black/30"></div>
+const Hero = memo(() => {
+  // Accessibility: Respect user's motion preferences
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
 
-  {/* Content with proper z-indexing */}
-  <div className="max-w-7xl mx-auto px-4 relative z-10">
-    {/* Hero content here */}
-  </div>
-</section>
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    setPrefersReducedMotion(mediaQuery.matches);
+
+    const handleChange = (e) => {
+      setPrefersReducedMotion(e.matches);
+    };
+
+    mediaQuery.addListener(handleChange);
+    return () => mediaQuery.removeListener(handleChange);
+  }, []);
+
+  return (
+    <section id="home" className="relative overflow-hidden py-20">
+      {/* Mobile: Static image background - SEO friendly with proper alt text */}
+      <div className="absolute inset-0 md:hidden">
+        <img 
+          src="/Fresh_fruit_hero_display_11baa93f.png"
+          alt="Fresh colorful fruits display - Super Fruit Center premium fruit delivery service"
+          className="w-full h-full object-cover"
+        />
+      </div>
+      
+      {/* Desktop: Video background with accessibility and performance optimizations */}
+      <video
+        autoPlay={!prefersReducedMotion}
+        muted
+        loop={!prefersReducedMotion}
+        playsInline
+        preload="none"
+        className="absolute inset-0 w-full h-full object-cover hidden md:block"
+        poster="/Fresh_fruit_hero_display_11baa93f.png"
+      >
+        <source src="/hero-video.mp4" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+      
+      {/* Dark overlay for text readability */}
+      <div className="absolute inset-0 bg-black/30"></div>
+
+      {/* Content with proper z-indexing */}
+      <div className="max-w-7xl mx-auto px-4 relative z-10">
+        {/* Hero content here */}
+      </div>
+    </section>
+  );
+});
 ```
 
 ### Key Technical Decisions
 
 #### Video Attributes
-- `autoPlay`: Enables automatic video playback
+- `autoPlay={!prefersReducedMotion}`: Enables automatic video playback, respects accessibility preferences
 - `muted`: Required for autoplay to work in modern browsers
-- `loop`: Creates seamless looping experience
+- `loop={!prefersReducedMotion}`: Creates seamless looping experience, disabled for motion-sensitive users
 - `playsInline`: Prevents fullscreen video on iOS devices
+- `preload="none"`: Prevents unnecessary video loading on mobile devices
 - `poster`: Shows fallback image while video loads
 
 #### CSS Classes & Responsive Design
-- `md:hidden`: Hides image on desktop (≥768px)
+- `md:hidden`: Hides image on desktop (≥768px) - applied to img container
 - `hidden md:block`: Shows video only on desktop
 - `absolute inset-0`: Full coverage positioning
 - `object-cover`: Maintains aspect ratio while filling container
 - `relative z-10`: Ensures content appears above background
+- `w-full h-full`: Ensures image covers full container dimensions
 
 #### Layering Structure (z-index)
 1. **Background Layer**: Image/Video (`absolute inset-0`)
@@ -97,8 +117,9 @@ client/
 
 ### Universal Benefits
 - **Graceful Degradation**: Fallback to image if video fails
-- **Accessibility**: Respects user preferences
-- **SEO Friendly**: Search engines can index image alt text
+- **Accessibility Compliant**: Respects `prefers-reduced-motion` user preference
+- **SEO Friendly**: Proper image alt text for search engine indexing
+- **Motion Sensitivity**: Automatically disables video animation for sensitive users
 
 ## Implementation Steps Taken
 
@@ -173,13 +194,51 @@ cp attached_assets/video_preview_h264_1757522538558.mp4 client/public/hero-video
 - **Bandwidth**: Acceptable for desktop users
 - **Engagement**: Increased visual interest
 
+## Current Accessibility & Performance Features
+
+### ✅ Implemented Enhancements
+
+#### 1. Motion Preference Accessibility
+```jsx
+// Respects user's system preference for reduced motion
+const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+
+useEffect(() => {
+  const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+  setPrefersReducedMotion(mediaQuery.matches);
+
+  const handleChange = (e) => {
+    setPrefersReducedMotion(e.matches);
+  };
+
+  mediaQuery.addListener(handleChange);
+  return () => mediaQuery.removeListener(handleChange);
+}, []);
+```
+
+#### 2. Performance Optimization
+```jsx
+// Prevents unnecessary video loading on mobile
+<video preload="none" />
+```
+
+#### 3. SEO Enhancement
+```jsx
+// Proper alt text for search engine indexing
+<img 
+  src="/Fresh_fruit_hero_display_11baa93f.png"
+  alt="Fresh colorful fruits display - Super Fruit Center premium fruit delivery service"
+  className="w-full h-full object-cover"
+/>
+```
+
 ## Future Enhancements
 
 ### Potential Improvements
 1. **Multiple Video Formats**: Add WebM for better compression
 2. **Lazy Loading**: Implement intersection observer for below-fold optimization
-3. **Prefers Reduced Motion**: Respect user accessibility preferences
-4. **Video Analytics**: Track engagement metrics if needed
+3. **Video Analytics**: Track engagement metrics if needed
+4. **Advanced Performance**: Implement adaptive video quality based on connection speed
 
 ### Code Examples for Future Enhancements
 
@@ -187,17 +246,6 @@ cp attached_assets/video_preview_h264_1757522538558.mp4 client/public/hero-video
 ```jsx
 <source src="/hero-video.webm" type="video/webm" />
 <source src="/hero-video.mp4" type="video/mp4" />
-```
-
-#### Accessibility Enhancement
-```jsx
-const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-<video 
-  autoPlay={!prefersReducedMotion}
-  loop={!prefersReducedMotion}
-  // other attributes
->
 ```
 
 ## Conclusion
