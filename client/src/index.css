@@ -8,7 +8,7 @@
   overflow-y: auto;
   height: 100vh;
   scroll-behavior: smooth;
-  scroll-padding-top: 7rem; /* Account for fixed header - increased */
+  scroll-padding-top: 6rem; /* Account for fixed header */
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* Internet Explorer 10+ */
   
@@ -33,11 +33,8 @@
 .snap-section {
   scroll-snap-align: start;
   scroll-snap-stop: always; /* Ensure each section is a mandatory stop */
-  height: 100vh; /* Exact viewport height - no overflow */
+  min-height: 100vh;
   position: relative;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden; /* Prevent internal scrolling */
   
   /* Performance optimizations */
   will-change: transform;
@@ -46,17 +43,6 @@
   
   /* Smooth transitions */
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* Responsive section heights */
-@media (max-width: 768px) {
-  .snap-section {
-    height: 100svh; /* Small viewport height on mobile */
-  }
-  
-  .snap-scroll-container {
-    scroll-padding-top: 5rem; /* Smaller header offset on mobile */
-  }
 }
 
 /* Sections now use container's scroll-padding-top */

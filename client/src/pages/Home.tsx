@@ -3,20 +3,6 @@ import Hero from '../components/Hero';
 import WhyChooseUs from '../components/WhyChooseUs';
 import FeaturedProducts from '../components/FeaturedProducts';
 import AndroidApp from '../components/Testimonials';
-import Contact from '../components/Contact';
-import Footer from '../components/Footer';
-
-// Combined Contact and Footer component for the final snap section
-const ContactAndFooter = () => {
-  return (
-    <div className="flex-1 flex flex-col">
-      <div className="flex-1">
-        <Contact />
-      </div>
-      <Footer />
-    </div>
-  );
-};
 
 const Home = () => {
   return (
@@ -36,10 +22,6 @@ const Home = () => {
       
       <section id="app" className="snap-section">
         <AndroidApp />
-      </section>
-      
-      <section id="contact" className="snap-section">
-        <ContactAndFooter />
       </section>
     </div>
   );

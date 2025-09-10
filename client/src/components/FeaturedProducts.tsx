@@ -79,14 +79,14 @@ const FeaturedProducts = memo(() => {
   };
 
   return (
-    <section id="products" className="bg-gradient-to-br from-gray-50 to-green-50 dark:from-gray-900 dark:to-gray-800 relative overflow-hidden w-full flex-1 flex items-center justify-center py-8">
+    <section id="products" className="py-20 bg-gradient-to-br from-gray-50 to-green-50 dark:from-gray-900 dark:to-gray-800 relative overflow-hidden w-full">
       {/* Background decorations */}
       <div className="absolute top-10 right-10 w-20 h-20 bg-green-200 rounded-full opacity-30 animate-float"></div>
       <div className="absolute bottom-10 left-10 w-16 h-16 bg-orange-200 rounded-full opacity-30 animate-float" style={{ animationDelay: '1s' }}></div>
       <div className="absolute top-1/2 left-1/4 w-12 h-12 bg-yellow-200 rounded-full opacity-30 animate-float" style={{ animationDelay: '2s' }}></div>
       
       <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 relative z-10 max-w-7xl">
-        <div className="text-center mb-8 lg:mb-12">
+        <div className="text-center mb-16">
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-6">
             Featured <span className="text-green-600 underline-animated">
               Fresh Fruits
@@ -98,7 +98,7 @@ const FeaturedProducts = memo(() => {
         </div>
 
         {/* Real Products Display */}
-        <div className="w-full grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 lg:mb-8">
+        <div className="w-full grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-6 lg:gap-8 mb-12">
           {loading ? (
             Array.from({ length: 4 }).map((_, index) => (
               <div 
