@@ -16,6 +16,8 @@
 /* Hide scrollbar for Chrome, Safari and Opera */
 .snap-scroll-container::-webkit-scrollbar {
   display: none;
+  width: 0px;
+  background: transparent;
 }
 
 /* =================== SNAP SECTIONS =================== */
@@ -50,6 +52,17 @@
 html, body {
   overflow-x: hidden;
   max-width: 100%;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera - apply globally */
+html::-webkit-scrollbar,
+body::-webkit-scrollbar,
+*::-webkit-scrollbar {
+  display: none;
+  width: 0px;
+  background: transparent;
 }
 
 /* Line clamp utilities for text truncation */
