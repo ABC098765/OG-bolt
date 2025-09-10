@@ -1,0 +1,90 @@
+Recommended Approaches
+1. HTML5 Video Element (Recommended)
+The most reliable approach is using a native <video> element:
+
+<section className="relative overflow-hidden py-20">
+  <video
+    autoPlay
+    muted
+    loop
+    playsInline
+    className="absolute inset-0 w-full h-full object-cover"
+  >
+    <source src="/hero-video.mp4" type="video/mp4" />
+    <source src="/hero-video.webm" type="video/webm" />
+    {/* Fallback to current image */}
+    <img src="/Fresh_fruit_hero_display_11baa93f.png" alt="Fresh fruits" />
+  </video>
+  
+  {/* Dark overlay for text readability */}
+  <div className="absolute inset-0 bg-black/30"></div>
+  
+  {/* Your existing hero content */}
+  <div className="relative z-10">
+    {/* ... existing content ... */}
+  </div>
+</section>
+2. Progressive Enhancement Strategy
+// Show image on mobile, video on desktop
+<section className="relative">
+  {/* Mobile: Image background */}
+  <div 
+    className="absolute inset-0 md:hidden bg-cover bg-center"
+    style={{ backgroundImage: 'url(/Fresh_fruit_hero_display_11baa93f.png)' }}
+  />
+  
+  {/* Desktop: Video background */}
+  <video className="absolute inset-0 w-full h-full object-cover hidden md:block">
+    <source src="/hero-video.mp4" type="video/mp4" />
+  </video>
+</section>
+Technical Considerations
+Video Requirements:
+Format: MP4 (H.264) + WebM for better browser support
+Duration: 10-30 seconds, looped
+Resolution: 1920x1080 max, consider 1280x720 for better performance
+File Size: Keep under 5MB for good loading performance
+Compression: High compression with acceptable quality loss
+Performance Optimizations:
+Use preload="metadata" or preload="none"
+Implement lazy loading for below-the-fold content
+Consider using poster image while video loads
+Add playsinline attribute for iOS compatibility
+Accessibility & UX:
+// Respect user's motion preferences
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+<video 
+  autoPlay={!prefersReducedMotion}
+  muted 
+  loop={!prefersReducedMotion}
+>
+Implementation Steps
+Video Preparation:
+
+Source or create fruit-themed video content
+Optimize and compress for web delivery
+Create multiple format versions (MP4, WebM)
+Code Implementation:
+
+Replace background image with video element
+Add fallback mechanisms
+Implement loading states
+Performance Testing:
+
+Test on mobile devices
+Monitor Core Web Vitals impact
+Ensure smooth playback
+Alternative: External Video Hosting
+If file size is a concern, consider:
+
+Vimeo Pro: Clean embeds without branding
+JW Player: Professional video hosting
+Custom CDN: Host optimized videos on a fast CDN
+Would you like me to implement any of these approaches?
+I can help you:
+
+Set up the HTML5 video implementation
+Create the responsive mobile/desktop strategy
+Add performance optimizations and accessibility features
+Help source or optimize video content
+Which approach interests you most, or would you like me to start with the basic HTML5 video implementation?
