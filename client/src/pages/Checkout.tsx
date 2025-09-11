@@ -794,6 +794,33 @@ const Checkout = () => {
                 )}
               </div>
             </div>
+            
+            {/* Online Payment - Disabled */}
+            <div className="border rounded-lg p-4 bg-gray-50 dark:bg-gray-700/50 border-gray-300 dark:border-gray-600 opacity-60 cursor-not-allowed">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <input
+                    type="radio"
+                    disabled
+                    className="cursor-not-allowed"
+                  />
+                  <div className="flex items-center space-x-3">
+                    <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                      💳
+                    </div>
+                    <div>
+                      <span className="font-medium text-gray-600 dark:text-gray-400">Online Payment</span>
+                      <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">Cards • UPI • Net Banking</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="mt-3 pl-11">
+                <p className="text-sm text-blue-600 dark:text-blue-400 font-medium">
+                  📱 Download our app for online payment
+                </p>
+              </div>
+            </div>
           </div>
         </div>
         )}
