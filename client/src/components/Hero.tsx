@@ -46,7 +46,7 @@ const Hero = memo(() => {
         className="absolute inset-0 w-full h-full object-cover hidden md:block"
         poster="/Fresh_fruit_hero_display_11baa93f.png"
       >
-        <source src="/hero-video.mp4" type="video/mp4" />
+        <source src="/hero-video-new.mp4" type="video/mp4" />
         Your browser does not support the video tag.
       </video>
       
