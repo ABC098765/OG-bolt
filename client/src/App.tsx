@@ -1,5 +1,5 @@
 import { QueryClientProvider } from '@tanstack/react-query';
-import { Route } from 'wouter';
+import { Route, useLocation } from 'wouter';
 import { queryClient } from './lib/queryClient';
 import { CartProvider } from './contexts/CartContext';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
@@ -24,11 +24,13 @@ import OrderTutorial from './components/OrderTutorial';
 
 function AppContent() {
   const { state, hideTutorial, skipTutorial } = useAuth();
+  const [location] = useLocation();
+  const isHomePage = location === '/';
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors">
       <Header />
-      <div className="pt-32">
+      <div className={isHomePage ? '' : 'pt-32'}>
         <Notification />
         <AuthModal />
         <OrderTutorial 
