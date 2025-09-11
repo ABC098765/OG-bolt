@@ -478,8 +478,8 @@ const Checkout = () => {
   // Step state logic
   const getStepState = (step: number) => {
     if (step === 0) return !showAddressForm && selectedAddressId ? 'complete' : 'editing';
-    if (step === 1) return currentStep === 'payment' && selectedAddressId ? 'editing' : selectedAddressId ? 'complete' : 'indexed';
-    if (step === 2) return currentStep === 'payment' && selectedPaymentMethod ? 'complete' : currentStep === 'payment' ? 'editing' : 'indexed';
+    if (step === 1) return currentStep === 'payment' && selectedPaymentMethod ? 'complete' : currentStep === 'payment' ? 'editing' : 'indexed';
+    if (step === 2) return 'indexed'; // Confirmation step - not implemented yet
     return 'indexed';
   };
 
