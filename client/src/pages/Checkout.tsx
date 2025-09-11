@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'wouter';
 import { ArrowLeft, Plus, Edit3, Trash2, MapPin, CreditCard, Package, Check, XCircle } from 'lucide-react';
 import { useCart } from '../contexts/CartContext';
@@ -12,6 +12,9 @@ const Checkout = () => {
   const { state: cartState, dispatch: cartDispatch } = useCart();
   const { clearCart } = useCart();
   const { state: authState, dispatch: authDispatch } = useAuth();
+  
+  // Track component mount status to prevent state updates on unmounted component
+  const isMountedRef = useRef(true);
   
   const [addresses, setAddresses] = useState<FirestoreAddress[]>([]);
   const [selectedAddressId, setSelectedAddressId] = useState<string>('');
@@ -64,6 +67,13 @@ const Checkout = () => {
       navigate('/cart');
     }
   }, [cartState.items.length, navigate]);
+
+  // Cleanup mounted ref on unmount
+  useEffect(() => {
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, []);
 
   // Show loading or sign in prompt if not authenticated
   if (!authState.isAuthenticated) {
@@ -399,7 +409,9 @@ const Checkout = () => {
       
       if (result.success && result.orderId) {
         console.log('🎉 Order placement successful!');
-        setLastOrderId(result.orderId);
+        if (isMountedRef.current) {
+          setLastOrderId(result.orderId);
+        }
         
         // Only clear cart after successful order verification
         try {
@@ -410,19 +422,27 @@ const Checkout = () => {
           // Don't fail the entire process if cart clearing fails
         }
         
-        // Navigate to success page
-        navigate('/order-success');
+        // Navigate to success page only if component is still mounted
+        if (isMountedRef.current) {
+          navigate('/order-success');
+        }
       } else {
         // Order creation failed
-        setOrderError(result.error || 'Unknown error occurred');
+        if (isMountedRef.current) {
+          setOrderError(result.error || 'Unknown error occurred');
+        }
         console.error('💥 Order creation failed:', result.error);
       }
       
     } catch (error) {
       console.error('💥 Unexpected error in order creation:', error);
-      setOrderError('An unexpected error occurred. Please try again.');
+      if (isMountedRef.current) {
+        setOrderError('An unexpected error occurred. Please try again.');
+      }
     } finally {
-      setIsProcessingPayment(false);
+      if (isMountedRef.current) {
+        setIsProcessingPayment(false);
+      }
     }
   };
 
