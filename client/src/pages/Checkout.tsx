@@ -518,7 +518,7 @@ const Checkout = () => {
           <div className="flex items-center justify-between">
             <StepCircle step={0} state={getStepState(0)} label="Address" />
             <div className="flex-1 h-0.5 bg-gray-300 dark:bg-gray-600 mx-4"></div>
-            <StepCircle step={1} state={getStepState(1)} label="Summary" />
+            <StepCircle step={1} state={getStepState(1)} label="Payment" />
             <div className="flex-1 h-0.5 bg-gray-300 dark:bg-gray-600 mx-4"></div>
             <StepCircle step={2} state={getStepState(2)} label="Payment" />
           </div>
