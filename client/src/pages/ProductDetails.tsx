@@ -247,7 +247,7 @@ const ProductDetails = () => {
       name: product.name,
       price: productPrice,
       displayPrice: product.displayPrice, // Keep original displayPrice format like "₹150-₹400/kg"
-      image: productImage,
+      imageUrls: product.imageUrls || product.image_urls || [productImage], // Pass imageUrls array
       unit: product.unit || 'piece',
       selectedAmount: selectedAmount // Pass the selected amount (e.g., "2kg", "3pc")
     });
