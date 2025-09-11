@@ -1,6 +1,7 @@
 import React from 'react';
 import Hero from '../components/Hero';
 import WhyChooseUs from '../components/WhyChooseUs';
+import JuiceRecipesSection from '../components/JuiceRecipesSection';
 import FeaturedProducts from '../components/FeaturedProducts';
 import AndroidApp from '../components/Testimonials';
 import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
@@ -23,6 +24,10 @@ const Home = () => {
       
       <section id="features" className="reveal-section">
         <WhyChooseUs />
+      </section>
+      
+      <section id="juice-recipes" className="reveal-section">
+        <JuiceRecipesSection />
       </section>
       
       <section id="products" className="reveal-section">

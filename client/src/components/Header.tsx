@@ -85,6 +85,14 @@ const Header = () => {
               Products
             </Link>
             <Link 
+              to="/juice-recipes" 
+              className={`transition-colors font-medium ${
+                isActive('/juice-recipes') ? 'text-green-600 dark:text-green-400' : 'text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400'
+              }`}
+            >
+              Juice Recipes
+            </Link>
+            <Link 
               to="/cart" 
               className={`transition-colors font-medium ${
                 isActive('/cart') ? 'text-green-600 dark:text-green-400' : 'text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400'
@@ -173,6 +181,15 @@ const Header = () => {
                 onClick={() => setIsMenuOpen(false)}
               >
                 Products
+              </Link>
+              <Link 
+                to="/juice-recipes" 
+                className={`transition-colors font-medium ${
+                  isActive('/juice-recipes') ? 'text-green-600 dark:text-green-400' : 'text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400'
+                } flex items-center`}
+                onClick={() => setIsMenuOpen(false)}
+              >
+                🥤 Juice Recipes
               </Link>
               <Link 
                 to="/cart" 

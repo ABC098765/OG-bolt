@@ -254,6 +254,26 @@ const Products = () => {
           </div>
         </div>
 
+        {/* Juice Recipes Banner */}
+        <div className="mb-8 bg-gradient-to-r from-green-100 to-orange-100 dark:from-green-900 dark:to-orange-900 rounded-xl p-6 border border-green-200 dark:border-green-700">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="text-center sm:text-left">
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
+                🥤 Try Our Juice Recipes
+              </h3>
+              <p className="text-gray-600 dark:text-gray-300">
+                Discover perfect fruit combinations for healthy, delicious homemade juices
+              </p>
+            </div>
+            <button
+              onClick={() => navigate('/juice-recipes')}
+              className="bg-gradient-to-r from-green-600 to-orange-500 text-white px-6 py-3 rounded-full hover:from-green-700 hover:to-orange-600 transition-all duration-200 font-semibold whitespace-nowrap"
+            >
+              View Recipes →
+            </button>
+          </div>
+        </div>
+
         {/* Filters */}
         <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 mb-4">
           <div className="flex flex-col lg:flex-row gap-6 items-center">

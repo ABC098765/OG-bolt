@@ -19,6 +19,7 @@ import OrderSuccess from './pages/OrderSuccess';
 import TermsAndConditions from './pages/TermsAndConditions';
 import ProductDetails from './pages/ProductDetails';
 import Notifications from './pages/Notifications';
+import JuiceRecipes from './pages/JuiceRecipes';
 import OrderTutorial from './components/OrderTutorial';
 
 function AppContent() {
@@ -46,6 +47,7 @@ function AppContent() {
         <Route path="/terms-and-conditions" component={TermsAndConditions} />
         <Route path="/product/:productId" component={ProductDetails} />
         <Route path="/notifications" component={Notifications} />
+        <Route path="/juice-recipes" component={JuiceRecipes} />
         <Footer />
       </div>
     </div>
