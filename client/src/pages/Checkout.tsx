@@ -463,10 +463,12 @@ const Checkout = () => {
               console.log('✅ Found interrupted order that was actually created:', verifiedOrderId);
               localStorage.removeItem('orderAttempt');
               
-              // Clear cart and navigate to success
+              // Clear cart and navigate to success only if component is still mounted
               try {
                 await clearCart();
-                navigate('/order-success');
+                if (isMountedRef.current) {
+                  navigate('/order-success');
+                }
               } catch (error) {
                 console.error('Error handling interrupted order:', error);
               }
