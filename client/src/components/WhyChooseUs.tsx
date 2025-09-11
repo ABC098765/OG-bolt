@@ -27,12 +27,13 @@ const WhyChooseUs = memo(() => {
   ];
 
   return (
-    <section className="py-20 relative" style={{
-      backgroundImage: 'url(/fruit_background.png)',
-      backgroundSize: 'cover',
-      backgroundPosition: 'center',
-      backgroundRepeat: 'no-repeat'
-    }}>
+    <section className="py-20 relative overflow-hidden">
+      {/* Background image - matching hero section pattern */}
+      <img 
+        src="/fruit_background.png"
+        alt="Fresh fruit background"
+        className="absolute inset-0 w-full h-full object-cover"
+      />
       {/* Dark overlay for text readability - matching hero section */}
       <div className="absolute inset-0 bg-black/30"></div>
       <div className="max-w-7xl mx-auto px-4 relative z-10">
