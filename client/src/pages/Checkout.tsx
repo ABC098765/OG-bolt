@@ -783,8 +783,12 @@ const Checkout = () => {
                     onChange={() => setSelectedPaymentMethod('cod')}
                   />
                   <div className="flex items-center space-x-3">
-                    <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
-                      💵
+                    <div className="w-8 h-8 rounded-full flex items-center justify-center">
+                      <img 
+                        src="/cod-icon.png" 
+                        alt="Cash on Delivery" 
+                        className="w-8 h-8 rounded-full"
+                      />
                     </div>
                     <span className="font-medium text-gray-900 dark:text-white">Cash on Delivery</span>
                   </div>
