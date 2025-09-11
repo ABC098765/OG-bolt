@@ -7,12 +7,13 @@ import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
 
 const Home = () => {
   // Initialize intersection observer for reveal animations
-  const { observeAllElements } = useIntersectionObserver({
+  useIntersectionObserver({
     threshold: 0.1,
     rootMargin: '0px 0px -100px 0px',
     triggerOnce: true,
     observeNewElements: true,
   });
+
   return (
     <div className="smooth-scroll-container">
       {/* Sections with IDs */}
