@@ -58,6 +58,13 @@ const Checkout = () => {
     loadAddresses();
   }, [authState.user]);
 
+  // Redirect to cart if empty
+  useEffect(() => {
+    if (cartState.items.length === 0) {
+      navigate('/cart');
+    }
+  }, [cartState.items.length, navigate]);
+
   // Show loading or sign in prompt if not authenticated
   if (!authState.isAuthenticated) {
     return (
@@ -80,13 +87,6 @@ const Checkout = () => {
       </div>
     );
   }
-
-  // Redirect to cart if empty
-  useEffect(() => {
-    if (cartState.items.length === 0) {
-      navigate('/cart');
-    }
-  }, [cartState.items.length, navigate]);
 
   if (cartState.items.length === 0) {
     return null;
