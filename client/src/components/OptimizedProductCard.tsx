@@ -68,25 +68,32 @@ const OptimizedProductCard = memo<OptimizedProductCardProps>(({ product, onAddTo
         </button>
       </div>
 
-      {/* Product Image - Only show if valid image exists */}
-      {primaryImage && (
-        <div className="relative overflow-hidden">
+      {/* Product Image */}
+      <div className="relative overflow-hidden">
+        {primaryImage ? (
           <LazyImage
             src={primaryImage}
             alt={product.name}
             className="w-full h-40 sm:h-48 md:h-56 lg:h-64 object-cover group-hover:scale-110 transition-transform duration-500"
             loading="lazy"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-          {!isInStock && (
-            <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-              <span className="bg-red-500 text-white px-4 py-2 rounded-full font-semibold text-sm">
-                Out of Stock
-              </span>
+        ) : (
+          <div className="w-full h-40 sm:h-48 md:h-56 lg:h-64 bg-gradient-to-br from-green-100 to-orange-100 dark:from-green-800 dark:to-orange-800 flex items-center justify-center">
+            <div className="text-center">
+              <div className="text-4xl mb-2">🍎</div>
+              <p className="text-sm text-gray-600 dark:text-gray-300">Fresh Product</p>
             </div>
-          )}
-        </div>
-      )}
+          </div>
+        )}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+        {!isInStock && (
+          <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+            <span className="bg-red-500 text-white px-4 py-2 rounded-full font-semibold text-sm">
+              Out of Stock
+            </span>
+          </div>
+        )}
+      </div>
 
       {/* Product Info */}
       <div className="p-3 sm:p-4 lg:p-6">

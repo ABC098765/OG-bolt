@@ -193,6 +193,7 @@ const Products = () => {
     return matchesCategory && matchesSearch;
   });
 
+
   const handleAddToCart = async (product: any) => {
     if (!authState.isAuthenticated) {
       authDispatch({ type: 'SHOW_AUTH_MODAL' });
