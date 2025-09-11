@@ -23,6 +23,7 @@ const Checkout = () => {
   const [orderError, setOrderError] = useState<string>('');
   const [retryAttempt, setRetryAttempt] = useState(0);
   const [lastOrderId, setLastOrderId] = useState<string>('');
+  const [currentStep, setCurrentStep] = useState<'checkout' | 'payment'>('checkout');
 
   // Form fields
   const [addressName, setAddressName] = useState('');
@@ -308,6 +309,20 @@ const Checkout = () => {
     }
   };
 
+  const handleContinue = () => {
+    if (!selectedAddressId) {
+      setOrderError('Please select a delivery address');
+      return;
+    }
+    setCurrentStep('payment');
+    setOrderError(''); // Clear any previous errors
+  };
+
+  const handleBackToCheckout = () => {
+    setCurrentStep('checkout');
+    setOrderError('');
+  };
+
   const createOrder = async () => {
     if (!selectedAddressId || !selectedPaymentMethod) {
       setOrderError('Please select an address and payment method');
@@ -462,9 +477,9 @@ const Checkout = () => {
 
   // Step state logic
   const getStepState = (step: number) => {
-    if (step === 0) return !showAddressForm && !selectedAddressId ? 'editing' : 'complete';
-    if (step === 1) return selectedAddressId ? 'editing' : 'indexed';
-    if (step === 2) return isProcessingPayment ? 'editing' : 'indexed';
+    if (step === 0) return !showAddressForm && selectedAddressId ? 'complete' : 'editing';
+    if (step === 1) return currentStep === 'payment' && selectedAddressId ? 'editing' : selectedAddressId ? 'complete' : 'indexed';
+    if (step === 2) return currentStep === 'payment' && selectedPaymentMethod ? 'complete' : currentStep === 'payment' ? 'editing' : 'indexed';
     return 'indexed';
   };
 
@@ -518,13 +533,14 @@ const Checkout = () => {
           <div className="flex items-center justify-between">
             <StepCircle step={0} state={getStepState(0)} label="Address" />
             <div className="flex-1 h-0.5 bg-gray-300 dark:bg-gray-600 mx-4"></div>
-            <StepCircle step={1} state={getStepState(1)} label="Payment" />
+            <StepCircle step={1} state={getStepState(1)} label="Summary" />
             <div className="flex-1 h-0.5 bg-gray-300 dark:bg-gray-600 mx-4"></div>
             <StepCircle step={2} state={getStepState(2)} label="Payment" />
           </div>
         </div>
 
         {/* Address Section */}
+        {currentStep === 'checkout' && (
         <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 mb-8">
           <div className="flex items-center justify-between mb-6">
             <h3 className="text-xl font-bold text-gray-900 dark:text-white flex items-center">
@@ -683,8 +699,10 @@ const Checkout = () => {
             </div>
           )}
         </div>
+        )}
 
         {/* Order Summary */}
+        {currentStep === 'checkout' && (
         <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 mb-8">
           <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-6 flex items-center">
             <Package className="w-5 h-5 mr-2" />
@@ -738,8 +756,10 @@ const Checkout = () => {
             </p>
           )}
         </div>
+        )}
 
         {/* Payment Method */}
+        {currentStep === 'payment' && (
         <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 mb-8">
           <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-6 flex items-center">
             <CreditCard className="w-5 h-5 mr-2" />
@@ -776,6 +796,7 @@ const Checkout = () => {
             </div>
           </div>
         </div>
+        )}
 
         {/* Error Message */}
         {orderError && (
@@ -806,11 +827,24 @@ const Checkout = () => {
           </div>
         )}
 
-        {/* Place Order Button */}
+        {/* Continue/Place Order Button */}
         <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
+          {currentStep === 'payment' && (
+            <button
+              onClick={handleBackToCheckout}
+              className="w-full mb-4 border-2 border-green-600 text-green-600 py-3 px-6 rounded-lg hover:bg-green-50 dark:hover:bg-gray-700 transition-colors font-semibold"
+            >
+              ← Back to Address & Summary
+            </button>
+          )}
+          
           <button
-            onClick={createOrder}
-            disabled={!selectedAddressId || !selectedPaymentMethod || isProcessingPayment}
+            onClick={currentStep === 'checkout' ? handleContinue : createOrder}
+            disabled={
+              currentStep === 'checkout' 
+                ? !selectedAddressId 
+                : !selectedAddressId || !selectedPaymentMethod || isProcessingPayment
+            }
             className="w-full bg-green-600 text-white py-4 px-8 rounded-lg hover:bg-green-700 transition-colors font-semibold text-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
           >
             {isProcessingPayment ? (
@@ -820,14 +854,14 @@ const Checkout = () => {
                 {retryAttempt > 0 && <span className="ml-2 text-sm">(Attempt {retryAttempt}/3)</span>}
               </>
             ) : (
-              'Place Order'
+              currentStep === 'checkout' ? 'Continue' : 'Place Order'
             )}
           </button>
           
-          {!selectedAddressId && (
+          {currentStep === 'checkout' && !selectedAddressId && (
             <p className="text-sm text-red-600 dark:text-red-400 mt-2 text-center">Please select a delivery address</p>
           )}
-          {!selectedPaymentMethod && (
+          {currentStep === 'payment' && !selectedPaymentMethod && (
             <p className="text-sm text-red-600 dark:text-red-400 mt-2 text-center">Please select a payment method</p>
           )}
         </div>
