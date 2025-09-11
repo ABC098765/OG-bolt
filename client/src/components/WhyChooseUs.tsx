@@ -27,19 +27,20 @@ const WhyChooseUs = memo(() => {
   ];
 
   return (
-    <section className="py-20 relative bg-gradient-to-br from-lime-100 to-orange-100 dark:bg-gradient-to-br dark:from-lime-900 dark:to-orange-900" style={{
+    <section className="py-20 relative" style={{
       backgroundImage: 'url(/fruit_background.png)',
       backgroundSize: 'cover',
       backgroundPosition: 'center',
       backgroundRepeat: 'no-repeat'
     }}>
-      <div className="absolute inset-0 bg-gradient-to-br from-lime-100/80 to-orange-100/80 dark:from-lime-900/80 dark:to-orange-900/80"></div>
+      {/* Dark overlay for text readability - matching hero section */}
+      <div className="absolute inset-0 bg-black/30"></div>
       <div className="max-w-7xl mx-auto px-4 relative z-10">
         <div className="text-center mb-16">
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-6">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-6">
             Why Choose <span className="text-green-600 underline-gradient">Super Fruit Center</span>?
           </h2>
-          <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+          <p className="text-xl text-white/90 max-w-3xl mx-auto">
             We're committed to bringing you the freshest, highest-quality fruits with exceptional service that sets us apart.
           </p>
         </div>
@@ -55,10 +56,10 @@ const WhyChooseUs = memo(() => {
                 <div className={`w-16 h-16 ${feature.bgColor} rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
                   <IconComponent className={`w-8 h-8 ${feature.color}`} />
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">
+                <h3 className="text-xl font-semibold text-white mb-3">
                   {feature.title}
                 </h3>
-                <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
+                <p className="text-white/90 leading-relaxed">
                   {feature.description}
                 </p>
               </div>
