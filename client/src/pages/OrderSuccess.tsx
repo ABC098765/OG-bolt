@@ -11,59 +11,169 @@ const OrderSuccess = () => {
     let animationIds: number[] = [];
     let cleanupTimeout: NodeJS.Timeout;
     
-    // Simple confetti effect simulation with browser APIs
+    // Enhanced confetti effect with multiple particle types and animations
     const createConfetti = () => {
-      const colors = ['#22c55e', '#fbbf24', '#f87171', '#60a5fa', '#a78bfa'];
+      const colors = ['#22c55e', '#10b981', '#fbbf24', '#f59e0b', '#f87171', '#ef4444', '#60a5fa', '#3b82f6', '#a78bfa', '#8b5cf6', '#f472b6', '#ec4899'];
       const particles: HTMLElement[] = [];
       
-      for (let i = 0; i < 50; i++) {
-        const particle = document.createElement('div');
-        particle.style.position = 'fixed';
-        particle.style.left = Math.random() * 100 + '%';
-        particle.style.top = '-10px';
-        particle.style.width = '10px';
-        particle.style.height = '10px';
-        particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-        particle.style.pointerEvents = 'none';
-        particle.style.borderRadius = '50%';
-        particle.style.zIndex = '9999';
-        document.body.appendChild(particle);
-        particles.push(particle);
-        
-        const animateParticle = () => {
-          if (!document.body.contains(particle)) return; // Safety check
-          
-          const fallSpeed = Math.random() * 3 + 2;
-          const drift = Math.sin(Date.now() * 0.01) * 2;
-          const currentTop = parseFloat(particle.style.top) || -10;
-          
-          particle.style.top = currentTop + fallSpeed + 'px';
-          particle.style.left = parseFloat(particle.style.left) + drift + 'px';
-          
-          if (currentTop < window.innerHeight + 20) {
-            const animationId = requestAnimationFrame(animateParticle);
-            animationIds.push(animationId);
-          } else {
-            if (document.body.contains(particle)) {
-              document.body.removeChild(particle);
-            }
-          }
-        };
-        
+      // Create burst effect from center
+      const centerX = window.innerWidth / 2;
+      const centerY = window.innerHeight / 2;
+      
+      // Create multiple waves of particles
+      for (let wave = 0; wave < 3; wave++) {
         setTimeout(() => {
-          const animationId = requestAnimationFrame(animateParticle);
-          animationIds.push(animationId);
-        }, i * 100);
+          for (let i = 0; i < 100; i++) {
+            const particle = document.createElement('div');
+            const particleType = Math.random();
+            const size = Math.random() * 8 + 4; // 4-12px
+            
+            // Different particle shapes
+            if (particleType < 0.6) {
+              // Circles (60%)
+              particle.style.borderRadius = '50%';
+            } else if (particleType < 0.8) {
+              // Stars (20%)
+              particle.innerHTML = '★';
+              particle.style.fontSize = size + 'px';
+              particle.style.textAlign = 'center';
+              particle.style.lineHeight = size + 'px';
+            } else {
+              // Hearts (20%)
+              particle.innerHTML = '💚';
+              particle.style.fontSize = size + 'px';
+              particle.style.textAlign = 'center';
+              particle.style.lineHeight = size + 'px';
+            }
+            
+            particle.style.position = 'fixed';
+            particle.style.width = size + 'px';
+            particle.style.height = size + 'px';
+            particle.style.backgroundColor = particleType < 0.6 ? colors[Math.floor(Math.random() * colors.length)] : 'transparent';
+            particle.style.pointerEvents = 'none';
+            particle.style.zIndex = '9999';
+            particle.style.opacity = '1';
+            
+            // Start from center with random burst direction
+            const angle = (Math.PI * 2 * i) / 100 + Math.random() * 0.5;
+            const velocity = Math.random() * 15 + 10;
+            const startX = centerX + Math.cos(angle) * 50;
+            const startY = centerY + Math.sin(angle) * 50;
+            
+            particle.style.left = startX + 'px';
+            particle.style.top = startY + 'px';
+            
+            document.body.appendChild(particle);
+            particles.push(particle);
+            
+            // Enhanced animation with physics
+            let x = startX;
+            let y = startY;
+            let vx = Math.cos(angle) * velocity + (Math.random() - 0.5) * 5;
+            let vy = Math.sin(angle) * velocity + (Math.random() - 0.5) * 5;
+            let rotation = 0;
+            let scale = 1;
+            let opacity = 1;
+            let time = 0;
+            
+            const animateParticle = () => {
+              if (!document.body.contains(particle)) return;
+              
+              time += 0.016; // ~60fps
+              
+              // Physics
+              vy += 0.5; // gravity
+              vx *= 0.99; // air resistance
+              vy *= 0.995;
+              
+              x += vx;
+              y += vy;
+              
+              // Rotation and scaling
+              rotation += (vx + vy) * 0.1;
+              scale = 1 + Math.sin(time * 5) * 0.1;
+              opacity = Math.max(0, 1 - time / 4); // fade out over 4 seconds
+              
+              // Apply transformations
+              particle.style.left = x + 'px';
+              particle.style.top = y + 'px';
+              particle.style.transform = `rotate(${rotation}deg) scale(${scale})`;
+              particle.style.opacity = opacity.toString();
+              
+              // Continue animation or cleanup
+              if (y < window.innerHeight + 100 && opacity > 0.1 && time < 5) {
+                const animationId = requestAnimationFrame(animateParticle);
+                animationIds.push(animationId);
+              } else {
+                if (document.body.contains(particle)) {
+                  document.body.removeChild(particle);
+                }
+              }
+            };
+            
+            // Stagger particle start times for wave effect
+            setTimeout(() => {
+              const animationId = requestAnimationFrame(animateParticle);
+              animationIds.push(animationId);
+            }, Math.random() * 200);
+          }
+        }, wave * 400); // 400ms between waves
       }
       
-      // Remove all particles after 3 seconds
+      // Additional shooting stars effect
+      setTimeout(() => {
+        for (let i = 0; i < 20; i++) {
+          const star = document.createElement('div');
+          star.innerHTML = '✨';
+          star.style.position = 'fixed';
+          star.style.fontSize = (Math.random() * 10 + 8) + 'px';
+          star.style.left = Math.random() * window.innerWidth + 'px';
+          star.style.top = '-20px';
+          star.style.pointerEvents = 'none';
+          star.style.zIndex = '9999';
+          star.style.opacity = '1';
+          
+          document.body.appendChild(star);
+          particles.push(star);
+          
+          let y = -20;
+          let opacity = 1;
+          
+          const animateStar = () => {
+            if (!document.body.contains(star)) return;
+            
+            y += Math.random() * 8 + 5;
+            opacity -= 0.015;
+            
+            star.style.top = y + 'px';
+            star.style.opacity = opacity.toString();
+            star.style.transform = `rotate(${y * 2}deg)`;
+            
+            if (y < window.innerHeight + 50 && opacity > 0) {
+              const animationId = requestAnimationFrame(animateStar);
+              animationIds.push(animationId);
+            } else {
+              if (document.body.contains(star)) {
+                document.body.removeChild(star);
+              }
+            }
+          };
+          
+          setTimeout(() => {
+            const animationId = requestAnimationFrame(animateStar);
+            animationIds.push(animationId);
+          }, i * 150);
+        }
+      }, 500);
+      
+      // Extended cleanup
       cleanupTimeout = setTimeout(() => {
         particles.forEach(particle => {
           if (document.body.contains(particle)) {
             document.body.removeChild(particle);
           }
         });
-      }, 3000);
+      }, 6000); // Extended to 6 seconds
     };
 
     createConfetti();
