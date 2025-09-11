@@ -71,7 +71,7 @@ const OptimizedProductCard = memo<OptimizedProductCardProps>(({ product, onAddTo
       {/* Product Image */}
       <div className="relative overflow-hidden">
         {primaryImage ? (
-          <LazyImage
+          <img
             src={primaryImage}
             alt={product.name}
             className="w-full h-40 sm:h-48 md:h-56 lg:h-64 object-cover group-hover:scale-110 transition-transform duration-500"
