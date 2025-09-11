@@ -26,7 +26,7 @@ const Hero = memo(() => {
   }, []);
 
   return (
-    <section id="home" className="relative overflow-hidden py-20">
+    <section id="home" className="relative overflow-hidden pt-32 pb-20">
       {/* Mobile: Static image background - SEO friendly with proper alt text */}
       <div className="absolute inset-0 md:hidden">
         <img 
