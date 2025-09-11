@@ -61,12 +61,12 @@ const Checkout = () => {
     loadAddresses();
   }, [authState.user]);
 
-  // Redirect to cart if empty
+  // Redirect to cart if empty (but not during order processing)
   useEffect(() => {
-    if (cartState.items.length === 0) {
+    if (cartState.items.length === 0 && !isProcessingPayment) {
       navigate('/cart');
     }
-  }, [cartState.items.length, navigate]);
+  }, [cartState.items.length, navigate, isProcessingPayment]);
 
   // Cleanup mounted ref on unmount
   useEffect(() => {
@@ -98,7 +98,7 @@ const Checkout = () => {
     );
   }
 
-  if (cartState.items.length === 0) {
+  if (cartState.items.length === 0 && !isProcessingPayment) {
     return null;
   }
 
