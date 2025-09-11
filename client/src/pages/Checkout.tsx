@@ -61,12 +61,12 @@ const Checkout = () => {
     loadAddresses();
   }, [authState.user]);
 
-  // Redirect to cart if empty (but not during order processing)
+  // Redirect to cart if empty
   useEffect(() => {
-    if (cartState.items.length === 0 && !isProcessingPayment) {
+    if (cartState.items.length === 0) {
       navigate('/cart');
     }
-  }, [cartState.items.length, navigate, isProcessingPayment]);
+  }, [cartState.items.length, navigate]);
 
   // Cleanup mounted ref on unmount
   useEffect(() => {
@@ -98,9 +98,8 @@ const Checkout = () => {
     );
   }
 
-  if (cartState.items.length === 0 && !isProcessingPayment) {
-    return null;
-  }
+  // Determine if we should show checkout content
+  const shouldShowCheckout = cartState.items.length > 0 || isProcessingPayment;
 
   const startAddAddress = () => {
     setEditingAddress(null);
@@ -422,11 +421,6 @@ const Checkout = () => {
           // Don't fail the entire process if cart clearing fails
         }
         
-        // Set processing to false before navigation to prevent early returns
-        if (isMountedRef.current) {
-          setIsProcessingPayment(false);
-        }
-        
         // Navigate to success page only if component is still mounted
         if (isMountedRef.current) {
           navigate('/order-success');
@@ -538,6 +532,23 @@ const Checkout = () => {
       </div>
     );
   };
+
+  // Show loading or redirect message if no checkout content
+  if (!shouldShowCheckout) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
+        <div className="max-w-4xl mx-auto px-4">
+          <div className="text-center py-16">
+            <Package className="w-24 h-24 text-gray-300 dark:text-gray-600 mx-auto mb-6" />
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">Cart is empty</h2>
+            <p className="text-xl text-gray-600 dark:text-gray-300 mb-8">
+              Redirecting you back to shopping...
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
