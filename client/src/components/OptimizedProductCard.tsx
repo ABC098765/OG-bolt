@@ -40,7 +40,7 @@ const OptimizedProductCard = memo<OptimizedProductCardProps>(({ product, onAddTo
   const isInStock = product.inStock !== false && (product.stock === undefined || product.stock > 0);
   return (
     <div 
-      className="group relative bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 overflow-hidden cursor-pointer w-full h-auto flex flex-col"
+      className="reveal-product group relative bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 overflow-hidden cursor-pointer w-full h-auto flex flex-col"
       onClick={() => navigate(`/product/${product.id}`)}
     >
       {/* Stock Badge */}
