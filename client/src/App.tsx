@@ -28,7 +28,7 @@ function AppContent() {
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors">
       <Header />
-      <div>
+      <div className="pt-32">
         <Notification />
         <AuthModal />
         <OrderTutorial 
