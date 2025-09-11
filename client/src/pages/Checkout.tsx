@@ -422,6 +422,11 @@ const Checkout = () => {
           // Don't fail the entire process if cart clearing fails
         }
         
+        // Set processing to false before navigation to prevent early returns
+        if (isMountedRef.current) {
+          setIsProcessingPayment(false);
+        }
+        
         // Navigate to success page only if component is still mounted
         if (isMountedRef.current) {
           navigate('/order-success');
