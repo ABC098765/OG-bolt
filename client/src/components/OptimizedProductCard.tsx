@@ -32,11 +32,20 @@ const OptimizedProductCard = memo<OptimizedProductCardProps>(({ product, onAddTo
   const [, setLocation] = useLocation();
   const navigate = (path: string) => setLocation(path);
   
+  // Debug log to see product data
+  console.log(`🖼️ Product ${product.name} data:`, product);
+  
   const productImages = product.imageUrls || product.image_urls || (product.image_url ? [product.image_url] : (product.image ? [product.image] : []));
   
-  // Filter out invalid URLs
-  const validImages = productImages.filter(url => url && typeof url === 'string' && url.trim() !== '');
-  const primaryImage = validImages.length > 0 ? validImages[0] : null;
+  const validImages = productImages.filter(url => 
+    url && 
+    typeof url === 'string' && 
+    url.trim() !== '' && 
+    (url.startsWith('http') || url.startsWith('data:')) &&
+    !url.includes('/wiki/') && // Skip wikipedia pages
+    !url.includes('/media/') // Skip fandom media pages
+  );
+  const primaryImage = validImages.length > 0 ? validImages[0] : (productImages.length > 0 ? productImages[0] : 'https://images.pexels.com/photos/1132047/pexels-photo-1132047.jpeg?auto=compress&cs=tinysrgb&w=400');
   
   const isInStock = product.inStock !== false && (product.stock === undefined || product.stock > 0);
   return (
@@ -70,12 +79,16 @@ const OptimizedProductCard = memo<OptimizedProductCardProps>(({ product, onAddTo
       </div>
 
       {/* Product Image */}
-      <div className="relative overflow-hidden">
+      <div className="relative overflow-hidden bg-gray-100 dark:bg-gray-700">
         {primaryImage ? (
-          <LazyImage
+          <img
             src={primaryImage}
             alt={product.name}
             className="w-full h-40 sm:h-48 md:h-56 lg:h-64 object-cover group-hover:scale-110 transition-transform duration-500"
+            onError={(e) => {
+              console.error(`❌ Image failed: ${primaryImage}`);
+              (e.target as HTMLImageElement).src = 'https://images.pexels.com/photos/1132047/pexels-photo-1132047.jpeg?auto=compress&cs=tinysrgb&w=400';
+            }}
           />
         ) : (
           <div className="w-full h-40 sm:h-48 md:h-56 lg:h-64 bg-gradient-to-br from-green-100 to-orange-100 dark:from-green-800 dark:to-orange-800 flex items-center justify-center">

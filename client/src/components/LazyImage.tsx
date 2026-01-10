@@ -108,11 +108,12 @@ const LazyImage = memo<LazyImageProps>(({
         ref={imgRef}
         src={src}
         alt={alt}
-        className={`transition-opacity duration-300 ${
-          isLoaded ? 'opacity-100' : 'opacity-0'
-        } ${className}`}
+        className={`transition-opacity duration-300 opacity-100 ${className}`}
         onLoad={handleImageLoad}
-        onError={handleImageError}
+        onError={(e) => {
+          console.error(`❌ Image failed to load: ${src}`, e);
+          handleImageError();
+        }}
         loading={loading}
       />
       
