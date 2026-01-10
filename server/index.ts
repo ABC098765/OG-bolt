@@ -32,7 +32,7 @@ app.use(helmet({
       defaultSrc: ["'self'"],
       styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://cdn.jsdelivr.net"],
       fontSrc: ["'self'", "https://fonts.gstatic.com", "https://cdn.jsdelivr.net"],
-      imgSrc: ["'self'", "data:", "https:", "blob:", "https://firebasestorage.googleapis.com"],
+      imgSrc: ["'self'", "data:", "https:", "blob:", "https://firebasestorage.googleapis.com", "https://images.pexels.com", "https://images.unsplash.com"],
       scriptSrc: process.env.NODE_ENV === 'development' 
         ? ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://www.google.com", "https://www.gstatic.com", "https://apis.google.com"] // Development mode with reCAPTCHA and Google OAuth
         : ["'self'", "'strict-dynamic'", "https://www.google.com", "https://www.gstatic.com", "https://apis.google.com"], // Production mode with reCAPTCHA and Google OAuth

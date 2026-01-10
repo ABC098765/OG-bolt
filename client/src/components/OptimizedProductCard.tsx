@@ -12,6 +12,7 @@ interface Product {
   image: string;
   imageUrls?: string[];
   image_urls?: string[];
+  image_url?: string;
   rating?: number;
   badge?: string;
   unit?: string;
@@ -31,9 +32,9 @@ const OptimizedProductCard = memo<OptimizedProductCardProps>(({ product, onAddTo
   const [, setLocation] = useLocation();
   const navigate = (path: string) => setLocation(path);
   
-  const productImages = product.imageUrls || product.image_urls || (product.image ? [product.image] : []);
+  const productImages = product.imageUrls || product.image_urls || (product.image_url ? [product.image_url] : (product.image ? [product.image] : []));
   
-  // Filter out invalid URLs - no fallback placeholder
+  // Filter out invalid URLs
   const validImages = productImages.filter(url => url && typeof url === 'string' && url.trim() !== '');
   const primaryImage = validImages.length > 0 ? validImages[0] : null;
   
@@ -71,11 +72,10 @@ const OptimizedProductCard = memo<OptimizedProductCardProps>(({ product, onAddTo
       {/* Product Image */}
       <div className="relative overflow-hidden">
         {primaryImage ? (
-          <img
+          <LazyImage
             src={primaryImage}
             alt={product.name}
             className="w-full h-40 sm:h-48 md:h-56 lg:h-64 object-cover group-hover:scale-110 transition-transform duration-500"
-            loading="lazy"
           />
         ) : (
           <div className="w-full h-40 sm:h-48 md:h-56 lg:h-64 bg-gradient-to-br from-green-100 to-orange-100 dark:from-green-800 dark:to-orange-800 flex items-center justify-center">
