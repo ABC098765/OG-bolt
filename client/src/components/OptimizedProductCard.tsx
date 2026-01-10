@@ -85,9 +85,13 @@ const OptimizedProductCard = memo<OptimizedProductCardProps>(({ product, onAddTo
             src={primaryImage}
             alt={product.name}
             className="w-full h-40 sm:h-48 md:h-56 lg:h-64 object-cover group-hover:scale-110 transition-transform duration-500"
+            referrerPolicy="no-referrer"
             onError={(e) => {
               console.error(`❌ Image failed: ${primaryImage}`);
-              (e.target as HTMLImageElement).src = 'https://images.pexels.com/photos/1132047/pexels-photo-1132047.jpeg?auto=compress&cs=tinysrgb&w=400';
+              const target = e.target as HTMLImageElement;
+              if (!target.src.includes('placeholder')) {
+                target.src = 'https://images.pexels.com/photos/1132047/pexels-photo-1132047.jpeg?auto=compress&cs=tinysrgb&w=400';
+              }
             }}
           />
         ) : (

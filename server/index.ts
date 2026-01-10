@@ -27,40 +27,17 @@ app.use((req, res, next) => {
 
 // 🔒 ENHANCED SECURITY HEADERS - Fine-tuned Content Security Policy
 app.use(helmet({
-  contentSecurityPolicy: {
-    directives: {
-      defaultSrc: ["'self'"],
-      styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://cdn.jsdelivr.net"],
-      fontSrc: ["'self'", "https://fonts.gstatic.com", "https://cdn.jsdelivr.net"],
-      imgSrc: ["*", "data:", "https:", "blob:"],
-      scriptSrc: process.env.NODE_ENV === 'development' 
-        ? ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://www.google.com", "https://www.gstatic.com", "https://apis.google.com"] // Development mode with reCAPTCHA and Google OAuth
-        : ["'self'", "'strict-dynamic'", "https://www.google.com", "https://www.gstatic.com", "https://apis.google.com"], // Production mode with reCAPTCHA and Google OAuth
-      connectSrc: ["*", "https:", "wss:", "ws:"],
-      frameSrc: [
-        "https://accounts.google.com", 
-        "https://content.googleapis.com", // Firebase auth frames
-        "https://www.google.com", // reCAPTCHA frames
-        "https://recaptcha.google.com", // reCAPTCHA frames
-        "https://apis.google.com" // Google APIs frames
-      ],
-      objectSrc: ["'none'"],
-      baseUri: ["'self'"],
-      formAction: ["'self'"],
-      frameAncestors: ["'none'"], // Prevent embedding
-      upgradeInsecureRequests: [],
-    },
-  },
-  crossOriginEmbedderPolicy: false, // Required for Firebase
+  contentSecurityPolicy: false, // TEMPORARILY DISABLE CSP TO DEBUG IMAGES
+  crossOriginEmbedderPolicy: false,
   hsts: {
-    maxAge: 31536000, // 1 year
+    maxAge: 31536000,
     includeSubDomains: true,
     preload: true
   },
   noSniff: true,
-  xssFilter: false, // Disabled in favor of CSP
+  xssFilter: false,
   referrerPolicy: {
-    policy: ["strict-origin-when-cross-origin"]
+    policy: ["no-referrer"]
   }
 }));
 
