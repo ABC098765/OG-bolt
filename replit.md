@@ -8,32 +8,14 @@ Preferred communication style: Simple, everyday language.
 
 # Recent Changes
 
-## August 26, 2025 - 3D Orange Burst Animation Integration
+## January 10, 2026 - Security & Auth Domain Configuration
 
-### New Feature Added
-- **Enhancement**: Added dramatic 3D orange burst animation with text reveal effect
-- **Location**: New full-screen section on homepage after the hero section
-- **Behavior**: 
-  - Orange emerges from behind the screen with dramatic movement
-  - Collides with screen and bursts into animated splash particles
-  - Hidden "SUPER FRUIT CENTER" text dramatically reveals during burst
-  - Animated gradient text with glow effects
-- **Technical Implementation**:
-  - Uses Three.js for WebGL 3D rendering with full-screen canvas
-  - Frame-based animation cycling through 3 splash textures
-  - Physics-based particle system with gravity and air resistance
-  - Synchronized text reveal with opacity and transform animations
-  - Auto-cycles every 11 seconds for continuous engagement
-  - Proper cleanup and memory management
+### Enhancements
+- **CORS Optimization**: Updated production CORS configuration to include the official Netlify deployment URL (`https://superfruitcenter.netlify.app`).
+- **Domain Identification**: Identified required authorized domains for Firebase (Replit dev domain and Netlify production domain) to fix Google Sign-in issues.
 
-### Files Added/Modified
-- **Added**: `client/src/components/SuperFruitCenterReveal.tsx` - Full-screen 3D animation with text reveal
-- **Modified**: `client/src/pages/Home.tsx` - Added new section to homepage
-- **Added**: Splash texture assets in `client/public/` (splash1.png, splash2.png, splash3.png)
-
-### Dependencies Added
-- `three`: 3D graphics library for WebGL rendering
-- `@types/three`: TypeScript definitions for Three.js
+### Files Modified
+- `server/config/security.ts`: Updated `productionConfig` with actual Netlify URL.
 
 ## January 24, 2025 - Order Tracking & Reorder Functionality Enhancement
 
