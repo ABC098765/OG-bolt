@@ -12,7 +12,6 @@ interface Product {
   image: string;
   imageUrls?: string[];
   image_urls?: string[];
-  image_url?: string;
   rating?: number;
   badge?: string;
   unit?: string;
@@ -32,25 +31,16 @@ const OptimizedProductCard = memo<OptimizedProductCardProps>(({ product, onAddTo
   const [, setLocation] = useLocation();
   const navigate = (path: string) => setLocation(path);
   
-  // Debug log to see product data
-  console.log(`🖼️ Product ${product.name} data:`, product);
+  const productImages = product.imageUrls || product.image_urls || (product.image ? [product.image] : []);
   
-  const productImages = product.imageUrls || product.image_urls || (product.image_url ? [product.image_url] : (product.image ? [product.image] : []));
-  
-  const validImages = productImages.filter(url => 
-    url && 
-    typeof url === 'string' && 
-    url.trim() !== '' && 
-    (url.startsWith('http') || url.startsWith('data:')) &&
-    !url.includes('/wiki/') && // Skip wikipedia pages
-    !url.includes('/media/') // Skip fandom media pages
-  );
-  const primaryImage = validImages.length > 0 ? validImages[0] : (productImages.length > 0 ? productImages[0] : 'https://images.pexels.com/photos/1132047/pexels-photo-1132047.jpeg?auto=compress&cs=tinysrgb&w=400');
+  // Filter out invalid URLs - no fallback placeholder
+  const validImages = productImages.filter(url => url && typeof url === 'string' && url.trim() !== '');
+  const primaryImage = validImages.length > 0 ? validImages[0] : null;
   
   const isInStock = product.inStock !== false && (product.stock === undefined || product.stock > 0);
   return (
     <div 
-      className="group relative bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 overflow-hidden cursor-pointer w-full h-auto flex flex-col"
+      className="group relative bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 overflow-hidden cursor-pointer w-full h-auto flex flex-col animate-fade-in"
       onClick={() => navigate(`/product/${product.id}`)}
     >
       {/* Stock Badge */}
@@ -79,29 +69,29 @@ const OptimizedProductCard = memo<OptimizedProductCardProps>(({ product, onAddTo
       </div>
 
       {/* Product Image */}
-      <div className="relative overflow-hidden bg-orange-200 dark:bg-gray-700 h-40 sm:h-48 md:h-56 lg:h-64 flex items-center justify-center border-4 border-orange-400 rounded-t-xl" style={{ opacity: 1, visibility: 'visible' }}>
-        <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none z-0">
-          <span className="text-orange-600 text-sm font-bold uppercase tracking-widest">{product.name}</span>
-          <span className="text-orange-400 text-[10px] mt-1">Image Loading...</span>
-        </div>
+      <div className="relative overflow-hidden">
         {primaryImage ? (
           <img
             src={primaryImage}
             alt={product.name}
-            className="w-full h-full object-cover relative z-10"
-            style={{ display: 'block', minHeight: '100%' }}
-            onLoad={(e) => {
-              console.log(`✅ Image loaded: ${product.name}`);
-              (e.target as HTMLImageElement).style.opacity = '1';
-            }}
-            onError={(e) => {
-              console.error(`❌ Image failed: ${product.name} - ${primaryImage}`);
-              // Don't hide it, maybe it will show a broken icon which is better than nothing for debugging
-              (e.target as HTMLImageElement).style.border = '2px solid red';
-            }}
+            className="w-full h-40 sm:h-48 md:h-56 lg:h-64 object-cover group-hover:scale-110 transition-transform duration-500"
+            loading="lazy"
           />
         ) : (
-          <div className="text-4xl relative z-10">🍎</div>
+          <div className="w-full h-40 sm:h-48 md:h-56 lg:h-64 bg-gradient-to-br from-green-100 to-orange-100 dark:from-green-800 dark:to-orange-800 flex items-center justify-center">
+            <div className="text-center">
+              <div className="text-4xl mb-2">🍎</div>
+              <p className="text-sm text-gray-600 dark:text-gray-300">Fresh Product</p>
+            </div>
+          </div>
+        )}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+        {!isInStock && (
+          <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+            <span className="bg-red-500 text-white px-4 py-2 rounded-full font-semibold text-sm">
+              Out of Stock
+            </span>
+          </div>
         )}
       </div>
 

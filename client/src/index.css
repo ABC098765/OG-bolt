@@ -41,8 +41,8 @@
 
 /* Faster animation for product cards */
 .reveal-product {
-  opacity: 1;
-  transform: none;
+  opacity: 0;
+  transform: translateY(20px);
   transition: opacity 0.6s ease-out, transform 0.6s ease-out;
 }
 
@@ -672,8 +672,8 @@ html, body {
 
 /* Custom scrollbar styles removed to prevent conflicts with targeted scrollbar hiding */
 
-/* Smooth transitions for elements that need them */
-.transition-all-custom {
+/* Smooth transitions for all elements */
+* {
   transition: all 0.3s ease;
 }
 

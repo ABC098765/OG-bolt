@@ -27,17 +27,58 @@ app.use((req, res, next) => {
 
 // 🔒 ENHANCED SECURITY HEADERS - Fine-tuned Content Security Policy
 app.use(helmet({
-  contentSecurityPolicy: false, // TEMPORARILY DISABLE CSP TO DEBUG IMAGES
-  crossOriginEmbedderPolicy: false,
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://cdn.jsdelivr.net"],
+      fontSrc: ["'self'", "https://fonts.gstatic.com", "https://cdn.jsdelivr.net"],
+      imgSrc: ["'self'", "data:", "https:", "blob:", "https://firebasestorage.googleapis.com"],
+      scriptSrc: process.env.NODE_ENV === 'development' 
+        ? ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://www.google.com", "https://www.gstatic.com", "https://apis.google.com"] // Development mode with reCAPTCHA and Google OAuth
+        : ["'self'", "'strict-dynamic'", "https://www.google.com", "https://www.gstatic.com", "https://apis.google.com"], // Production mode with reCAPTCHA and Google OAuth
+      connectSrc: [
+        "'self'", 
+        "https:", 
+        "wss:", 
+        "ws:",
+        "https://identitytoolkit.googleapis.com", // Firebase Auth
+        "https://securetoken.googleapis.com", // Firebase Auth  
+        "https://firestore.googleapis.com", // Firestore
+        "https://fcm.googleapis.com", // Firebase Cloud Messaging
+        "https://www.google.com", // reCAPTCHA
+        "https://recaptcha.google.com", // reCAPTCHA API
+        "https://www.gstatic.com", // reCAPTCHA resources
+        "https://accounts.google.com", // Google OAuth
+        "https://apis.google.com", // Google APIs
+        "https://oauth2.googleapis.com", // Google OAuth token exchange
+        "https://content.googleapis.com", // Google OAuth content
+        "https://ssl.gstatic.com", // Google static resources
+        "*.googleapis.com" // All Google API services
+      ],
+      frameSrc: [
+        "https://accounts.google.com", 
+        "https://content.googleapis.com", // Firebase auth frames
+        "https://www.google.com", // reCAPTCHA frames
+        "https://recaptcha.google.com", // reCAPTCHA frames
+        "https://apis.google.com" // Google APIs frames
+      ],
+      objectSrc: ["'none'"],
+      baseUri: ["'self'"],
+      formAction: ["'self'"],
+      frameAncestors: ["'none'"], // Prevent embedding
+      upgradeInsecureRequests: [],
+    },
+  },
+  crossOriginEmbedderPolicy: false, // Required for Firebase
   hsts: {
-    maxAge: 31536000,
+    maxAge: 31536000, // 1 year
     includeSubDomains: true,
     preload: true
   },
   noSniff: true,
-  xssFilter: false,
+  xssFilter: false, // Disabled in favor of CSP
   referrerPolicy: {
-    policy: ["no-referrer"]
+    policy: ["strict-origin-when-cross-origin"]
   }
 }));
 
