@@ -50,7 +50,7 @@ const OptimizedProductCard = memo<OptimizedProductCardProps>(({ product, onAddTo
   const isInStock = product.inStock !== false && (product.stock === undefined || product.stock > 0);
   return (
     <div 
-      className="group relative bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 overflow-hidden cursor-pointer w-full h-auto flex flex-col animate-fade-in"
+      className="group relative bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 overflow-hidden cursor-pointer w-full h-auto flex flex-col"
       onClick={() => navigate(`/product/${product.id}`)}
     >
       {/* Stock Badge */}
@@ -80,11 +80,28 @@ const OptimizedProductCard = memo<OptimizedProductCardProps>(({ product, onAddTo
 
       {/* Product Image */}
       <div className="relative overflow-hidden bg-gray-100 dark:bg-gray-700 h-40 sm:h-48 md:h-56 lg:h-64">
-        <LazyImage
-          src={primaryImage || ''}
-          alt={product.name}
-          className="group-hover:scale-110 transition-transform duration-500"
-        />
+        {primaryImage ? (
+          <img
+            src={primaryImage}
+            alt={product.name}
+            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+            referrerPolicy="no-referrer"
+            onError={(e) => {
+              console.error(`❌ Image failed: ${primaryImage}`);
+              const target = e.target as HTMLImageElement;
+              if (!target.src.includes('placeholder')) {
+                target.src = 'https://images.pexels.com/photos/1132047/pexels-photo-1132047.jpeg?auto=compress&cs=tinysrgb&w=400';
+              }
+            }}
+          />
+        ) : (
+          <div className="w-full h-full bg-gradient-to-br from-green-100 to-orange-100 dark:from-green-800 dark:to-orange-800 flex items-center justify-center">
+            <div className="text-center">
+              <div className="text-4xl mb-2">🍎</div>
+              <p className="text-sm text-gray-600 dark:text-gray-300">Fresh Product</p>
+            </div>
+          </div>
+        )}
         <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
         {!isInStock && (
           <div className="absolute inset-0 bg-black/50 flex items-center justify-center">

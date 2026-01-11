@@ -38,9 +38,7 @@ const LazyImage = memo<LazyImageProps>(({
         ref={imgRef}
         src={src}
         alt={alt}
-        className={`w-full h-full object-cover transition-opacity duration-300 ${
-          isLoaded ? 'opacity-100' : 'opacity-0'
-        } ${className}`}
+        className={`w-full h-full object-cover transition-opacity duration-300 opacity-100 ${className}`}
         onLoad={handleImageLoad}
         onError={handleImageError}
         loading={loading}
