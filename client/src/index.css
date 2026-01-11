@@ -672,8 +672,8 @@ html, body {
 
 /* Custom scrollbar styles removed to prevent conflicts with targeted scrollbar hiding */
 
-/* Smooth transitions for all elements */
-* {
+/* Smooth transitions for elements that need them */
+.transition-all-custom {
   transition: all 0.3s ease;
 }
 

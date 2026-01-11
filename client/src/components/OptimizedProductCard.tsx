@@ -79,36 +79,20 @@ const OptimizedProductCard = memo<OptimizedProductCardProps>(({ product, onAddTo
       </div>
 
       {/* Product Image */}
-      <div className="relative overflow-hidden bg-gray-100 dark:bg-gray-700 h-40 sm:h-48 md:h-56 lg:h-64">
+      <div className="relative overflow-hidden bg-orange-50 dark:bg-gray-700 h-40 sm:h-48 md:h-56 lg:h-64 flex items-center justify-center border-b border-gray-100">
         {primaryImage ? (
-          <img
-            src={primaryImage}
-            alt={product.name}
-            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-            referrerPolicy="no-referrer"
-            onError={(e) => {
-              console.error(`❌ Image failed: ${primaryImage}`);
-              const target = e.target as HTMLImageElement;
-              if (!target.src.includes('placeholder')) {
-                target.src = 'https://images.pexels.com/photos/1132047/pexels-photo-1132047.jpeg?auto=compress&cs=tinysrgb&w=400';
-              }
-            }}
-          />
+          <div className="w-full h-full relative">
+            <img
+              src={primaryImage}
+              alt={product.name}
+              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 block"
+              loading="eager"
+            />
+            {/* Debug label - hidden visually but present */}
+            <span className="sr-only">{product.name} image area</span>
+          </div>
         ) : (
-          <div className="w-full h-full bg-gradient-to-br from-green-100 to-orange-100 dark:from-green-800 dark:to-orange-800 flex items-center justify-center">
-            <div className="text-center">
-              <div className="text-4xl mb-2">🍎</div>
-              <p className="text-sm text-gray-600 dark:text-gray-300">Fresh Product</p>
-            </div>
-          </div>
-        )}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-        {!isInStock && (
-          <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-            <span className="bg-red-500 text-white px-4 py-2 rounded-full font-semibold text-sm">
-              Out of Stock
-            </span>
-          </div>
+          <div className="text-4xl">🍎</div>
         )}
       </div>
 
