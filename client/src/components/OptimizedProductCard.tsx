@@ -79,20 +79,23 @@ const OptimizedProductCard = memo<OptimizedProductCardProps>(({ product, onAddTo
       </div>
 
       {/* Product Image */}
-      <div className="relative overflow-hidden bg-orange-50 dark:bg-gray-700 h-40 sm:h-48 md:h-56 lg:h-64 flex items-center justify-center border-b border-gray-100">
+      <div className="relative overflow-hidden bg-orange-100 dark:bg-gray-700 h-40 sm:h-48 md:h-56 lg:h-64 flex items-center justify-center border-b border-gray-100">
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
+          <span className="text-orange-300 text-xs font-bold uppercase tracking-widest">{product.name}</span>
+        </div>
         {primaryImage ? (
-          <div className="w-full h-full relative">
-            <img
-              src={primaryImage}
-              alt={product.name}
-              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 block"
-              loading="eager"
-            />
-            {/* Debug label - hidden visually but present */}
-            <span className="sr-only">{product.name} image area</span>
-          </div>
+          <img
+            src={primaryImage}
+            alt={product.name}
+            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 block relative z-10"
+            onLoad={() => console.log(`✅ Image loaded: ${product.name}`)}
+            onError={(e) => {
+              console.error(`❌ Image failed: ${product.name} - ${primaryImage}`);
+              (e.target as HTMLImageElement).style.display = 'none';
+            }}
+          />
         ) : (
-          <div className="text-4xl">🍎</div>
+          <div className="text-4xl relative z-10">🍎</div>
         )}
       </div>
 
