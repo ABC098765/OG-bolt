@@ -64,8 +64,8 @@ const Hero = memo(() => {
         <div className="embla__container flex">
           {banners.map((banner) => (
             <div key={banner.id} className="embla__slide flex-[0_0_100%] min-w-0 relative">
-              <div className="max-w-7xl mx-auto px-4 py-12 sm:py-20 flex flex-col lg:flex-row items-center gap-12 min-h-[80vh]">
-                <div className="lg:w-1/2 space-y-8 text-left z-10">
+              <div className="max-w-7xl mx-auto px-4 py-12 sm:py-20 flex flex-col items-center justify-center text-center min-h-[80vh]">
+                <div className="max-w-4xl space-y-8 z-10">
                   <div className={`inline-flex items-center px-4 py-2 bg-${banner.color}-100 dark:bg-${banner.color}-900 text-${banner.color}-800 dark:text-${banner.color}-200 rounded-full text-sm font-medium animate-in fade-in slide-in-from-left duration-700`}>
                     <Award className="w-4 h-4 mr-2" />
                     {banner.badge}
@@ -80,12 +80,12 @@ const Hero = memo(() => {
                         </span>
                       ))}
                     </h1>
-                    <p className="text-xl text-gray-600 dark:text-gray-300 leading-relaxed max-w-xl animate-in fade-in slide-in-from-bottom duration-700 delay-200">
+                    <p className="text-xl text-gray-600 dark:text-gray-300 leading-relaxed max-w-xl mx-auto animate-in fade-in slide-in-from-bottom duration-700 delay-200">
                       {banner.description}
                     </p>
                   </div>
 
-                  <div className="flex flex-col sm:flex-row gap-4 animate-in fade-in slide-in-from-bottom duration-700 delay-300">
+                  <div className="flex flex-col sm:flex-row gap-4 justify-center animate-in fade-in slide-in-from-bottom duration-700 delay-300">
                     <Link 
                       to={banner.primaryAction.link}
                       className={`group relative overflow-hidden bg-gradient-to-r from-${banner.color}-600 to-${banner.color}-700 text-white px-8 py-4 rounded-full hover:from-${banner.color}-700 hover:to-${banner.color}-800 transition-all transform hover:scale-105 font-semibold text-lg flex items-center justify-center shadow-lg hover:shadow-xl`}
@@ -107,15 +107,6 @@ const Hero = memo(() => {
                       </div>
                     </Link>
                   </div>
-                </div>
-
-                <div className="lg:w-1/2 relative animate-in fade-in zoom-in duration-1000">
-                  <div className={`absolute inset-0 bg-${banner.color}-500/10 blur-3xl rounded-full`}></div>
-                  <img 
-                    src={banner.image} 
-                    alt={banner.title} 
-                    className="relative z-10 w-full h-auto max-h-[500px] object-contain drop-shadow-2xl"
-                  />
                 </div>
               </div>
             </div>
