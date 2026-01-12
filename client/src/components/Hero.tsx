@@ -91,7 +91,7 @@ const Hero = memo(() => {
               <div className="max-w-7xl mx-auto px-4 sm:px-6 py-20 sm:py-24 lg:py-32 h-full flex flex-col lg:flex-row items-center justify-center lg:justify-start gap-8 lg:gap-12 relative">
                 {/* Content Side */}
                 <div className={`w-full lg:w-3/5 space-y-4 sm:space-y-8 text-center lg:text-left z-10 ${banner.isBgImage ? 'text-white' : ''}`}>
-                  <div className="inline-flex items-center px-3 py-1 rounded-full bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm shadow-sm border border-gray-100 dark:border-gray-700 animate-in fade-in slide-in-from-left duration-700 pt-[0px] pb-[0px]">
+                  <div className="inline-flex items-center px-3 py-1 rounded-full bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm shadow-sm border border-gray-100 dark:border-gray-700 animate-in fade-in slide-in-from-left duration-700 pt-[4px] pb-[4px]">
                     <span className={`w-1.5 h-1.5 rounded-full ${banner.dotColor || `bg-${banner.accentColor}-500`} mr-2 animate-pulse`} />
                     <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-gray-600 dark:text-gray-300">
                       {banner.badge}
