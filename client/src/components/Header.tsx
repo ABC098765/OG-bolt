@@ -33,7 +33,7 @@ const Header = () => {
 
   return (
     <>
-      <header className="fixed top-8 left-1/2 -translate-x-1/2 w-[95%] max-w-7xl z-50">
+      <header className="fixed top-20 left-1/2 -translate-x-1/2 w-[95%] max-w-7xl z-50">
         <nav className="bg-transparent border-none px-6 py-3">
           <div className="flex justify-center items-center gap-4">
             {/* Main Navigation - Focused and blurred items */}

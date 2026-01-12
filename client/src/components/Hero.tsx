@@ -28,10 +28,10 @@ const Hero = memo(() => {
   }, []);
 
   return (
-    <section id="home" className="relative overflow-hidden pt-12 pb-20 bg-gray-50 dark:bg-gray-900">
+    <section id="home" className="relative overflow-hidden pt-24 pb-20 bg-gray-50 dark:bg-gray-900">
       <div className="max-w-7xl mx-auto px-4 relative z-10">
         {/* Brand and Auth - Top level in Hero */}
-        <div className="flex justify-between items-center mb-12">
+        <div className="flex justify-between items-center mb-16 px-4">
           <div className="flex items-center gap-2 group">
             <div className="w-10 h-10 bg-green-600 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg">
               <img src="/sfc-logo.png" alt="SFC Logo" className="h-6 w-auto" />
