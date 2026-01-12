@@ -160,30 +160,30 @@ const Hero = memo(() => {
       </div>
 
       {/* Modern Controls */}
-      <div className="absolute bottom-10 left-6 right-6 max-w-7xl mx-auto flex items-center justify-between pointer-events-none">
-        <div className="flex gap-3 pointer-events-auto">
+      <div className="absolute bottom-4 sm:bottom-10 left-4 sm:left-6 right-4 sm:right-6 max-w-7xl mx-auto flex items-center justify-between pointer-events-none">
+        <div className="flex gap-2 sm:gap-3 pointer-events-auto">
           {banners.map((_, index) => (
             <button
               key={index}
               onClick={() => emblaApi?.scrollTo(index)}
-              className={`h-1.5 transition-all duration-500 rounded-full ${index === selectedIndex ? 'w-12 bg-gray-900 dark:bg-white' : 'w-4 bg-gray-200 dark:bg-gray-800 hover:bg-gray-300'}`}
+              className={`h-1 sm:h-1.5 transition-all duration-500 rounded-full ${index === selectedIndex ? 'w-8 sm:w-12 bg-gray-900 dark:bg-white' : 'w-2 sm:w-4 bg-gray-200 dark:bg-gray-800 hover:bg-gray-300'}`}
               aria-label={`Go to slide ${index + 1}`}
             />
           ))}
         </div>
         
-        <div className="flex gap-2 pointer-events-auto">
+        <div className="flex gap-1.5 sm:gap-2 pointer-events-auto">
           <button 
             onClick={() => emblaApi?.scrollPrev()}
-            className="p-3 rounded-xl bg-white/80 dark:bg-gray-800/80 backdrop-blur-md border border-gray-100 dark:border-gray-700 text-gray-900 dark:text-white hover:bg-white dark:hover:bg-gray-700 transition-all active:scale-95 shadow-lg"
+            className="p-2 sm:p-3 rounded-lg sm:rounded-xl bg-white/80 dark:bg-gray-800/80 backdrop-blur-md border border-gray-100 dark:border-gray-700 text-gray-900 dark:text-white hover:bg-white dark:hover:bg-gray-700 transition-all active:scale-95 shadow-lg"
           >
-            <ChevronLeft className="w-5 h-5" />
+            <ChevronLeft className="w-4 h-4 sm:w-5 h-5" />
           </button>
           <button 
             onClick={() => emblaApi?.scrollNext()}
-            className="p-3 rounded-xl bg-white/80 dark:bg-gray-800/80 backdrop-blur-md border border-gray-100 dark:border-gray-700 text-gray-900 dark:text-white hover:bg-white dark:hover:bg-gray-700 transition-all active:scale-95 shadow-lg"
+            className="p-2 sm:p-3 rounded-lg sm:rounded-xl bg-white/80 dark:bg-gray-800/80 backdrop-blur-md border border-gray-100 dark:border-gray-700 text-gray-900 dark:text-white hover:bg-white dark:hover:bg-gray-700 transition-all active:scale-95 shadow-lg"
           >
-            <ChevronRight className="w-5 h-5" />
+            <ChevronRight className="w-4 h-4 sm:w-5 h-5" />
           </button>
         </div>
       </div>
