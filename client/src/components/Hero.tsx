@@ -67,12 +67,12 @@ const Hero = memo(() => {
   }, [emblaApi, onSelect]);
 
   return (
-    <section id="home" className="relative overflow-hidden pt-20 bg-gray-50 dark:bg-gray-900">
+    <section id="home" className="relative overflow-hidden pt-12 bg-gray-50 dark:bg-gray-900">
       <div className="embla overflow-hidden" ref={emblaRef}>
         <div className="embla__container flex">
           {banners.map((banner) => (
             <div key={banner.id} className="embla__slide flex-[0_0_100%] min-w-0 relative">
-              <div className="max-w-7xl mx-auto px-4 py-12 sm:py-20 flex flex-col items-center justify-center text-center min-h-[80vh] pl-[16px] pr-[16px] pt-[0px] pb-[0px]">
+              <div className="max-w-7xl mx-auto px-4 py-8 sm:py-12 flex flex-col items-center justify-center text-center min-h-[70vh] pl-[16px] pr-[16px] pt-[0px] pb-[0px]">
                 <div className="max-w-4xl space-y-8 z-10">
                   <div className={`inline-flex items-center px-4 py-2 bg-${banner.color}-100 dark:bg-${banner.color}-900 text-${banner.color}-800 dark:text-${banner.color}-200 rounded-full text-sm font-medium animate-in fade-in slide-in-from-left duration-700`}>
                     <Award className="w-4 h-4 mr-2" />
