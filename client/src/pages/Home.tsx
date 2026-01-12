@@ -16,25 +16,25 @@ const Home = () => {
   });
 
   return (
-    <div className="smooth-scroll-container">
+    <div className="smooth-scroll-container flex flex-col">
       {/* Sections with IDs */}
-      <section id="home" className="reveal-section">
+      <section id="home" className="reveal-section w-full">
         <Hero />
       </section>
       
-      <section id="features" className="reveal-section">
+      <section id="features" className="reveal-section w-full">
         <WhyChooseUs />
       </section>
       
-      <section id="juice-recipes" className="reveal-section">
+      <section id="juice-recipes" className="reveal-section w-full">
         <JuiceRecipesSection />
       </section>
       
-      <section id="products" className="reveal-section">
+      <section id="products" className="reveal-section w-full">
         <FeaturedProducts />
       </section>
       
-      <section id="app" className="reveal-section">
+      <section id="app" className="reveal-section w-full">
         <AndroidApp />
       </section>
     </div>

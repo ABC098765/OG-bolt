@@ -79,7 +79,7 @@ const FeaturedProducts = memo(() => {
   };
 
   return (
-    <section id="products" className="py-20 bg-gradient-to-br from-gray-50 to-green-50 dark:from-gray-900 dark:to-gray-800 relative overflow-hidden w-full">
+    <section id="products" className="py-20 bg-gradient-to-br from-gray-50 to-green-50 dark:from-gray-900 dark:to-gray-800 relative overflow-hidden w-full m-0">
       {/* Background decorations */}
       <div className="absolute top-10 right-10 w-20 h-20 bg-green-200 rounded-full opacity-30 animate-float"></div>
       <div className="absolute bottom-10 left-10 w-16 h-16 bg-orange-200 rounded-full opacity-30 animate-float" style={{ animationDelay: '1s' }}></div>

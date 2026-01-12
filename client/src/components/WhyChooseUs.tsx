@@ -27,7 +27,7 @@ const WhyChooseUs = memo(() => {
   ];
 
   return (
-    <section className="py-20 relative overflow-hidden">
+    <section className="py-20 relative overflow-hidden m-0">
       {/* Background image - matching hero section pattern */}
       <img 
         src="/fruit_background.png"
