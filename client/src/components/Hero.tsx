@@ -36,7 +36,8 @@ const banners = [
     primaryAction: { label: "Order Now", link: "/products", icon: Clock },
     secondaryAction: { label: "Details", link: "/", icon: Award },
     bgColor: "from-blue-500/20 to-sky-500/20",
-    accentColor: "blue"
+    accentColor: "blue",
+    dotColor: "bg-blue-500"
   }
 ];
 
@@ -77,7 +78,7 @@ const Hero = memo(() => {
                 {/* Content Side */}
                 <div className="lg:w-3/5 space-y-8 text-left z-10">
                   <div className={`inline-flex items-center px-4 py-1.5 rounded-full bg-white dark:bg-gray-800 shadow-sm border border-gray-100 dark:border-gray-700 animate-in fade-in slide-in-from-left duration-700`}>
-                    <span className={`w-2 h-2 rounded-full bg-${banner.accentColor}-500 mr-2 animate-pulse`} />
+                    <span className={`w-2 h-2 rounded-full ${banner.dotColor || `bg-${banner.accentColor}-500`} mr-2 animate-pulse`} />
                     <span className="text-xs font-bold uppercase tracking-wider text-gray-600 dark:text-gray-300">
                       {banner.badge}
                     </span>
