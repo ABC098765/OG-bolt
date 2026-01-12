@@ -43,11 +43,13 @@ const banners = [
 const Hero = memo(() => {
   const [emblaRef, emblaApi] = useEmblaCarousel({ 
     loop: true,
-    duration: 40,
-    skipSnaps: false,
+    duration: 50,
     dragFree: false,
-    containScroll: false
-  }, [Autoplay({ delay: 5000, stopOnInteraction: false, stopOnMouseEnter: true })]);
+    containScroll: false,
+    align: 'center',
+    inViewThreshold: 0.7,
+    skipSnaps: false
+  }, [Autoplay({ delay: 5000, stopOnInteraction: false, stopOnMouseEnter: false, playOnInit: true })]);
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   const scrollPrev = useCallback(() => emblaApi && emblaApi.scrollPrev(), [emblaApi]);
