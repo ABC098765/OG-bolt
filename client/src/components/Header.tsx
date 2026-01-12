@@ -36,11 +36,11 @@ const Header = () => {
       <nav className="bg-transparent border-none px-6 py-3">
         <div className="flex justify-between items-center">
           {/* Logo & Brand */}
-          <Link to="/" className="flex items-center gap-2 group">
-            <div className="w-10 h-10 flex items-center justify-center group-hover:scale-110 transition-transform">
-              <img src="/sfc-logo.png" alt="SFC Logo" className="h-10 w-auto" />
+          <Link to="/" className="flex items-center gap-2 group bg-white/10 backdrop-blur-md border border-white/20 px-4 py-1.5 rounded-full shadow-sm hover:bg-white/20 transition-all">
+            <div className="w-8 h-8 flex items-center justify-center group-hover:scale-110 transition-transform">
+              <img src="/sfc-logo.png" alt="SFC Logo" className="h-8 w-auto" />
             </div>
-            <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-green-600 to-green-500 hidden sm:block">
+            <span className="text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-green-600 to-green-500 hidden sm:block">
               Super Fruit Center
             </span>
           </Link>
