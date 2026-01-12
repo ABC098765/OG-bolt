@@ -33,12 +33,12 @@ const Header = () => {
 
   return (
     <header className="fixed top-6 left-1/2 -translate-x-1/2 w-[95%] max-w-7xl z-50">
-      <nav className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg border border-gray-200 dark:border-gray-800 rounded-full px-6 py-3 shadow-xl">
+      <nav className="bg-transparent border-none px-6 py-3">
         <div className="flex justify-between items-center">
           {/* Logo & Brand */}
           <Link to="/" className="flex items-center gap-2 group">
-            <div className="w-10 h-10 bg-green-600 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
-              <img src="/sfc-logo.png" alt="SFC Logo" className="h-6 w-auto" />
+            <div className="w-10 h-10 flex items-center justify-center group-hover:scale-110 transition-transform">
+              <img src="/sfc-logo.png" alt="SFC Logo" className="h-10 w-auto" />
             </div>
             <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-green-600 to-green-500 hidden sm:block">
               Super Fruit Center
