@@ -67,7 +67,7 @@ const Hero = memo(() => {
   }, [emblaApi, onSelect]);
 
   return (
-    <section id="home" className="relative overflow-hidden pt-12 bg-gray-50 dark:bg-gray-900">
+    <section id="home" className="relative overflow-hidden pt-32 sm:pt-20 bg-gray-50 dark:bg-gray-900">
       <div className="embla overflow-hidden" ref={emblaRef}>
         <div className="embla__container flex">
           {banners.map((banner) => (
