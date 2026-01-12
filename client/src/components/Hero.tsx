@@ -41,7 +41,7 @@ const Hero = memo(() => {
             </span>
           </div>
           
-          {!authState.isAuthenticated && (
+          {!authState.isAuthenticated ? (
             <button 
               onClick={() => authDispatch({ type: 'SHOW_AUTH_MODAL' })}
               className="bg-gray-900 text-white px-6 py-2.5 rounded-full text-sm font-semibold hover:bg-gray-800 transition-all flex items-center gap-2 group shadow-xl hover:shadow-2xl active:scale-95"
@@ -49,6 +49,15 @@ const Hero = memo(() => {
               Sign In
               <LogIn className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </button>
+          ) : (
+            <Link to="/profile" className="flex items-center gap-2 bg-white/80 backdrop-blur-md border border-gray-200 px-4 py-2 rounded-full shadow-lg hover:shadow-xl transition-all group">
+              <div className="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center text-xs text-white font-bold group-hover:scale-110 transition-transform">
+                {authState.user?.name?.[0]}
+              </div>
+              <span className="text-sm font-medium text-gray-700">
+                {authState.user?.name}
+              </span>
+            </Link>
           )}
         </div>
 
