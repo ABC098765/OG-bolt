@@ -46,7 +46,7 @@ const Hero = memo(() => {
     duration: 40,
     skipSnaps: false,
     dragFree: false,
-    containScroll: 'trimSnaps'
+    containScroll: false
   }, [Autoplay({ delay: 5000, stopOnInteraction: false, stopOnMouseEnter: true })]);
   const [selectedIndex, setSelectedIndex] = useState(0);
 
