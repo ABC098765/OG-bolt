@@ -1,6 +1,5 @@
 import React from 'react';
 import Hero from '../components/Hero';
-import WhyChooseUs from '../components/WhyChooseUs';
 import JuiceRecipesSection from '../components/JuiceRecipesSection';
 import FeaturedProducts from '../components/FeaturedProducts';
 import AndroidApp from '../components/Testimonials';
@@ -20,10 +19,6 @@ const Home = () => {
       {/* Sections with IDs */}
       <section id="home" className="reveal-section w-full">
         <Hero />
-      </section>
-      
-      <section id="features" className="reveal-section w-full">
-        <WhyChooseUs />
       </section>
       
       <section id="juice-recipes" className="reveal-section w-full">
