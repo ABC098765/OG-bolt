@@ -38,7 +38,7 @@ const banners = [
     isBgImage: true,
     primaryAction: { label: "Order Now", link: "/products", icon: Clock },
     secondaryAction: { label: "Details", link: "/", icon: Award },
-    bgColor: "from-blue-900/60 to-sky-900/60",
+    bgColor: "from-blue-900/40 to-sky-900/40",
     accentColor: "blue",
     dotColor: "bg-blue-500"
   }
@@ -88,10 +88,10 @@ const Hero = memo(() => {
                 </>
               )}
               
-              <div className="max-w-7xl mx-auto px-6 py-24 sm:py-32 min-h-screen flex flex-col lg:flex-row items-center gap-12 relative">
+              <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-24 lg:py-32 min-h-screen flex flex-col lg:flex-row items-center justify-center lg:justify-start gap-8 lg:gap-12 relative">
                 {/* Content Side */}
-                <div className={`lg:w-3/5 space-y-8 text-left z-10 ${banner.isBgImage ? 'text-white' : ''}`}>
-                  <div className={`inline-flex items-center px-4 py-1.5 rounded-full bg-white dark:bg-gray-800 shadow-sm border border-gray-100 dark:border-gray-700 animate-in fade-in slide-in-from-left duration-700`}>
+                <div className={`w-full lg:w-3/5 space-y-6 sm:space-y-8 text-center lg:text-left z-10 ${banner.isBgImage ? 'text-white' : ''}`}>
+                  <div className={`inline-flex items-center px-4 py-1.5 rounded-full bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm shadow-sm border border-gray-100 dark:border-gray-700 animate-in fade-in slide-in-from-left duration-700`}>
                     <span className={`w-2 h-2 rounded-full ${banner.dotColor || `bg-${banner.accentColor}-500`} mr-2 animate-pulse`} />
                     <span className="text-xs font-bold uppercase tracking-wider text-gray-600 dark:text-gray-300">
                       {banner.badge}
@@ -99,31 +99,31 @@ const Hero = memo(() => {
                   </div>
 
                   <div className="space-y-4">
-                    <h1 className={`text-5xl sm:text-6xl lg:text-8xl font-black ${banner.isBgImage ? 'text-white' : 'text-gray-900 dark:text-white'} leading-[1.1] tracking-tight animate-in fade-in slide-in-from-bottom duration-1000`}>
+                    <h1 className={`text-4xl sm:text-6xl lg:text-8xl font-black ${banner.isBgImage ? 'text-white' : 'text-gray-900 dark:text-white'} leading-[1.1] tracking-tight animate-in fade-in slide-in-from-bottom duration-1000`}>
                       {banner.title.split(' ').map((word, i) => (
                         <span key={i} className={i >= banner.title.split(' ').length - 2 ? (banner.isBgImage ? `text-${banner.accentColor}-200 block sm:inline` : `text-${banner.accentColor}-600 block sm:inline`) : "inline"}>
                           {word}{' '}
                         </span>
                       ))}
                     </h1>
-                    <p className={`text-lg sm:text-xl ${banner.isBgImage ? 'text-white/90' : 'text-gray-600 dark:text-gray-400'} max-w-2xl leading-relaxed animate-in fade-in slide-in-from-bottom duration-1000 delay-200`}>
+                    <p className={`text-base sm:text-xl ${banner.isBgImage ? 'text-white/90' : 'text-gray-600 dark:text-gray-400'} max-w-2xl mx-auto lg:mx-0 leading-relaxed animate-in fade-in slide-in-from-bottom duration-1000 delay-200`}>
                       {banner.description}
                     </p>
                   </div>
 
-                  <div className="flex flex-wrap gap-4 pt-4 animate-in fade-in slide-in-from-bottom duration-1000 delay-300">
+                  <div className="flex flex-wrap justify-center lg:justify-start gap-3 sm:gap-4 pt-4 animate-in fade-in slide-in-from-bottom duration-1000 delay-300">
                     <Link 
                       to={banner.primaryAction.link}
-                      className={`px-8 py-4 rounded-2xl bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-bold text-lg hover:scale-105 transition-all shadow-xl hover:shadow-2xl active:scale-95 flex items-center gap-2 group`}
+                      className={`px-6 sm:px-8 py-3 sm:py-4 rounded-2xl bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-bold text-base sm:text-lg hover:scale-105 transition-all shadow-xl hover:shadow-2xl active:scale-95 flex items-center gap-2 group`}
                     >
-                      <banner.primaryAction.icon className="w-5 h-5 group-hover:rotate-12 transition-transform" />
+                      <banner.primaryAction.icon className="w-4 h-4 sm:w-5 h-5 group-hover:rotate-12 transition-transform" />
                       {banner.primaryAction.label}
                     </Link>
                     <Link 
                       to={banner.secondaryAction.link}
-                      className={`px-8 py-4 rounded-2xl ${banner.isBgImage ? 'bg-white/20 backdrop-blur-md border-white/30 text-white hover:bg-white/30' : 'bg-white dark:bg-gray-800 text-gray-900 dark:text-white border-2 border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700'} font-bold text-lg transition-all flex items-center gap-2 group`}
+                      className={`px-6 sm:px-8 py-3 sm:py-4 rounded-2xl ${banner.isBgImage ? 'bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white/20' : 'bg-white dark:bg-gray-800 text-gray-900 dark:text-white border-2 border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700'} font-bold text-base sm:text-lg transition-all flex items-center gap-2 group`}
                     >
-                      <banner.secondaryAction.icon className={`w-5 h-5 ${banner.isBgImage ? 'text-white/70' : 'text-gray-400'} group-hover:text-red-500 transition-colors`} />
+                      <banner.secondaryAction.icon className={`w-4 h-4 sm:w-5 h-5 ${banner.isBgImage ? 'text-white/70' : 'text-gray-400'} group-hover:text-red-500 transition-colors`} />
                       {banner.secondaryAction.label}
                     </Link>
                   </div>
