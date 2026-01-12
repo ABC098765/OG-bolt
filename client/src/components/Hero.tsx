@@ -8,7 +8,7 @@ const banners = [
   {
     id: 1,
     badge: "#1 Fresh Fruit Delivery",
-    title: "Premium Quality\nFresh Fruits",
+    title: "Premium Quality",
     description: "Experience the finest selection of farm-fresh fruits delivered directly to your doorstep with our premium daily service.",
     image: "/premium-fruits-bg-v4.jpg",
     isBgImage: true,
