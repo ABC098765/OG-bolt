@@ -30,7 +30,7 @@ const banners = [
   {
     id: 3,
     badge: "Express Delivery",
-    title: "Same Day Store to Door",
+    title: " Freshness Delivered, Fast! ",
     description: "Get your fresh vitamins delivered within hours. We ensure your fruits arrive at peak freshness every single time.",
     image: "/splash2.png",
     primaryAction: { label: "Order Now", link: "/products", icon: Clock },
