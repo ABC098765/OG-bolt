@@ -33,9 +33,10 @@ const banners = [
     title: " Freshness Delivered, Fast! ",
     description: "Get your fresh vitamins delivered within hours. We ensure your fruits arrive at peak freshness every single time.",
     image: "/express-delivery.png",
+    isBgImage: true,
     primaryAction: { label: "Order Now", link: "/products", icon: Clock },
     secondaryAction: { label: "Details", link: "/", icon: Award },
-    bgColor: "from-blue-500/20 to-sky-500/20",
+    bgColor: "from-blue-500/80 to-sky-500/80",
     accentColor: "blue",
     dotColor: "bg-blue-500"
   }
@@ -71,12 +72,23 @@ const Hero = memo(() => {
           {banners.map((banner, index) => (
             <div key={banner.id} className="embla__slide flex-[0_0_100%] min-w-0 relative">
               {/* Background Decorative Elements */}
-              <div className={`absolute inset-0 bg-gradient-to-br ${banner.bgColor} opacity-50 -z-10`} />
-              <div className="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-white/20 to-transparent pointer-events-none" />
+              {banner.isBgImage ? (
+                <div 
+                  className="absolute inset-0 bg-cover bg-center -z-10"
+                  style={{ backgroundImage: `url(${banner.image})` }}
+                >
+                  <div className={`absolute inset-0 bg-gradient-to-br ${banner.bgColor} opacity-90`} />
+                </div>
+              ) : (
+                <>
+                  <div className={`absolute inset-0 bg-gradient-to-br ${banner.bgColor} opacity-50 -z-10`} />
+                  <div className="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-white/20 to-transparent pointer-events-none" />
+                </>
+              )}
               
               <div className="max-w-7xl mx-auto px-6 py-24 sm:py-32 min-h-[85vh] flex flex-col lg:flex-row items-center gap-12 relative">
                 {/* Content Side */}
-                <div className="lg:w-3/5 space-y-8 text-left z-10">
+                <div className={`lg:w-3/5 space-y-8 text-left z-10 ${banner.isBgImage ? 'text-white' : ''}`}>
                   <div className={`inline-flex items-center px-4 py-1.5 rounded-full bg-white dark:bg-gray-800 shadow-sm border border-gray-100 dark:border-gray-700 animate-in fade-in slide-in-from-left duration-700`}>
                     <span className={`w-2 h-2 rounded-full ${banner.dotColor || `bg-${banner.accentColor}-500`} mr-2 animate-pulse`} />
                     <span className="text-xs font-bold uppercase tracking-wider text-gray-600 dark:text-gray-300">
@@ -85,14 +97,14 @@ const Hero = memo(() => {
                   </div>
 
                   <div className="space-y-4">
-                    <h1 className="text-5xl sm:text-6xl lg:text-8xl font-black text-gray-900 dark:text-white leading-[1.1] tracking-tight animate-in fade-in slide-in-from-bottom duration-1000">
+                    <h1 className={`text-5xl sm:text-6xl lg:text-8xl font-black ${banner.isBgImage ? 'text-white' : 'text-gray-900 dark:text-white'} leading-[1.1] tracking-tight animate-in fade-in slide-in-from-bottom duration-1000`}>
                       {banner.title.split(' ').map((word, i) => (
-                        <span key={i} className={i >= banner.title.split(' ').length - 2 ? `text-${banner.accentColor}-600 block sm:inline` : "inline"}>
+                        <span key={i} className={i >= banner.title.split(' ').length - 2 ? (banner.isBgImage ? `text-${banner.accentColor}-200 block sm:inline` : `text-${banner.accentColor}-600 block sm:inline`) : "inline"}>
                           {word}{' '}
                         </span>
                       ))}
                     </h1>
-                    <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-400 max-w-2xl leading-relaxed animate-in fade-in slide-in-from-bottom duration-1000 delay-200">
+                    <p className={`text-lg sm:text-xl ${banner.isBgImage ? 'text-white/90' : 'text-gray-600 dark:text-gray-400'} max-w-2xl leading-relaxed animate-in fade-in slide-in-from-bottom duration-1000 delay-200`}>
                       {banner.description}
                     </p>
                   </div>
@@ -107,36 +119,38 @@ const Hero = memo(() => {
                     </Link>
                     <Link 
                       to={banner.secondaryAction.link}
-                      className="px-8 py-4 rounded-2xl bg-white dark:bg-gray-800 text-gray-900 dark:text-white font-bold text-lg border-2 border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all flex items-center gap-2 group"
+                      className={`px-8 py-4 rounded-2xl ${banner.isBgImage ? 'bg-white/20 backdrop-blur-md border-white/30 text-white hover:bg-white/30' : 'bg-white dark:bg-gray-800 text-gray-900 dark:text-white border-2 border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700'} font-bold text-lg transition-all flex items-center gap-2 group`}
                     >
-                      <banner.secondaryAction.icon className="w-5 h-5 text-gray-400 group-hover:text-red-500 transition-colors" />
+                      <banner.secondaryAction.icon className={`w-5 h-5 ${banner.isBgImage ? 'text-white/70' : 'text-gray-400'} group-hover:text-red-500 transition-colors`} />
                       {banner.secondaryAction.label}
                     </Link>
                   </div>
                 </div>
 
                 {/* Image Side */}
-                <div className="lg:w-2/5 relative h-full flex items-center justify-center animate-in fade-in zoom-in duration-1000 delay-150">
-                  <div className={`absolute w-full aspect-square bg-${banner.accentColor}-500/10 blur-[100px] rounded-full`} />
-                  <img 
-                    src={banner.image} 
-                    alt={banner.title} 
-                    className="w-full h-auto max-h-[500px] object-contain drop-shadow-[0_20px_50px_rgba(0,0,0,0.15)] hover:scale-105 transition-transform duration-700"
-                  />
-                  
-                  {/* Floating Elements */}
-                  <div className="absolute top-10 right-0 bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 animate-bounce duration-[3000ms] hidden sm:block">
-                    <div className="flex items-center gap-3">
-                      <div className={`w-10 h-10 rounded-xl bg-${banner.accentColor}-100 flex items-center justify-center`}>
-                        <Star className={`w-6 h-6 text-${banner.accentColor}-600`} />
-                      </div>
-                      <div>
-                        <p className="text-xs text-gray-500 uppercase font-bold tracking-tighter">Rating</p>
-                        <p className="text-sm font-black">4.9/5.0</p>
+                {!banner.isBgImage && (
+                  <div className="lg:w-2/5 relative h-full flex items-center justify-center animate-in fade-in zoom-in duration-1000 delay-150">
+                    <div className={`absolute w-full aspect-square bg-${banner.accentColor}-500/10 blur-[100px] rounded-full`} />
+                    <img 
+                      src={banner.image} 
+                      alt={banner.title} 
+                      className="w-full h-auto max-h-[500px] object-contain drop-shadow-[0_20px_50px_rgba(0,0,0,0.15)] hover:scale-105 transition-transform duration-700"
+                    />
+                    
+                    {/* Floating Elements */}
+                    <div className="absolute top-10 right-0 bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 animate-bounce duration-[3000ms] hidden sm:block">
+                      <div className="flex items-center gap-3">
+                        <div className={`w-10 h-10 rounded-xl bg-${banner.accentColor}-100 flex items-center justify-center`}>
+                          <Star className={`w-6 h-6 text-${banner.accentColor}-600`} />
+                        </div>
+                        <div>
+                          <p className="text-xs text-gray-500 uppercase font-bold tracking-tighter">Rating</p>
+                          <p className="text-sm font-black">4.9/5.0</p>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
+                )}
               </div>
             </div>
           ))}
