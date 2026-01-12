@@ -22,7 +22,7 @@ const banners = [
     badge: "Seasonal Specials",
     title: "Fresh Harvest Seasonal Fruits",
     description: "Discover our hand-picked selection of the season's best fruits, ripened naturally and packed with nutrients and flavor.",
-    image: "/seasonal-harvest-bg.jpg",
+    image: "/seasonal-harvest-bg-v2.jpg",
     isBgImage: true,
     primaryAction: { label: "View Deals", link: "/products", icon: Star },
     secondaryAction: { label: "Recipes", link: "/juice-recipes", icon: Leaf },
