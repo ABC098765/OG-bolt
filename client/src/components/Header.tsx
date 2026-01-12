@@ -32,13 +32,13 @@ const Header = () => {
   const isActive = (path: string) => location === path;
 
   return (
-    <header className="fixed top-6 left-1/2 -translate-x-1/2 w-[95%] max-w-7xl z-50 rounded-full bg-white/30 backdrop-blur-md border border-white/20 shadow-lg">
+    <header className={`fixed top-6 left-1/2 -translate-x-1/2 w-[95%] max-w-7xl z-50 bg-white/30 backdrop-blur-md border border-white/20 shadow-lg transition-all duration-300 ${isMenuOpen ? 'rounded-2xl' : 'rounded-full'}`}>
       <nav className="bg-transparent border-none px-6 py-3 pl-[24px] pr-[24px] mt-[0px] mb-[0px] ml-[0px] mr-[0px] pt-[0px] pb-[0px]">
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center h-14">
           {/* Logo & Brand */}
-          <Link to="/" className="flex items-center gap-2 group">
-            <div className="w-14 h-14 flex items-center justify-center group-hover:scale-110 transition-transform">
-              <img src="/sfc-logo.png" alt="SFC Logo" className="h-14 w-auto pt-[5px] pb-[5px]" />
+          <Link to="/" className="flex items-center gap-2 group h-full">
+            <div className="w-12 h-12 flex items-center justify-center group-hover:scale-110 transition-transform">
+              <img src="/sfc-logo.png" alt="SFC Logo" className="h-full w-auto object-contain" />
             </div>
             <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-green-600 to-green-500 hidden sm:block">
               Super Fruit Center
@@ -101,26 +101,24 @@ const Header = () => {
         </div>
 
         {/* Mobile Menu */}
-        {isMenuOpen && (
-          <div className="lg:hidden mt-4 py-4 border-t border-gray-100 animate-in slide-in-from-top duration-300">
-            <div className="flex flex-col gap-4">
-              <Link to="/" onClick={() => setIsMenuOpen(false)} className="text-sm font-medium text-gray-600">Home</Link>
-              <Link to="/products" onClick={() => setIsMenuOpen(false)} className="text-sm font-medium text-gray-600">Products</Link>
-              <Link to="/juice-recipes" onClick={() => setIsMenuOpen(false)} className="text-sm font-medium text-gray-600">Juice Recipes</Link>
-              <Link to="/orders" onClick={() => setIsMenuOpen(false)} className="text-sm font-medium text-gray-600">Orders</Link>
-              {authState.isAuthenticated && (
-                <Link to="/notifications" onClick={() => setIsMenuOpen(false)} className="text-sm font-medium text-gray-600 flex items-center gap-2">
-                  Notifications
-                  {unreadCount > 0 && (
-                    <span className="bg-red-500 text-white text-[10px] px-1.5 py-0.5 rounded-full font-bold">
-                      {unreadCount}
-                    </span>
-                  )}
-                </Link>
-              )}
-            </div>
+        <div className={`lg:hidden overflow-hidden transition-all duration-300 ${isMenuOpen ? 'max-h-64 mt-4 py-4 border-t border-gray-100/20' : 'max-h-0'}`}>
+          <div className="flex flex-col gap-4">
+            <Link to="/" onClick={() => setIsMenuOpen(false)} className={`text-sm font-medium px-4 py-2 rounded-xl ${isActive('/') ? 'bg-green-600/20 text-green-600' : 'text-gray-700 hover:bg-white/20'}`}>Home</Link>
+            <Link to="/products" onClick={() => setIsMenuOpen(false)} className={`text-sm font-medium px-4 py-2 rounded-xl ${isActive('/products') ? 'bg-green-600/20 text-green-600' : 'text-gray-700 hover:bg-white/20'}`}>Products</Link>
+            <Link to="/juice-recipes" onClick={() => setIsMenuOpen(false)} className={`text-sm font-medium px-4 py-2 rounded-xl ${isActive('/juice-recipes') ? 'bg-green-600/20 text-green-600' : 'text-gray-700 hover:bg-white/20'}`}>Juice Recipes</Link>
+            <Link to="/orders" onClick={() => setIsMenuOpen(false)} className={`text-sm font-medium px-4 py-2 rounded-xl ${isActive('/orders') ? 'bg-green-600/20 text-green-600' : 'text-gray-700 hover:bg-white/20'}`}>Orders</Link>
+            {authState.isAuthenticated && (
+              <Link to="/notifications" onClick={() => setIsMenuOpen(false)} className={`text-sm font-medium px-4 py-2 rounded-xl flex items-center justify-between ${isActive('/notifications') ? 'bg-green-600/20 text-green-600' : 'text-gray-700 hover:bg-white/20'}`}>
+                <span>Notifications</span>
+                {unreadCount > 0 && (
+                  <span className="bg-red-500 text-white text-[10px] px-2 py-0.5 rounded-full font-bold">
+                    {unreadCount}
+                  </span>
+                )}
+              </Link>
+            )}
           </div>
-        )}
+        </div>
       </nav>
     </header>
   );
