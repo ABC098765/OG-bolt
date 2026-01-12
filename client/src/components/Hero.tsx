@@ -32,7 +32,7 @@ const banners = [
     badge: "Express Delivery",
     title: " Freshness Delivered, Fast! ",
     description: "Get your fresh vitamins delivered within hours. We ensure your fruits arrive at peak freshness every single time.",
-    image: "/splash2.png",
+    image: "/attached_assets/image_1768218383975.png",
     primaryAction: { label: "Order Now", link: "/products", icon: Clock },
     secondaryAction: { label: "Details", link: "/", icon: Award },
     bgColor: "from-blue-500/20 to-sky-500/20",
