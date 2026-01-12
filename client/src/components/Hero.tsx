@@ -100,11 +100,7 @@ const Hero = memo(() => {
 
                   <div className="space-y-2 sm:space-y-4">
                     <h1 className={`text-2xl sm:text-6xl lg:text-8xl font-black ${banner.isBgImage ? 'text-white' : 'text-gray-900 dark:text-white'} leading-tight tracking-tight animate-in fade-in slide-in-from-bottom duration-1000 whitespace-pre-line`}>
-                      {banner.title.split(' ').map((word, i) => (
-                        <span key={i} className={i >= banner.title.split(' ').length - 2 ? (banner.isBgImage ? `text-${banner.accentColor}-200 block sm:inline` : `text-${banner.accentColor}-600 block sm:inline`) : "inline"}>
-                          {word}{' '}
-                        </span>
-                      ))}
+                      {banner.title}
                     </h1>
                     <p className={`text-xs sm:text-xl ${banner.isBgImage ? 'text-white/90' : 'text-gray-600 dark:text-gray-400'} max-w-2xl mx-auto lg:mx-0 leading-relaxed animate-in fade-in slide-in-from-bottom duration-1000 delay-200`}>
                       {banner.description}
