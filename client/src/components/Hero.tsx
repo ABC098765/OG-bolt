@@ -43,8 +43,10 @@ const banners = [
 const Hero = memo(() => {
   const [emblaRef, emblaApi] = useEmblaCarousel({ 
     loop: true,
-    duration: 30,
-    skipSnaps: false
+    duration: 40,
+    skipSnaps: false,
+    dragFree: false,
+    containScroll: 'trimSnaps'
   }, [Autoplay({ delay: 5000, stopOnInteraction: false, stopOnMouseEnter: true })]);
   const [selectedIndex, setSelectedIndex] = useState(0);
 
