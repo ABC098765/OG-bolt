@@ -32,7 +32,7 @@ const Header = () => {
   const isActive = (path: string) => location === path;
 
   return (
-    <div className="relative z-50">
+    <div className="absolute top-0 left-0 right-0 z-50">
       {/* Brand and Actions that scroll with page */}
       <div className="w-[95%] max-w-7xl mx-auto py-6 flex justify-between items-center px-6">
         {/* Logo & Brand */}
