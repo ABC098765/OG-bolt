@@ -50,11 +50,23 @@ const Header = () => {
             <Link to="/" className={`text-sm font-medium transition-colors ${isActive('/') ? 'text-green-600' : 'text-gray-600 hover:text-green-600'}`}>Benefits</Link>
             <Link to="/products" className={`text-sm font-medium transition-colors ${isActive('/products') ? 'text-green-600' : 'text-gray-600 hover:text-green-600'}`}>Products</Link>
             <Link to="/juice-recipes" className={`text-sm font-medium transition-colors ${isActive('/juice-recipes') ? 'text-green-600' : 'text-gray-600 hover:text-green-600'}`}>Juice Recipes</Link>
+            <Link to="/orders" className={`text-sm font-medium transition-colors ${isActive('/orders') ? 'text-green-600' : 'text-gray-600 hover:text-green-600'}`}>Orders</Link>
             <Link to="/profile" className={`text-sm font-medium transition-colors ${isActive('/profile') ? 'text-green-600' : 'text-gray-600 hover:text-green-600'}`}>Contact Us</Link>
           </div>
 
           {/* Actions */}
           <div className="flex items-center gap-4">
+            {authState.isAuthenticated && (
+              <Link to="/notifications" className={`relative p-2 transition-colors ${isActive('/notifications') ? 'text-green-600' : 'text-gray-600 hover:text-green-600'}`}>
+                <Bell className="w-5 h-5" />
+                {unreadCount > 0 && (
+                  <span className="absolute top-0 right-0 bg-red-500 text-white text-[10px] font-bold rounded-full h-4 w-4 flex items-center justify-center">
+                    {unreadCount > 99 ? '99+' : unreadCount}
+                  </span>
+                )}
+              </Link>
+            )}
+            
             <Link to="/cart" className="relative p-2 text-gray-600 hover:text-green-600 transition-colors">
               <ShoppingCart className="w-5 h-5" />
               {state.items.length > 0 && (
@@ -96,7 +108,18 @@ const Header = () => {
               <Link to="/" onClick={() => setIsMenuOpen(false)} className="text-sm font-medium text-gray-600">Benefits</Link>
               <Link to="/products" onClick={() => setIsMenuOpen(false)} className="text-sm font-medium text-gray-600">Products</Link>
               <Link to="/juice-recipes" onClick={() => setIsMenuOpen(false)} className="text-sm font-medium text-gray-600">Juice Recipes</Link>
+              <Link to="/orders" onClick={() => setIsMenuOpen(false)} className="text-sm font-medium text-gray-600">Orders</Link>
               <Link to="/profile" onClick={() => setIsMenuOpen(false)} className="text-sm font-medium text-gray-600">Contact Us</Link>
+              {authState.isAuthenticated && (
+                <Link to="/notifications" onClick={() => setIsMenuOpen(false)} className="text-sm font-medium text-gray-600 flex items-center gap-2">
+                  Notifications
+                  {unreadCount > 0 && (
+                    <span className="bg-red-500 text-white text-[10px] px-1.5 py-0.5 rounded-full font-bold">
+                      {unreadCount}
+                    </span>
+                  )}
+                </Link>
+              )}
             </div>
           </div>
         )}
