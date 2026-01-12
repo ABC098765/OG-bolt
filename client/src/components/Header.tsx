@@ -32,7 +32,7 @@ const Header = () => {
   const isActive = (path: string) => location === path;
 
   return (
-    <header className="fixed top-6 left-1/2 -translate-x-1/2 w-[95%] max-w-7xl z-50">
+    <header className="fixed top-6 left-1/2 -translate-x-1/2 w-[95%] max-w-7xl z-50 rounded-full bg-white/30 backdrop-blur-md border border-white/20 shadow-lg">
       <nav className="bg-transparent border-none px-6 py-3">
         <div className="flex justify-between items-center">
           {/* Logo & Brand */}
