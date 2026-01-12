@@ -68,7 +68,7 @@ const Hero = memo(() => {
   }, [emblaApi, onSelect]);
 
   return (
-    <section id="home" className="relative bg-white dark:bg-gray-950 overflow-hidden">
+    <section id="home" className="relative bg-white dark:bg-gray-950 overflow-hidden w-full m-0">
       <div className="embla overflow-hidden" ref={emblaRef}>
         <div className="embla__container flex">
           {banners.map((banner, index) => (
@@ -88,40 +88,40 @@ const Hero = memo(() => {
                 </>
               )}
               
-              <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-24 lg:py-32 min-h-screen flex flex-col lg:flex-row items-center justify-center lg:justify-start gap-8 lg:gap-12 relative">
+              <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-24 lg:py-32 min-h-[250px] sm:min-h-screen flex flex-col lg:flex-row items-center justify-center lg:justify-start gap-8 lg:gap-12 relative">
                 {/* Content Side */}
-                <div className={`w-full lg:w-3/5 space-y-6 sm:space-y-8 text-center lg:text-left z-10 ${banner.isBgImage ? 'text-white' : ''}`}>
-                  <div className={`inline-flex items-center px-4 py-1.5 rounded-full bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm shadow-sm border border-gray-100 dark:border-gray-700 animate-in fade-in slide-in-from-left duration-700`}>
-                    <span className={`w-2 h-2 rounded-full ${banner.dotColor || `bg-${banner.accentColor}-500`} mr-2 animate-pulse`} />
-                    <span className="text-xs font-bold uppercase tracking-wider text-gray-600 dark:text-gray-300">
+                <div className={`w-full lg:w-3/5 space-y-4 sm:space-y-8 text-center lg:text-left z-10 ${banner.isBgImage ? 'text-white' : ''}`}>
+                  <div className={`inline-flex items-center px-3 py-1 rounded-full bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm shadow-sm border border-gray-100 dark:border-gray-700 animate-in fade-in slide-in-from-left duration-700`}>
+                    <span className={`w-1.5 h-1.5 rounded-full ${banner.dotColor || `bg-${banner.accentColor}-500`} mr-2 animate-pulse`} />
+                    <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-gray-600 dark:text-gray-300">
                       {banner.badge}
                     </span>
                   </div>
 
-                  <div className="space-y-4">
-                    <h1 className={`text-4xl sm:text-6xl lg:text-8xl font-black ${banner.isBgImage ? 'text-white' : 'text-gray-900 dark:text-white'} leading-[1.1] tracking-tight animate-in fade-in slide-in-from-bottom duration-1000`}>
+                  <div className="space-y-2 sm:space-y-4">
+                    <h1 className={`text-2xl sm:text-6xl lg:text-8xl font-black ${banner.isBgImage ? 'text-white' : 'text-gray-900 dark:text-white'} leading-tight tracking-tight animate-in fade-in slide-in-from-bottom duration-1000`}>
                       {banner.title.split(' ').map((word, i) => (
                         <span key={i} className={i >= banner.title.split(' ').length - 2 ? (banner.isBgImage ? `text-${banner.accentColor}-200 block sm:inline` : `text-${banner.accentColor}-600 block sm:inline`) : "inline"}>
                           {word}{' '}
                         </span>
                       ))}
                     </h1>
-                    <p className={`text-base sm:text-xl ${banner.isBgImage ? 'text-white/90' : 'text-gray-600 dark:text-gray-400'} max-w-2xl mx-auto lg:mx-0 leading-relaxed animate-in fade-in slide-in-from-bottom duration-1000 delay-200`}>
+                    <p className={`text-xs sm:text-xl ${banner.isBgImage ? 'text-white/90' : 'text-gray-600 dark:text-gray-400'} max-w-2xl mx-auto lg:mx-0 leading-relaxed animate-in fade-in slide-in-from-bottom duration-1000 delay-200`}>
                       {banner.description}
                     </p>
                   </div>
 
-                  <div className="flex flex-wrap justify-center lg:justify-start gap-3 sm:gap-4 pt-4 animate-in fade-in slide-in-from-bottom duration-1000 delay-300">
+                  <div className="flex flex-wrap justify-center lg:justify-start gap-2 sm:gap-4 pt-2 animate-in fade-in slide-in-from-bottom duration-1000 delay-300">
                     <Link 
                       to={banner.primaryAction.link}
-                      className={`px-6 sm:px-8 py-3 sm:py-4 rounded-2xl bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-bold text-base sm:text-lg hover:scale-105 transition-all shadow-xl hover:shadow-2xl active:scale-95 flex items-center gap-2 group`}
+                      className={`px-4 sm:px-8 py-2 sm:py-4 rounded-xl sm:rounded-2xl bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-bold text-sm sm:text-lg hover:scale-105 transition-all shadow-xl hover:shadow-2xl active:scale-95 flex items-center gap-2 group`}
                     >
                       <banner.primaryAction.icon className="w-4 h-4 sm:w-5 h-5 group-hover:rotate-12 transition-transform" />
                       {banner.primaryAction.label}
                     </Link>
                     <Link 
                       to={banner.secondaryAction.link}
-                      className={`px-6 sm:px-8 py-3 sm:py-4 rounded-2xl ${banner.isBgImage ? 'bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white/20' : 'bg-white dark:bg-gray-800 text-gray-900 dark:text-white border-2 border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700'} font-bold text-base sm:text-lg transition-all flex items-center gap-2 group`}
+                      className={`px-4 sm:px-8 py-2 sm:py-4 rounded-xl sm:rounded-2xl ${banner.isBgImage ? 'bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white/20' : 'bg-white dark:bg-gray-800 text-gray-900 dark:text-white border-2 border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700'} font-bold text-sm sm:text-lg transition-all flex items-center gap-2 group`}
                     >
                       <banner.secondaryAction.icon className={`w-4 h-4 sm:w-5 h-5 ${banner.isBgImage ? 'text-white/70' : 'text-gray-400'} group-hover:text-red-500 transition-colors`} />
                       {banner.secondaryAction.label}
