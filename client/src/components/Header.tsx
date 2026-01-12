@@ -32,7 +32,7 @@ const Header = () => {
   const isActive = (path: string) => location === path;
 
   return (
-    <header className={`fixed top-6 left-1/2 -translate-x-1/2 w-[95%] max-w-7xl z-50 bg-white/30 backdrop-blur-md border border-white/20 shadow-lg transition-all duration-300 ${isMenuOpen ? 'rounded-2xl' : 'rounded-full'}`}>
+    <header className={`fixed top-6 left-1/2 -translate-x-1/2 w-[95%] max-w-7xl z-50 bg-white/40 backdrop-blur-xl border border-white/20 shadow-lg transition-all duration-300 ${isMenuOpen ? 'rounded-2xl' : 'rounded-full'}`}>
       <nav className="bg-transparent border-none px-6 py-3 pl-[24px] pr-[24px] mt-[0px] mb-[0px] ml-[0px] mr-[0px] pt-[0px] pb-[0px]">
         <div className="flex justify-between items-center h-14">
           {/* Logo & Brand */}
