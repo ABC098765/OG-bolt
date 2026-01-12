@@ -8,7 +8,7 @@ const banners = [
   {
     id: 1,
     badge: "#1 Fresh Fruit Delivery",
-    title: "Premium Quality Fresh Fruits",
+    title: "Premium Quality\nFresh Fruits",
     description: "Experience the finest selection of farm-fresh fruits delivered directly to your doorstep with our premium daily service.",
     image: "/premium-fruits-bg-v4.jpg",
     isBgImage: true,
@@ -99,7 +99,7 @@ const Hero = memo(() => {
                   </div>
 
                   <div className="space-y-2 sm:space-y-4">
-                    <h1 className={`text-2xl sm:text-6xl lg:text-8xl font-black ${banner.isBgImage ? 'text-white' : 'text-gray-900 dark:text-white'} leading-tight tracking-tight animate-in fade-in slide-in-from-bottom duration-1000`}>
+                    <h1 className={`text-2xl sm:text-6xl lg:text-8xl font-black ${banner.isBgImage ? 'text-white' : 'text-gray-900 dark:text-white'} leading-tight tracking-tight animate-in fade-in slide-in-from-bottom duration-1000 whitespace-pre-line`}>
                       {banner.title.split(' ').map((word, i) => (
                         <span key={i} className={i >= banner.title.split(' ').length - 2 ? (banner.isBgImage ? `text-${banner.accentColor}-200 block sm:inline` : `text-${banner.accentColor}-600 block sm:inline`) : "inline"}>
                           {word}{' '}
