@@ -10,7 +10,7 @@ const banners = [
     badge: "#1 Fresh Fruit Delivery",
     title: "Premium Quality Fresh Fruits",
     description: "Experience the finest selection of farm-fresh fruits delivered directly to your doorstep with our premium daily service.",
-    image: "/premium-fruits-bg.jpg",
+    image: "/premium-fruits-bg-v2.jpg",
     isBgImage: true,
     primaryAction: { label: "Shop Now", link: "/products", icon: ShoppingCart },
     secondaryAction: { label: "Our Story", link: "/juice-recipes", icon: Heart },
