@@ -33,7 +33,7 @@ const Header = () => {
 
   return (
     <header className="fixed top-6 left-1/2 -translate-x-1/2 w-[95%] max-w-7xl z-50 rounded-full bg-white/30 backdrop-blur-md border border-white/20 shadow-lg">
-      <nav className="bg-transparent border-none px-6 py-3">
+      <nav className="bg-transparent border-none px-6 py-3 pl-[24px] pr-[24px] mt-[0px] mb-[0px] ml-[0px] mr-[0px] pt-[0px] pb-[0px]">
         <div className="flex justify-between items-center">
           {/* Logo & Brand */}
           <Link to="/" className="flex items-center gap-2 group">
