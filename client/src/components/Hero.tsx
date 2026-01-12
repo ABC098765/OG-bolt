@@ -68,11 +68,11 @@ const Hero = memo(() => {
   }, [emblaApi, onSelect]);
 
   return (
-    <section id="home" className="relative bg-white dark:bg-gray-950 overflow-hidden w-full m-0">
-      <div className="embla overflow-hidden" ref={emblaRef}>
-        <div className="embla__container flex">
+    <section id="home" className="relative bg-white dark:bg-gray-950 overflow-hidden w-full m-0 lg:h-screen lg:min-h-0">
+      <div className="embla overflow-hidden h-full" ref={emblaRef}>
+        <div className="embla__container flex h-full">
           {banners.map((banner, index) => (
-            <div key={banner.id} className="embla__slide flex-[0_0_100%] min-w-0 relative">
+            <div key={banner.id} className="embla__slide flex-[0_0_100%] min-w-0 relative h-full">
               {/* Background Decorative Elements */}
               {banner.isBgImage ? (
                 <div 
@@ -88,7 +88,7 @@ const Hero = memo(() => {
                 </>
               )}
               
-              <div className="max-w-7xl mx-auto px-4 sm:px-6 py-20 sm:py-24 lg:py-32 min-h-[250px] sm:min-h-screen flex flex-col lg:flex-row items-center justify-center lg:justify-start gap-8 lg:gap-12 relative">
+              <div className="max-w-7xl mx-auto px-4 sm:px-6 py-20 sm:py-24 lg:py-32 h-full flex flex-col lg:flex-row items-center justify-center lg:justify-start gap-8 lg:gap-12 relative">
                 {/* Content Side */}
                 <div className={`w-full lg:w-3/5 space-y-4 sm:space-y-8 text-center lg:text-left z-10 ${banner.isBgImage ? 'text-white' : ''}`}>
                   <div className={`inline-flex items-center px-3 py-1 rounded-full bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm shadow-sm border border-gray-100 dark:border-gray-700 animate-in fade-in slide-in-from-left duration-700`}>
