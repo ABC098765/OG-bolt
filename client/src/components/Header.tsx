@@ -47,7 +47,7 @@ const Header = () => {
 
           {/* Desktop Nav */}
           <div className="hidden lg:flex items-center gap-8">
-            <Link to="/" className={`text-sm font-medium transition-colors ${isActive('/') ? 'text-green-600' : 'text-gray-600 hover:text-green-600'}`}>Benefits</Link>
+            <Link to="/" className={`text-sm font-medium transition-colors ${isActive('/') ? 'text-green-600' : 'text-gray-600 hover:text-green-600'}`}>Home</Link>
             <Link to="/products" className={`text-sm font-medium transition-colors ${isActive('/products') ? 'text-green-600' : 'text-gray-600 hover:text-green-600'}`}>Products</Link>
             <Link to="/juice-recipes" className={`text-sm font-medium transition-colors ${isActive('/juice-recipes') ? 'text-green-600' : 'text-gray-600 hover:text-green-600'}`}>Juice Recipes</Link>
             <Link to="/orders" className={`text-sm font-medium transition-colors ${isActive('/orders') ? 'text-green-600' : 'text-gray-600 hover:text-green-600'}`}>Orders</Link>
@@ -104,7 +104,7 @@ const Header = () => {
         {isMenuOpen && (
           <div className="lg:hidden mt-4 py-4 border-t border-gray-100 animate-in slide-in-from-top duration-300">
             <div className="flex flex-col gap-4">
-              <Link to="/" onClick={() => setIsMenuOpen(false)} className="text-sm font-medium text-gray-600">Benefits</Link>
+              <Link to="/" onClick={() => setIsMenuOpen(false)} className="text-sm font-medium text-gray-600">Home</Link>
               <Link to="/products" onClick={() => setIsMenuOpen(false)} className="text-sm font-medium text-gray-600">Products</Link>
               <Link to="/juice-recipes" onClick={() => setIsMenuOpen(false)} className="text-sm font-medium text-gray-600">Juice Recipes</Link>
               <Link to="/orders" onClick={() => setIsMenuOpen(false)} className="text-sm font-medium text-gray-600">Orders</Link>
