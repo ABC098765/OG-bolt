@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'wouter';
-import { Menu, X, ShoppingCart, Bell } from 'lucide-react';
+import { Menu, X, ShoppingCart, Bell, ArrowRight } from 'lucide-react';
 import { useCart } from '../contexts/CartContext';
 import { useAuth } from '../contexts/AuthContext';
 import { firestoreService } from '../services/firestoreService';
@@ -12,7 +12,6 @@ const Header = () => {
   const { state } = useCart();
   const { state: authState, dispatch: authDispatch } = useAuth();
 
-  // Load unread notifications count
   React.useEffect(() => {
     const loadUnreadCount = async () => {
       if (authState.user) {
@@ -27,214 +26,82 @@ const Header = () => {
         setUnreadCount(0);
       }
     };
-
     loadUnreadCount();
   }, [authState.user]);
 
-  const isActive = (path: string) => {
-    return location === path;
-  };
+  const isActive = (path: string) => location === path;
 
   return (
-    <>
-      {/* Elements outside the transparent header */}
-      <div className="fixed top-0 left-0 right-0 z-[60] flex justify-between items-center px-8 py-2 pointer-events-none">
-        <div className="flex items-center text-2xl font-bold text-green-600 dark:text-green-400 pointer-events-auto">
-          <span className="ml-16">Super Fruit Center</span>
-        </div>
-        {!authState.isAuthenticated && (
-          <button 
-            onClick={() => authDispatch({ type: 'SHOW_AUTH_MODAL' })}
-            className="bg-gradient-to-r from-orange-500 to-orange-600 text-white px-6 py-2 rounded-full hover:from-orange-600 hover:to-orange-700 active:scale-95 transition-all duration-200 font-semibold shadow-lg hover:shadow-xl whitespace-nowrap flex items-center justify-center min-w-max text-sm pointer-events-auto"
-          >
-            <span className="flex items-center gap-2">
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-              </svg>
-              Sign In
+    <header className="fixed top-6 left-1/2 -translate-x-1/2 w-[95%] max-w-7xl z-50">
+      <nav className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg border border-gray-200 dark:border-gray-800 rounded-full px-6 py-3 shadow-xl">
+        <div className="flex justify-between items-center">
+          {/* Logo & Brand */}
+          <Link to="/" className="flex items-center gap-2 group">
+            <div className="w-10 h-10 bg-green-600 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+              <img src="/sfc-logo.png" alt="SFC Logo" className="h-6 w-auto" />
+            </div>
+            <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-green-600 to-green-500 hidden sm:block">
+              Super Fruit Center
             </span>
-          </button>
-        )}
-      </div>
+          </Link>
 
-      <header className="bg-red-50/40 dark:bg-gray-800/90 backdrop-blur-md shadow-md fixed top-2 left-0 right-0 z-50 rounded-2xl mx-4">
-        {/* Main navigation */}
-        <nav className="max-w-7xl mx-auto px-4 py-2 pl-[8px] pr-[8px]">
-          <div className="flex justify-between items-center">
-            <div className="flex items-center">
-              <div className="flex items-center text-2xl font-bold text-green-600 dark:text-green-400">
-                <img src="/sfc-logo.png" alt="SFC Logo" className="h-12 w-auto mr-3" />
-              </div>
-            </div>
+          {/* Desktop Nav */}
+          <div className="hidden lg:flex items-center gap-8">
+            <Link to="/" className={`text-sm font-medium transition-colors ${isActive('/') ? 'text-green-600' : 'text-gray-600 hover:text-green-600'}`}>Benefits</Link>
+            <Link to="/products" className={`text-sm font-medium transition-colors ${isActive('/products') ? 'text-green-600' : 'text-gray-600 hover:text-green-600'}`}>Specifications</Link>
+            <Link to="/juice-recipes" className={`text-sm font-medium transition-colors ${isActive('/juice-recipes') ? 'text-green-600' : 'text-gray-600 hover:text-green-600'}`}>How-to</Link>
+            <Link to="/profile" className={`text-sm font-medium transition-colors ${isActive('/profile') ? 'text-green-600' : 'text-gray-600 hover:text-green-600'}`}>Contact Us</Link>
+          </div>
 
-            {/* Desktop menu */}
-            <div className="hidden md:flex items-center space-x-8">
-              <Link 
-                to="/" 
-                className={`transition-colors font-medium ${
-                  isActive('/') ? 'text-green-600 dark:text-green-400' : 'text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400'
-                }`}
-              >
-                Home
-              </Link>
-              <Link 
-                to="/products" 
-                className={`transition-colors font-medium ${
-                  isActive('/products') ? 'text-green-600 dark:text-green-400' : 'text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400'
-                }`}
-              >
-                Products
-              </Link>
-              <Link 
-                to="/juice-recipes" 
-                className={`transition-colors font-medium ${
-                  isActive('/juice-recipes') ? 'text-green-600 dark:text-green-400' : 'text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400'
-                }`}
-              >
-                Juice Recipes
-              </Link>
-              <Link 
-                to="/cart" 
-                className={`transition-colors font-medium ${
-                  isActive('/cart') ? 'text-green-600 dark:text-green-400' : 'text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400'
-                } flex items-center`}
-              >
-                <ShoppingCart className="w-4 h-4 mr-1" />
-                Cart ({state.items.reduce((sum, item) => sum + item.quantity, 0)})
-              </Link>
-              <Link 
-                to="/orders" 
-                className={`transition-colors font-medium ${
-                  isActive('/orders') ? 'text-green-600 dark:text-green-400' : 'text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400'
-                }`}
-              >
-                Orders
-              </Link>
-              <Link 
-                to="/profile" 
-                className={`transition-colors font-medium ${
-                  isActive('/profile') ? 'text-green-600 dark:text-green-400' : 'text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400'
-                }`}
-              >
-                Profile
-              </Link>
-              <Link 
-                to="/notifications" 
-                className={`transition-colors font-medium ${
-                  isActive('/notifications') ? 'text-green-600 dark:text-green-400' : 'text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400'
-                } relative`}
-              >
-                <Bell className="w-5 h-5" />
-                {unreadCount > 0 && (
-                  <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                    {unreadCount > 99 ? '99+' : unreadCount}
-                  </span>
-                )}
-              </Link>
-              {authState.isAuthenticated && (
-                <div className="flex items-center space-x-4">
-                  <span className="text-gray-700 dark:text-gray-300 font-medium">
-                    Hi, {authState.user?.name}
-                  </span>
-                </div>
+          {/* Actions */}
+          <div className="flex items-center gap-4">
+            <Link to="/cart" className="relative p-2 text-gray-600 hover:text-green-600 transition-colors">
+              <ShoppingCart className="w-5 h-5" />
+              {state.items.length > 0 && (
+                <span className="absolute top-0 right-0 bg-orange-500 text-white text-[10px] font-bold rounded-full h-4 w-4 flex items-center justify-center">
+                  {state.items.reduce((sum, item) => sum + item.quantity, 0)}
+                </span>
               )}
-            </div>
+            </Link>
+            
+            {!authState.isAuthenticated ? (
+              <button 
+                onClick={() => authDispatch({ type: 'SHOW_AUTH_MODAL' })}
+                className="bg-gray-900 text-white px-5 py-2 rounded-full text-sm font-semibold hover:bg-gray-800 transition-all flex items-center gap-2 group"
+              >
+                Sign In
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </button>
+            ) : (
+              <Link to="/profile" className="flex items-center gap-2 bg-green-50 px-3 py-1.5 rounded-full border border-green-100">
+                <div className="w-6 h-6 bg-green-600 rounded-full flex items-center justify-center text-[10px] text-white font-bold">
+                  {authState.user?.name?.[0]}
+                </div>
+                <span className="text-sm font-medium text-green-700 hidden sm:block">
+                  {authState.user?.name}
+                </span>
+              </Link>
+            )}
 
-            {/* Mobile menu button */}
-            <button
-              className="md:hidden text-gray-700 dark:text-gray-300"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-            >
+            <button className="lg:hidden p-2 text-gray-600" onClick={() => setIsMenuOpen(!isMenuOpen)}>
               {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
           </div>
+        </div>
 
-          {/* Mobile menu */}
-          {isMenuOpen && (
-            <div className="md:hidden mt-4 pb-4 border-t border-gray-200 dark:border-gray-700">
-              <div className="flex flex-col space-y-4 pt-4">
-                <Link 
-                  to="/" 
-                  className={`transition-colors font-medium ${
-                    isActive('/') ? 'text-green-600 dark:text-green-400' : 'text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400'
-                  }`}
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Home
-                </Link>
-                <Link 
-                  to="/products" 
-                  className={`transition-colors font-medium ${
-                    isActive('/products') ? 'text-green-600 dark:text-green-400' : 'text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400'
-                  }`}
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Products
-                </Link>
-                <Link 
-                  to="/juice-recipes" 
-                  className={`transition-colors font-medium ${
-                    isActive('/juice-recipes') ? 'text-green-600 dark:text-green-400' : 'text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400'
-                  } flex items-center`}
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  🥤 Juice Recipes
-                </Link>
-                <Link 
-                  to="/cart" 
-                  className={`transition-colors font-medium ${
-                    isActive('/cart') ? 'text-green-600 dark:text-green-400' : 'text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400'
-                  } flex items-center`}
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  <ShoppingCart className="w-4 h-4 mr-1" />
-                  Cart ({state.items.reduce((sum, item) => sum + item.quantity, 0)})
-                </Link>
-                <Link 
-                  to="/orders" 
-                  className={`transition-colors font-medium ${
-                    isActive('/orders') ? 'text-green-600 dark:text-green-400' : 'text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400'
-                  }`}
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Orders
-                </Link>
-                <Link 
-                  to="/profile" 
-                  className={`transition-colors font-medium ${
-                    isActive('/profile') ? 'text-green-600 dark:text-green-400' : 'text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400'
-                  }`}
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Profile
-                </Link>
-                <Link 
-                  to="/notifications" 
-                  className={`transition-colors font-medium ${
-                    isActive('/notifications') ? 'text-green-600 dark:text-green-400' : 'text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400'
-                  } relative flex items-center`}
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  <Bell className="w-5 h-5" />
-                  {unreadCount > 0 && (
-                    <span className="ml-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                      {unreadCount > 99 ? '99+' : unreadCount}
-                    </span>
-                  )}
-                </Link>
-                {authState.isAuthenticated && (
-                  <div className="space-y-4">
-                    <span className="text-gray-700 dark:text-gray-300 font-medium">
-                      Hi, {authState.user?.name}
-                    </span>
-                  </div>
-                )}
-              </div>
+        {/* Mobile Menu */}
+        {isMenuOpen && (
+          <div className="lg:hidden mt-4 py-4 border-t border-gray-100 animate-in slide-in-from-top duration-300">
+            <div className="flex flex-col gap-4">
+              <Link to="/" onClick={() => setIsMenuOpen(false)} className="text-sm font-medium text-gray-600">Benefits</Link>
+              <Link to="/products" onClick={() => setIsMenuOpen(false)} className="text-sm font-medium text-gray-600">Specifications</Link>
+              <Link to="/juice-recipes" onClick={() => setIsMenuOpen(false)} className="text-sm font-medium text-gray-600">How-to</Link>
+              <Link to="/profile" onClick={() => setIsMenuOpen(false)} className="text-sm font-medium text-gray-600">Contact Us</Link>
             </div>
-          )}
-        </nav>
-      </header>
-    </>
+          </div>
+        )}
+      </nav>
+    </header>
   );
 };
 
