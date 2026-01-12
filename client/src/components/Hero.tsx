@@ -10,10 +10,11 @@ const banners = [
     badge: "#1 Fresh Fruit Delivery",
     title: "Premium Quality Fresh Fruits",
     description: "Experience the finest selection of farm-fresh fruits delivered directly to your doorstep with our premium daily service.",
-    image: "/Fresh_fruit_hero_display_11baa93f.png",
+    image: "/premium-fruits-bg.jpg",
+    isBgImage: true,
     primaryAction: { label: "Shop Now", link: "/products", icon: ShoppingCart },
     secondaryAction: { label: "Our Story", link: "/juice-recipes", icon: Heart },
-    bgColor: "from-green-500/20 to-emerald-500/20",
+    bgColor: "from-green-900/60 to-emerald-900/60",
     accentColor: "green"
   },
   {
@@ -21,10 +22,11 @@ const banners = [
     badge: "Seasonal Specials",
     title: "Fresh Harvest Seasonal Fruits",
     description: "Discover our hand-picked selection of the season's best fruits, ripened naturally and packed with nutrients and flavor.",
-    image: "/splash1.png",
+    image: "/seasonal-harvest-bg.jpg",
+    isBgImage: true,
     primaryAction: { label: "View Deals", link: "/products", icon: Star },
     secondaryAction: { label: "Recipes", link: "/juice-recipes", icon: Leaf },
-    bgColor: "from-orange-500/20 to-amber-500/20",
+    bgColor: "from-orange-900/60 to-amber-900/60",
     accentColor: "orange"
   },
   {
@@ -36,7 +38,7 @@ const banners = [
     isBgImage: true,
     primaryAction: { label: "Order Now", link: "/products", icon: Clock },
     secondaryAction: { label: "Details", link: "/", icon: Award },
-    bgColor: "from-blue-500/80 to-sky-500/80",
+    bgColor: "from-blue-900/60 to-sky-900/60",
     accentColor: "blue",
     dotColor: "bg-blue-500"
   }
