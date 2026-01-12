@@ -1,8 +1,10 @@
 import React, { memo, useEffect, useState } from 'react';
 import { Link } from 'wouter';
-import { ShoppingCart, Truck, Star, Heart, Award, Clock, Leaf } from 'lucide-react';
+import { ShoppingCart, Heart, Award, Clock, Leaf, LogIn } from 'lucide-react';
+import { useAuth } from '../contexts/AuthContext';
 
 const Hero = memo(() => {
+  const { state: authState, dispatch: authDispatch } = useAuth();
   // Accessibility: Respect user's motion preferences
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
 
@@ -26,9 +28,31 @@ const Hero = memo(() => {
   }, []);
 
   return (
-    <section id="home" className="relative overflow-hidden pt-32 pb-20 bg-gray-50 dark:bg-gray-900">
+    <section id="home" className="relative overflow-hidden pt-12 pb-20 bg-gray-50 dark:bg-gray-900">
       <div className="max-w-7xl mx-auto px-4 relative z-10">
-        <div className="flex justify-center items-center min-h-[80vh]">
+        {/* Brand and Auth - Top level in Hero */}
+        <div className="flex justify-between items-center mb-12">
+          <div className="flex items-center gap-2 group">
+            <div className="w-10 h-10 bg-green-600 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg">
+              <img src="/sfc-logo.png" alt="SFC Logo" className="h-6 w-auto" />
+            </div>
+            <span className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-green-600 to-green-500">
+              Super Fruit Center
+            </span>
+          </div>
+          
+          {!authState.isAuthenticated && (
+            <button 
+              onClick={() => authDispatch({ type: 'SHOW_AUTH_MODAL' })}
+              className="bg-gray-900 text-white px-6 py-2.5 rounded-full text-sm font-semibold hover:bg-gray-800 transition-all flex items-center gap-2 group shadow-xl hover:shadow-2xl active:scale-95"
+            >
+              Sign In
+              <LogIn className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </button>
+          )}
+        </div>
+
+        <div className="flex justify-center items-center min-h-[60vh]">
           <div className="space-y-8 text-center max-w-4xl relative p-8">
             {/* Badge */}
             <div className="inline-flex items-center px-4 py-2 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-full text-sm font-medium">
@@ -38,7 +62,6 @@ const Hero = memo(() => {
 
             <div className="space-y-6">
               <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold text-gray-900 dark:text-white leading-tight">
-                <span className="text-lg sm:text-xl lg:text-2xl font-medium text-gray-600 dark:text-gray-400 block mb-2">Super Fruit Center</span>
                 Fresh <span className="text-green-600">
                   Fruits
                 </span><br />
