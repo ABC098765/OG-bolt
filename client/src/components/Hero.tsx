@@ -41,7 +41,11 @@ const banners = [
 ];
 
 const Hero = memo(() => {
-  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [Autoplay({ delay: 5000 })]);
+  const [emblaRef, emblaApi] = useEmblaCarousel({ 
+    loop: true,
+    duration: 30,
+    skipSnaps: false
+  }, [Autoplay({ delay: 5000, stopOnInteraction: false, stopOnMouseEnter: true })]);
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   const scrollPrev = useCallback(() => emblaApi && emblaApi.scrollPrev(), [emblaApi]);
