@@ -88,7 +88,7 @@ const Hero = memo(() => {
                 </>
               )}
               
-              <div className="max-w-7xl mx-auto px-4 sm:px-6 py-64 sm:py-48 lg:py-72 h-full flex flex-col lg:flex-row items-center justify-center lg:justify-start gap-8 lg:gap-12 relative">
+              <div className="max-w-7xl mx-auto px-4 sm:px-6 py-20 sm:py-24 lg:py-32 h-full flex flex-col lg:flex-row items-center justify-center lg:justify-start gap-8 lg:gap-12 relative">
                 {/* Content Side */}
                 <div className={`w-full lg:w-3/5 space-y-4 sm:space-y-8 text-center lg:text-left z-10 ${banner.isBgImage ? 'text-white' : ''}`}>
                   <div className={`inline-flex items-center px-3 py-1 rounded-full bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm shadow-sm border border-gray-100 dark:border-gray-700 animate-in fade-in slide-in-from-left duration-700`}>
