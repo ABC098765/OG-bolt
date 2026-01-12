@@ -27,28 +27,14 @@ const Hero = memo(() => {
 
   return (
     <section id="home" className="relative overflow-hidden pt-32 pb-20">
-      {/* Mobile: Static image background - SEO friendly with proper alt text */}
-      <div className="absolute inset-0 md:hidden">
+      {/* Background Image - SEO friendly with proper alt text */}
+      <div className="absolute inset-0">
         <img 
           src="/Fresh_fruit_hero_display_11baa93f.png"
           alt="Fresh colorful fruits display - Super Fruit Center premium fruit delivery service"
           className="w-full h-full object-cover"
         />
       </div>
-      
-      {/* Desktop: Video background with accessibility and performance optimizations */}
-      <video
-        autoPlay={!prefersReducedMotion}
-        muted
-        loop={!prefersReducedMotion}
-        playsInline
-        preload="none"
-        className="absolute inset-0 w-full h-full object-cover hidden md:block"
-        poster="/Fresh_fruit_hero_display_11baa93f.png"
-      >
-        <source src="/hero-video-new.mp4?v=1" type="video/mp4" />
-        Your browser does not support the video tag.
-      </video>
       
       {/* Dark overlay for text readability */}
       <div className="absolute inset-0 bg-black/30"></div>
