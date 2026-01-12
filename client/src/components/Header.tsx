@@ -46,30 +46,30 @@ const Header = () => {
           </Link>
 
           {/* Desktop Nav */}
-          <div className="hidden lg:flex items-center gap-8">
-            <Link to="/" className={`text-sm font-medium transition-colors ${isActive('/') ? 'text-green-600' : 'text-gray-600 hover:text-green-600'}`}>Home</Link>
-            <Link to="/products" className={`text-sm font-medium transition-colors ${isActive('/products') ? 'text-green-600' : 'text-gray-600 hover:text-green-600'}`}>Products</Link>
-            <Link to="/juice-recipes" className={`text-sm font-medium transition-colors ${isActive('/juice-recipes') ? 'text-green-600' : 'text-gray-600 hover:text-green-600'}`}>Juice Recipes</Link>
-            <Link to="/orders" className={`text-sm font-medium transition-colors ${isActive('/orders') ? 'text-green-600' : 'text-gray-600 hover:text-green-600'}`}>Orders</Link>
+          <div className="hidden lg:flex items-center gap-4">
+            <Link to="/" className={`text-sm font-medium transition-all px-4 py-2 rounded-full backdrop-blur-md border border-white/20 shadow-sm ${isActive('/') ? 'bg-green-600/20 text-green-600 border-green-600/30' : 'bg-white/10 text-gray-700 hover:bg-white/20'}`}>Home</Link>
+            <Link to="/products" className={`text-sm font-medium transition-all px-4 py-2 rounded-full backdrop-blur-md border border-white/20 shadow-sm ${isActive('/products') ? 'bg-green-600/20 text-green-600 border-green-600/30' : 'bg-white/10 text-gray-700 hover:bg-white/20'}`}>Products</Link>
+            <Link to="/juice-recipes" className={`text-sm font-medium transition-all px-4 py-2 rounded-full backdrop-blur-md border border-white/20 shadow-sm ${isActive('/juice-recipes') ? 'bg-green-600/20 text-green-600 border-green-600/30' : 'bg-white/10 text-gray-700 hover:bg-white/20'}`}>Juice Recipes</Link>
+            <Link to="/orders" className={`text-sm font-medium transition-all px-4 py-2 rounded-full backdrop-blur-md border border-white/20 shadow-sm ${isActive('/orders') ? 'bg-green-600/20 text-green-600 border-green-600/30' : 'bg-white/10 text-gray-700 hover:bg-white/20'}`}>Orders</Link>
           </div>
 
           {/* Actions */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
             {authState.isAuthenticated && (
-              <Link to="/notifications" className={`relative p-2 transition-colors ${isActive('/notifications') ? 'text-green-600' : 'text-gray-600 hover:text-green-600'}`}>
+              <Link to="/notifications" className={`relative p-2.5 transition-all rounded-full backdrop-blur-md border border-white/20 shadow-sm ${isActive('/notifications') ? 'bg-green-600/20 text-green-600 border-green-600/30' : 'bg-white/10 text-gray-700 hover:bg-white/20'}`}>
                 <Bell className="w-5 h-5" />
                 {unreadCount > 0 && (
-                  <span className="absolute top-0 right-0 bg-red-500 text-white text-[10px] font-bold rounded-full h-4 w-4 flex items-center justify-center">
+                  <span className="absolute top-0 right-0 bg-red-500 text-white text-[10px] font-bold rounded-full h-4 w-4 flex items-center justify-center border-2 border-white">
                     {unreadCount > 99 ? '99+' : unreadCount}
                   </span>
                 )}
               </Link>
             )}
             
-            <Link to="/cart" className="relative p-2 text-gray-600 hover:text-green-600 transition-colors">
+            <Link to="/cart" className="relative p-2.5 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-gray-700 hover:bg-white/20 transition-all shadow-sm">
               <ShoppingCart className="w-5 h-5" />
               {state.items.length > 0 && (
-                <span className="absolute top-0 right-0 bg-orange-500 text-white text-[10px] font-bold rounded-full h-4 w-4 flex items-center justify-center">
+                <span className="absolute top-0 right-0 bg-orange-500 text-white text-[10px] font-bold rounded-full h-4 w-4 flex items-center justify-center border-2 border-white">
                   {state.items.reduce((sum, item) => sum + item.quantity, 0)}
                 </span>
               )}
