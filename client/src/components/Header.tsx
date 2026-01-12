@@ -38,7 +38,7 @@ const Header = () => {
           {/* Logo & Brand */}
           <Link to="/" className="flex items-center gap-2 group">
             <div className="w-14 h-14 flex items-center justify-center group-hover:scale-110 transition-transform">
-              <img src="/sfc-logo.png" alt="SFC Logo" className="h-14 w-auto" />
+              <img src="/sfc-logo.png" alt="SFC Logo" className="h-14 w-auto pt-[5px] pb-[5px]" />
             </div>
             <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-green-600 to-green-500 hidden sm:block">
               Super Fruit Center
