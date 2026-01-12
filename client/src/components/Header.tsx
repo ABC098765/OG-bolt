@@ -51,7 +51,6 @@ const Header = () => {
             <Link to="/products" className={`text-sm font-medium transition-colors ${isActive('/products') ? 'text-green-600' : 'text-gray-600 hover:text-green-600'}`}>Products</Link>
             <Link to="/juice-recipes" className={`text-sm font-medium transition-colors ${isActive('/juice-recipes') ? 'text-green-600' : 'text-gray-600 hover:text-green-600'}`}>Juice Recipes</Link>
             <Link to="/orders" className={`text-sm font-medium transition-colors ${isActive('/orders') ? 'text-green-600' : 'text-gray-600 hover:text-green-600'}`}>Orders</Link>
-            <Link to="/profile" className={`text-sm font-medium transition-colors ${isActive('/profile') ? 'text-green-600' : 'text-gray-600 hover:text-green-600'}`}>Contact Us</Link>
           </div>
 
           {/* Actions */}
@@ -109,7 +108,6 @@ const Header = () => {
               <Link to="/products" onClick={() => setIsMenuOpen(false)} className="text-sm font-medium text-gray-600">Products</Link>
               <Link to="/juice-recipes" onClick={() => setIsMenuOpen(false)} className="text-sm font-medium text-gray-600">Juice Recipes</Link>
               <Link to="/orders" onClick={() => setIsMenuOpen(false)} className="text-sm font-medium text-gray-600">Orders</Link>
-              <Link to="/profile" onClick={() => setIsMenuOpen(false)} className="text-sm font-medium text-gray-600">Contact Us</Link>
               {authState.isAuthenticated && (
                 <Link to="/notifications" onClick={() => setIsMenuOpen(false)} className="text-sm font-medium text-gray-600 flex items-center gap-2">
                   Notifications
