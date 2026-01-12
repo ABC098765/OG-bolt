@@ -1,6 +1,6 @@
 import React, { memo, useEffect, useState } from 'react';
 import { Link } from 'wouter';
-import { ShoppingCart, Heart, Award, Clock, Leaf, LogIn } from 'lucide-react';
+import { ShoppingCart, Heart, Award, Clock, Leaf, LogIn, Star } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 
 const Hero = memo(() => {
